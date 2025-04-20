@@ -1,0 +1,5733 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>重返未來：1999 綜合導航頁面</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --primary-bg: #28201A;
+    --secondary-bg: #383026;
+    --header-bg: #48382C;
+    --gold: #D4AF37;
+    --text-color: #FAF0E0;
+    --border-color: #58483C;
+    --highlight: #FFD700;
+    --card-bg: rgba(30, 30, 40, 0.8);
+    --accent-1: linear-gradient(135deg, #9b59b6, #8e44ad);
+    --accent-2: linear-gradient(135deg, #27ae60, #2ecc71);
+    --accent-3: linear-gradient(135deg, #e74c3c, #c0392b);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #12121e, #2a2a3c);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-attachment: fixed;
+    min-height: 100vh;
+  }.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  header {
+    background-color: var(--header-bg);
+    color: var(--gold);
+    padding: 20px 0;
+    position: relative;
+    text-align: center;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 30px;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #d4af37, #f9f095, #d4af37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }.nav-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .nav-tab {
+    background-color: var(--secondary-bg);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .nav-tab:hover {
+    background-color: var(--header-bg);
+    transform: translateY(-2px);
+  }
+
+  .nav-tab.active {
+    background-color: var(--gold);
+    color: var(--primary-bg);
+  }
+
+  .tab-content {
+    display: none;
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  }
+
+  .tab-content.active {
+    display: block;
+  }/* 禮包計算器樣式 */
+
+   .container {
+      background-color: #383026;
+      border: 2px solid #D4AF37;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 95%;
+      margin: 30px auto;
+    }
+    .header {
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      color: #D4AF37;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0 0 5px 0;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 15px 0 10px 0;
+    }
+    h3 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    /* 控制項 */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .controls label {
+      margin-right: 5px;
+    }
+    .controls select, .button {
+      background-color: #48382C;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 16px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNNyA5bDUgNSA1LTUiLz48L3N2Zz4=');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px 12px;
+      cursor: pointer;
+    }
+    .button {
+      background-image: none;
+      transition: background-color 0.3s;
+    }
+    .button:hover {
+      background-color: #584838;
+    }
+    .button i {
+      margin-right: 5px;
+    }
+
+    /* 切換觀看模式的按鈕 */
+    .view-mode {
+      margin-left: auto;
+      margin-right: 10px;
+      display: flex;
+      gap: 5px;
+    }
+    .view-mode-btn {
+      background-color: #48382C;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .view-mode-btn.active {
+      background-color: #D4AF37;
+      color: #28201A;
+    }
+
+    /* 表格與卡片容器 */
+    .content-container {
+      transition: all 0.3s;
+    }
+    
+    /* 表格樣式 */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 20px;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: #D4AF37;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #58483C;
+    }
+    th {
+      font-weight: 600;
+      color: #D4AF37;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background-color: #383026;
+      white-space: nowrap;
+    }
+    th i {
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    
+    /* 將資料行加上 hover 效果 */
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+    tbody tr.selected {
+      background-color: rgba(212, 175, 55, 0.2);
+    }
+    
+    /* 卡片視圖樣式 */
+    .card-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .package-card {
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      border-radius: 8px;
+      padding: 15px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .package-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    .package-card.selected {
+      background-color: rgba(212, 175, 55, 0.2);
+      border-color: #FFD700;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #58483C;
+    }
+    .card-title {
+      font-weight: bold;
+      font-size: 16px;
+      flex: 1;
+    }
+    .card-select {
+      margin-left: 10px;
+    }
+    .card-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #58483C;
+      color: #D4AF37;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    .card-info {
+      margin-bottom: 5px;
+    }
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .card-materials {
+      margin-top: 10px;
+      max-height: 80px;
+      overflow-y: auto;
+      font-size: 13px;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 5px;
+      border-top: 1px solid #58483C;
+    }
+    .card-rank-badge {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .rank-S {
+      background-color: #FFD700;
+      color: #28201A;
+    }
+    .rank-A {
+      background-color: #C0C0C0;
+      color: #28201A;
+    }
+    .rank-B {
+      background-color: #CD7F32;
+      color: #28201A;
+    }
+    .rank-C {
+      background-color: #6E3B13;
+      color: #D4AF37;
+    }
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      background-color: #58483C;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .qty-input {
+      width: 40px;
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      text-align: center;
+      margin: 0 5px;
+      padding: 2px 0;
+      border-radius: 3px;
+    }
+    
+    /* 總計區塊 */
+    .totals {
+      margin-top: 20px;
+    }
+    .totals-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .total-box {
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      border-radius: 5px;
+      padding: 10px;
+      flex: 1;
+      min-width: 150px;
+      text-align: center;
+    }
+    .total-label {
+      font-weight: bold;
+    }
+    
+    /* 素材總結 */
+    .material-summary {
+      margin-top: 20px;
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      border-radius: 5px;
+      padding: 15px;
+    }
+    .material-list {
+      margin: 10px 0 0 0;
+      padding: 0 0 0 20px;
+      columns: 2;
+    }
+    .material-list li {
+      margin-bottom: 5px;
+    }
+    
+    /* 功能按鈕區 */
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    /* 推薦助手 */
+    .recommendation-assistant {
+      margin-top: 20px;
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      border-radius: 5px;
+      padding: 15px;
+      display: none;
+    }
+    .assistant-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #58483C;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .assistant-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 8px;
+      background-color: #383026;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      border-radius: 5px;
+    }
+    .preference-sliders {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .slider-group {
+      margin-bottom: 10px;
+    }
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .slider-input {
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      height: 8px;
+      background: #383026;
+      border-radius: 4px;
+      outline: none;
+    }
+    .slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #D4AF37;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .slider-input::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #D4AF37;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+    }
+    .recommendation-results {
+      background-color: #383026;
+      border: 1px solid #58483C;
+      border-radius: 5px;
+      padding: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .recommendation-plan {
+      background-color: #48382C;
+      border: 1px solid #D4AF37;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    .plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #58483C;
+    }
+    .plan-title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .plan-score {
+      background-color: #D4AF37;
+      color: #28201A;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+    .plan-packages {
+      margin-bottom: 10px;
+    }
+    .plan-package {
+      background-color: #383026;
+      border: 1px solid #58483C;
+      border-radius: 5px;
+      padding: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .plan-totals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #58483C;
+    }
+    .plan-total-item {
+      background-color: #383026;
+      border: 1px solid #58483C;
+      border-radius: 5px;
+      padding: 5px 8px;
+      font-size: 14px;
+    }
+    .plan-action {
+      margin-top: 10px;
+      text-align: right;
+    }
+    
+    /* 模態框 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #383026;
+      margin: 10% auto;
+      padding: 20px;
+      border: 2px solid #D4AF37;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .close-modal {
+      color: #D4AF37;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-modal:hover {
+      color: #FFD700;
+    }
+
+    /* 按鈕提示 */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #28201A;
+      color: #D4AF37;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* 限購與限時標記 */
+    .limit-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      margin-left: 5px;
+      color: white;
+    }
+    .purchase-limit {
+      background-color: #CC3300;
+    }
+    .time-limit {
+      background-color: #E69500;
+    }
+    
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+        margin: 10px auto;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      .controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .view-mode {
+        margin: 10px 0;
+      }
+      table {
+        font-size: 12px;
+      }
+      th, td {
+        padding: 6px;
+      }
+      .card-view {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      .totals-container {
+        flex-direction: column;
+      }
+      .material-list {
+        columns: 1;
+      }
+      .assistant-form, .preference-sliders {
+        grid-template-columns: 1fr;
+  
+  }/* 傷害計算器樣式 */
+  .damage-calculator {
+    background-color: var(--secondary-bg);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .param-group {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    background: rgba(72, 56, 44, 0.5);
+  }
+
+  .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .flex-item {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  input[type="number"],
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: rgba(40, 32, 26, 0.7);
+    color: var(--text-color);
+  }
+
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background: var(--accent-1);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }.result {
+    padding: 15px;
+    background: rgba(30, 30, 40, 0.6);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 20px;
+  }
+
+  .damage-calculator {
+  background-color: var(--secondary-bg);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 100%;
+}
+
+.param-group {
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  background: rgba(72, 56, 44, 0.5);
+}
+
+/* 確保 flex 容器在小屏幕上的堆疊 */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.flex-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* 改善 input 和 select 的樣式 */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+input[type="number"],
+input[type="text"],
+input[type="checkbox"],
+select {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: rgba(40, 32, 26, 0.7);
+  color: var(--text-color);
+}
+
+/* 改善多選框的顯示 */
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* 改善按鈕樣式 */
+.damage-calculator button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.damage-calculator button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 改善結果顯示區域 */
+.result {
+  padding: 15px;
+  background: rgba(30, 30, 40, 0.6);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 20px;
+  color: var(--text-color);
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .flex-container {
+    flex-direction: column;
+  }
+  
+  .flex-item {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .damage-calculator button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}/* 徵集模擬器樣式 */
+  .gacha-simulator {
+    background-color: var(--secondary-bg);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .event-info {
+    background: rgba(30, 30, 40, 0.6);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stats-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(30, 30, 40, 0.6);
+    border-radius: 10px;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--gold);
+    margin-bottom: 5px;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+  }
+
+  .single-draw {
+    background: var(--accent-1);
+  }
+
+  .ten-draw {
+    background: var(--accent-2);
+  }
+
+  .reset-btn {
+    background: var(--accent-3);
+  }
+
+  .card-result {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #1c1c1e;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-result-6up {
+    background: linear-gradient(135deg, #ffa500, #ff8c00);
+    border-left: 8px solid gold;
+  }
+
+  .card-result-6spook {
+    background: linear-gradient(135deg, #ff7f50, #ff6347);
+    border-left: 8px solid #ff4500;
+  }
+
+  .card-result-5up {
+    background: linear-gradient(135deg, #ffd700, #ffcc00);
+    border-left: 8px solid #ffd700;
+  }
+
+  .card-result-5spook {
+    background: linear-gradient(135deg, #ffeb3b, #fdd835);
+    border-left: 8px solid #ffeb3b;
+  }
+
+  .result-container {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgba(30, 30, 40, 0.4);
+    border-radius: 10px;
+  }.gacha-simulator {
+  background-color: var(--secondary-bg);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 100%;
+}
+
+/* 徵集活動選擇器 */
+.gacha-simulator select {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: rgba(40, 32, 26, 0.7);
+  color: var(--text-color);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNNyA5bDUgNSA1LTUiLz48L3N2Zz4=');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 12px;
+  cursor: pointer;
+}
+
+/* 活動信息區域 */
+.event-info {
+  background: rgba(30, 30, 40, 0.6);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.event-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.up-character {
+  color: var(--highlight);
+  font-weight: bold;
+}
+
+/* 統計顯示區域 */
+.stats-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(30, 30, 40, 0.6);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--gold);
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* 按鈕區域 */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.action-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 120px;
+}
+
+.single-draw {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.ten-draw {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.reset-btn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.action-buttons button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 結果容器 */
+.result-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 15px;
+  background: rgba(30, 30, 40, 0.6);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  margin-top: 20px;
+}
+
+/* 卡片結果 */
+.card-result {
+  margin-bottom: 10px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #1c1c1e;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+
+.card-result:hover {
+  transform: translateX(5px);
+}
+
+.card-result-6up {
+  background: linear-gradient(135deg, #ffa500, #ff8c00);
+  border-left: 8px solid gold;
+}
+
+.card-result-6spook {
+  background: linear-gradient(135deg, #ff7f50, #ff6347);
+  border-left: 8px solid #ff4500;
+}
+
+.card-result-5up {
+  background: linear-gradient(135deg, #ffd700, #ffcc00);
+  border-left: 8px solid #ffd700;
+}
+
+.card-result-5spook {
+  background: linear-gradient(135deg, #ffeb3b, #fdd835);
+  border-left: 8px solid #ffeb3b;
+}
+
+.empty-results {
+  text-align: center;
+  color: var(--text-color);
+  padding: 20px;
+  font-style: italic;
+}
+
+/* 動畫效果 */
+.up-animation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: gold;
+  z-index: 1000;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+  animation: fadeUpOut 1.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeUpOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0%);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -100%);
+  }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons button {
+    width: 100%;
+  }
+  
+  .stats-display {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-display {
+    grid-template-columns: 1fr;
+  }
+}
+/* 外部連結區域 */
+  .links-section {
+    margin-top: 30px;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .link-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .link-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+
+  .link-card a {
+    color: var(--gold);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+  }
+
+  .link-card a:hover {
+    text-decoration: underline;
+  }
+
+  .link-card i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+  }
+
+  /* 響應式設計 */
+  @media (max-width: 768px) {
+    .main-container {
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .controls {
+      flex-direction: column;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+
+    .flex-container {
+      flex-direction: column;
+    }
+
+    .links-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .iframe-container {
+    margin: 20px 0;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    border-top: 1px solid var(--gold);
+    font-size: 0.9rem;
+    color: #999;
+  }
+</style><!-- 將此代碼放在原HTML的</body>標籤前 -->
+
+<script>
+// 確保卡片視圖容器存在
+document.addEventListener('DOMContentLoaded', function() {
+  if (!document.getElementById('cardView')) {
+    const tableContainer = document.querySelector('.table-container');
+    if (tableContainer) {
+      const cardView = document.createElement('div');
+      cardView.id = 'cardView';
+      cardView.className = 'card-view';
+      cardView.style.display = 'none'; // 默認隱藏
+      tableContainer.parentNode.insertBefore(cardView, tableContainer.nextSibling);
+    }
+  }
+  
+  // 確保視圖切換按鈕正確工作
+  const tableViewBtn = document.getElementById('tableViewBtn');
+  const cardViewBtn = document.getElementById('cardViewBtn');
+  const tableContainer = document.querySelector('.table-container');
+  const cardView = document.getElementById('cardView');
+  
+  if (tableViewBtn && cardViewBtn && tableContainer && cardView) {
+    tableViewBtn.addEventListener('click', function() {
+      tableViewBtn.classList.add('active');
+      cardViewBtn.classList.remove('active');
+      tableContainer.style.display = 'block';
+      cardView.style.display = 'none';
+    });
+    
+    cardViewBtn.addEventListener('click', function() {
+      cardViewBtn.classList.add('active');
+      tableViewBtn.classList.remove('active');
+      tableContainer.style.display = 'none';
+      cardView.style.display = 'grid';
+    });
+  }
+});
+
+// 修正卡片視圖更新功能
+function updateCardView() {
+  console.log("開始更新卡片視圖...");
+  const cardContainer = document.getElementById('cardView');
+  if (!cardContainer) {
+    console.error("找不到cardView元素");
+    return;
+  }
+  
+  const filterValue = document.getElementById('filter').value;
+  const sortValue = document.getElementById('sort').value;
+  
+  // 篩選與排序
+  let displayPackages = filterValue === 'all' ?
+    packages :
+    packages.filter(pkg => pkg.category.includes(filterValue));
+  
+  displayPackages = sortPackages(displayPackages, sortValue);
+  
+  // 清空卡片容器
+  cardContainer.innerHTML = '';
+  
+  // 創建每個卡片
+  displayPackages.forEach(pkg => {
+    const card = document.createElement('div');
+    card.className = 'package-card';
+    card.dataset.rank = pkg.rank;
+    if (selectedPackages.has(pkg.name)) {
+      card.classList.add('selected');
+    }
+    
+    // 點擊卡片進行選擇
+    card.addEventListener('click', (e) => {
+      if (e.target.type !== 'checkbox' && e.target.type !== 'number' && 
+          e.target.className !== 'qty-btn') {
+        if (selectedPackages.has(pkg.name)) {
+          selectedPackages.delete(pkg.name);
+        } else {
+          selectedPackages.add(pkg.name);
+        }
+        updateTable();
+        updateCardView();
+        updateTotals();
+      }
+    });
+    
+    // 卡片標籤（類別）
+    const categoryBadge = document.createElement('div');
+    categoryBadge.className = 'card-badge';
+    categoryBadge.textContent = pkg.category;
+    card.appendChild(categoryBadge);
+    
+    // 卡片頭部
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'card-header';
+    
+    const cardTitle = document.createElement('div');
+    cardTitle.className = 'card-title';
+    cardTitle.textContent = pkg.name;
+    
+    // 添加限購標記
+    if (pkg.purchaseLimit) {
+      const limitBadge = document.createElement('span');
+      limitBadge.className = 'limit-badge purchase-limit';
+      limitBadge.textContent = `限${pkg.purchaseLimit}`;
+      limitBadge.style.marginLeft = '5px';
+      limitBadge.style.fontSize = '11px';
+      cardTitle.appendChild(limitBadge);
+    }
+    
+    // 添加限時標記
+    if (pkg.purchaseTime && pkg.purchaseTime !== '永久') {
+      const timeBadge = document.createElement('span');
+      timeBadge.className = 'limit-badge time-limit';
+      timeBadge.textContent = '限時';
+      timeBadge.style.marginLeft = '5px';
+      timeBadge.style.fontSize = '11px';
+      cardTitle.appendChild(timeBadge);
+    }
+    
+    const cardSelect = document.createElement('div');
+    cardSelect.className = 'card-select';
+    
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = selectedPackages.has(pkg.name);
+    checkbox.addEventListener('change', (e) => {
+      e.stopPropagation();
+      if (e.target.checked) {
+        selectedPackages.add(pkg.name);
+      } else {
+        selectedPackages.delete(pkg.name);
+      }
+      updateTable();
+      updateCardView();
+      updateTotals();
+    });
+    
+    cardSelect.appendChild(checkbox);
+    cardHeader.appendChild(cardTitle);
+    cardHeader.appendChild(cardSelect);
+    card.appendChild(cardHeader);
+    
+    // 卡片信息
+    const cardInfo = document.createElement('div');
+    cardInfo.className = 'card-info';
+    
+    // 價格行
+    const priceRow = document.createElement('div');
+    priceRow.className = 'card-row';
+    const priceLabel = document.createElement('span');
+    priceLabel.textContent = '價格:';
+    const priceValue = document.createElement('span');
+    priceValue.textContent = `${pkg.price} TWD (${pkg.usdPrice.toFixed(2)} USD)`;
+    priceRow.appendChild(priceLabel);
+    priceRow.appendChild(priceValue);
+    cardInfo.appendChild(priceRow);
+    
+    // 獨一律行
+    const uniqueRow = document.createElement('div');
+    uniqueRow.className = 'card-row';
+    const uniqueLabel = document.createElement('span');
+    uniqueLabel.textContent = '獨一律:';
+    const uniqueValue = document.createElement('span');
+    uniqueValue.textContent = pkg.unique || 0;
+    uniqueRow.appendChild(uniqueLabel);
+    uniqueRow.appendChild(uniqueValue);
+    cardInfo.appendChild(uniqueRow);
+    
+    // 雨滴行
+    const dropsRow = document.createElement('div');
+    dropsRow.className = 'card-row';
+    const dropsLabel = document.createElement('span');
+    dropsLabel.textContent = '雨滴:';
+    const dropsValue = document.createElement('span');
+    dropsValue.textContent = pkg.drops || 0;
+    dropsRow.appendChild(dropsLabel);
+    dropsRow.appendChild(dropsValue);
+    cardInfo.appendChild(dropsRow);
+    
+    // 兔子價格行
+    const rabbitRow = document.createElement('div');
+    rabbitRow.className = 'card-row';
+    const rabbitLabel = document.createElement('span');
+    rabbitLabel.textContent = '兔子價格:';
+    const rabbitValue = document.createElement('span');
+    rabbitValue.textContent = getRabbitPrice(pkg);
+    rabbitRow.appendChild(rabbitLabel);
+    rabbitRow.appendChild(rabbitValue);
+    cardInfo.appendChild(rabbitRow);
+    
+    // 添加角色與造型信息（如果有）
+    if (pkg.character && pkg.costume) {
+      const costumeRow = document.createElement('div');
+      costumeRow.className = 'card-row';
+      const costumeLabel = document.createElement('span');
+      costumeLabel.textContent = '角色造型:';
+      const costumeValue = document.createElement('span');
+      costumeValue.textContent = `${pkg.character} - ${pkg.costume}`;
+      costumeRow.appendChild(costumeLabel);
+      costumeRow.appendChild(costumeValue);
+      cardInfo.appendChild(costumeRow);
+    }
+    
+    card.appendChild(cardInfo);
+    
+    // 素材信息
+    const materials = document.createElement('div');
+    materials.className = 'card-materials';
+    
+    const materialTitle = document.createElement('div');
+    materialTitle.style.fontWeight = 'bold';
+    materialTitle.textContent = '素材:';
+    materials.appendChild(materialTitle);
+    
+    const materialList = document.createElement('ul');
+    const materialLines = (pkg.materials || '').split('\n');
+    
+    materialLines.forEach(line => {
+      if (line.trim()) {
+        const item = document.createElement('li');
+        item.textContent = line.trim();
+        materialList.appendChild(item);
+      }
+    });
+    
+    materials.appendChild(materialList);
+    card.appendChild(materials);
+    
+    // 數量控制
+    const quantityControl = document.createElement('div');
+    quantityControl.className = 'quantity-control';
+    
+    const minusBtn = document.createElement('button');
+    minusBtn.className = 'qty-btn';
+    minusBtn.textContent = '-';
+    minusBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (pkg.quantity > 1) {
+        pkg.quantity--;
+        qtyInput.value = pkg.quantity;
+        updateTotals();
+      }
+    });
+    
+    const qtyInput = document.createElement('input');
+    qtyInput.className = 'qty-input';
+    qtyInput.type = 'number';
+    qtyInput.min = '1';
+    qtyInput.max = pkg.purchaseLimit || '99';
+    qtyInput.value = pkg.quantity;
+    qtyInput.addEventListener('change', (e) => {
+      e.stopPropagation();
+      const newQty = parseInt(e.target.value, 10) || 1;
+      pkg.quantity = Math.min(newQty, pkg.purchaseLimit || 99);
+      e.target.value = pkg.quantity;
+      updateTotals();
+    });
+    
+    const plusBtn = document.createElement('button');
+    plusBtn.className = 'qty-btn';
+    plusBtn.textContent = '+';
+    plusBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!pkg.purchaseLimit || pkg.quantity < pkg.purchaseLimit) {
+        pkg.quantity++;
+        qtyInput.value = pkg.quantity;
+        updateTotals();
+      }
+    });
+    
+    quantityControl.appendChild(minusBtn);
+    quantityControl.appendChild(qtyInput);
+    quantityControl.appendChild(plusBtn);
+    card.appendChild(quantityControl);
+    
+    // 卡片頁腳
+    const cardFooter = document.createElement('div');
+    cardFooter.className = 'card-footer';
+    
+    // 評級
+    const rankDisplay = document.createElement('div');
+    const rankBadge = document.createElement('span');
+    rankBadge.className = `card-rank-badge rank-${pkg.rank}`;
+    rankBadge.textContent = pkg.rank;
+    rankDisplay.appendChild(rankBadge);
+    rankDisplay.appendChild(document.createTextNode(' 評級'));
+    
+    // 購買時間
+    const timeDisplay = document.createElement('div');
+    timeDisplay.textContent = pkg.purchaseTime && pkg.purchaseTime !== '永久' ?
+      `限時: ${pkg.purchaseTime.split(' - ')[1] || pkg.purchaseTime}` : '';
+    
+    cardFooter.appendChild(rankDisplay);
+    cardFooter.appendChild(timeDisplay);
+    card.appendChild(cardFooter);
+    
+    cardContainer.appendChild(card);
+  });
+  
+  console.log("卡片視圖更新完成");
+}
+
+// 修正總計顯示函數
+function updateTotals() {
+  let totalPrice = 0;
+  let totalUsdPrice = 0;
+  let totalUnique = 0;
+  let totalDrops = 0;
+  let totalMatDrops = 0;
+  let finalItems = { "獨一律": 0 };
+  
+  selectedPackages.forEach(name => {
+    const pkg = packages.find(p => p.name === name);
+    if (pkg) {
+      const count = pkg.quantity || 1;
+      
+      totalPrice += pkg.price * count;
+      totalUsdPrice += pkg.usdPrice * count;
+      totalUnique += (pkg.unique || 0) * count;
+      totalDrops += (pkg.drops || 0) * count;
+      
+      // 計算素材折算雨滴
+      const { totalDrops: matDrops, items } = parseMaterials(pkg.materials || '');
+      totalMatDrops += matDrops * count;
+      
+      finalItems["獨一律"] += (pkg.unique || 0) * count;
+      
+      // 添加素材到最終列表
+      if (pkg.materials) {
+        const lines = pkg.materials.split(/\n/);
+        lines.forEach(line => {
+          const match = line.match(/(.+)\s*×\s*(\d+)/);
+          if (match) {
+            const itemName = match[1].trim();
+            const itemQty = parseInt(match[2], 10);
+            finalItems[itemName] = (finalItems[itemName] || 0) + (itemQty * count);
+          }
+        });
+      }
+    }
+  });
+  
+  // 總兔子數 = 獨一律 + [(雨滴) / 180]
+  const totalUniquePlusDrops = totalUnique + (totalDrops) / 180;
+  let totalRabbitPrice = "N/A";
+  
+  if (totalUniquePlusDrops > 0) {
+    totalRabbitPrice = (totalPrice / totalUniquePlusDrops).toFixed(2);
+  }
+  
+  // 更新總計顯示
+  document.getElementById('totalPrice').textContent = totalPrice.toString();
+  document.getElementById('totalUnique').textContent = totalUnique.toString();
+  document.getElementById('totalDrops').textContent = totalDrops.toString();
+  document.getElementById('totalMatDrops').textContent = totalMatDrops.toFixed(2);
+  document.getElementById('totalRabbitPrice').textContent = totalRabbitPrice;
+  
+  // 更新素材摘要
+  const matSummary = document.getElementById('materialSummary');
+  const matList = document.getElementById('materialList');
+  if (matSummary && matList) {
+    matList.innerHTML = '';
+    
+    // 把 finalItems 裡除了「獨一律」以外、有數量的素材都列出來
+    const sortedItems = Object.entries(finalItems)
+      .filter(([name, qty]) => name !== '獨一律' && qty > 0)
+      .sort((a, b) => b[1] - a[1]); // 按數量從多到少排序
+    
+    sortedItems.forEach(([name, qty]) => {
+      const li = document.createElement('li');
+      li.textContent = `${name} × ${qty}`;
+      matList.appendChild(li);
+    });
+    
+    // 若真的有任何素材，就顯示那個區塊，否則隱藏
+    if (matList.children.length) {
+      matSummary.style.display = 'block';
+    } else {
+      matSummary.style.display = 'none';
+    }
+  }
+}
+</script>
+
+<style>
+/* 修正卡片視圖的樣式 */
+.card-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.package-card {
+  background-color: #48382C;
+  border: 1px solid #D4AF37;
+  border-radius: 8px;
+  padding: 15px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.package-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.package-card.selected {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-color: #FFD700;
+}
+
+/* 修正表格容器的樣式，確保適當的滾動和寬度 */
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 20px;
+  max-height: 600px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* 確保表格在移動設備上正確顯示 */
+@media (max-width: 768px) {
+  .table-container {
+    font-size: 12px;
+  }
+  
+  table {
+    width: 100%;
+    min-width: 800px; /* 確保較小螢幕也能水平滾動 */
+  }
+  
+  th, td {
+    padding: 6px 4px;
+  }
+  
+  .card-view {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+/* 修正總計區域的樣式，確保適當的布局 */
+.stats-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(30, 30, 40, 0.6);
+  border-radius: 10px;
+  width: 100%;
+}
+
+/* 修正素材摘要區域的樣式 */
+.material-summary {
+  margin-top: 20px;
+  background-color: #48382C;
+  border: 1px solid #D4AF37;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+}
+
+.material-list {
+  margin: 10px 0 0 0;
+  padding: 0 0 0 20px;
+  columns: 2;
+}
+
+@media (max-width: 600px) {
+  .material-list {
+    columns: 1;
+  }
+}
+
+/* 修正全選/取消全選按鈕 */
+#selectAll {
+  cursor: pointer;
+}
+
+/* 調整視圖切換按鈕 */
+.view-mode {
+  margin-left: auto;
+  display: flex;
+  gap: 5px;
+}
+
+.view-mode-btn {
+  background-color: #48382C;
+  color: #D4AF37;
+  border: 1px solid #D4AF37;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.view-mode-btn.active {
+  background-color: #D4AF37;
+  color: #28201A;
+}
+
+/* 修正控制項列的排版 */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .view-mode {
+    margin: 10px 0;
+    margin-left: 0;
+  }
+}.links-section {
+  margin-top: 30px;
+  padding: 0 10px;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.link-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 15px;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.link-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.link-card h3 {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  color: var(--gold);
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.link-card a {
+  color: var(--gold);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  transition: all 0.2s ease;
+}
+
+.link-card a:hover {
+  text-decoration: underline;
+  padding-left: 5px;
+  color: var(--highlight);
+}
+
+.link-card i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .links-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .link-card {
+    margin-bottom: 15px;
+  }
+
+</style>
+</head><body>
+  <header>
+    <h1>重返未來：1999 綜合導航頁面</h1>
+  </header>
+
+  <div class="main-container">
+    <div class="iframe-container">
+      <iframe width="100%" height="165" 
+        src="https://www.youtube.com/embed/videoseries?si=tIOAU16NzzgzdbQp&list=PLLubeXa_lNx-H7C9aBC2VUgIk5hb04-py&autoplay=1" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen>
+      </iframe>
+      
+      <iframe style="border-radius:12px; width: 100%; margin-top: 15px;" 
+        src="https://open.spotify.com/embed/playlist/2wQauGrZ4c4ff87Ik8n8rc?utm_source=generator" 
+        height="152" 
+        frameBorder="0" 
+        allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <div class="nav-tabs">
+      <div class="nav-tab active" data-tab="package-calc">禮包計算器</div>
+      <div class="nav-tab" data-tab="damage-calc">傷害計算器</div>
+      <div class="nav-tab" data-tab="gacha-sim">徵集模擬器</div>
+      <div class="nav-tab" data-tab="links">實用連結</div>
+    </div><!-- 禮包計算器 -->
+    <div id="package-calc" class="tab-content active">
+      <h2>禮包計算器</h2>
+      <p>選擇您感興趣的禮包，計算最佳性價比組合。</p>
+      
+      <div class="package-container">
+        <div class="controls">
+          <div>
+            <label for="filter">篩選:</label>
+            <select id="filter">
+              <option value="all">全部分類</option>
+              <option value="活動">活動</option>
+              <option value="限時">限時</option>
+              <option value="素材">素材</option>
+              <option value="常駐">常駐</option>
+              <option value="新人">新人</option>
+              <option value="粹包">粹包</option>
+              <option value="造型">造型</option>
+            </select>
+          </div>
+          <div>
+            <label for="sort">排序:</label>
+            <select id="sort">
+              <option value="value">按性價比排序</option>
+              <option value="price">按價格排序</option>
+              <option value="unique">按獨一律排序</option>
+              <option value="drops">按雨滴排序</option>
+              <option value="rabbitPrice">按兔子價格排序</option>
+              <option value="usdPrice">按美金價格排序</option>
+            </select>
+          </div>
+          <div class="view-mode">
+            <button class="view-mode-btn active" id="tableViewBtn" title="表格視圖">
+              <i class="fas fa-table"></i>
+            </button>
+            <button class="view-mode-btn" id="cardViewBtn" title="卡片視圖">
+              <i class="fas fa-th"></i>
+            </button>
+          </div>
+        </div>
+<div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th width="40">
+                  <input type="checkbox" id="selectAll" title="全選/取消全選">
+                </th>
+                <th><i class="fas fa-gift"></i> 禮包名稱</th>
+                <th><i class="fas fa-coins"></i> 價格（NTD）</th>
+<th><i class="fas fa-coins"></i> 價格（USD）</th>
+             <th><i class="fas fa-star"></i> 獨一律</th>
+                <th><i class="fas fa-tint"></i> 雨滴</th>
+               <th>數量</th>
+              <th><i class="fas fa-box"></i> 素材</th>
+              <th><i class="fas fa-medal"></i> 評級</th>
+              <th><i class="fas fa-rabbit"></i> 兔子價格</th>
+              <th><i class="fas fa-exclamation-triangle"></i> 限購次數</th>
+              <th><i class="fas fa-calendar-alt"></i> 購買時間</th>
+              <th><i class="fas fa-tshirt"></i> 造型</th>
+
+              </tr>
+            </thead>
+            <tbody id="packageList">
+              <!-- 資料將由 JavaScript 動態生成 -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="totals">
+          <h3>總計資訊</h3>
+          <div class="stats-display">
+            <div class="stat-item">
+              <div class="stat-label">總價（NTD）：</div>
+              <div class="stat-value" id="totalPrice">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">獨一律：</div>
+              <div class="stat-value" id="totalUnique">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">雨滴：</div>
+              <div class="stat-value" id="totalDrops">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">素材折算雨滴：</div>
+              <div class="stat-value" id="totalMatDrops">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">平均兔子價格：</div>
+              <div class="stat-value" id="totalRabbitPrice">N/A</div>
+            </div>
+          </div>
+        </div>
+          <div class="material-summary" id="materialSummary" style="display: none;">
+      <h2 class="material-title">素材總結</h2>
+      <ul id="materialList" class="material-list"></ul>
+    </div>
+
+        <button class="button" id="clearBtn">
+          <i class="fas fa-trash"></i> 清除選擇
+        </button>
+      </div>
+    </div><!-- 傷害計算器 -->
+    <div id="damage-calc" class="tab-content">
+      <h2>Boss傷害計算模擬</h2>
+      <p>計算對Boss的傷害，優化您的戰鬥策略。</p>
+      
+      <div class="damage-calculator">
+        <!-- 我方參數 -->
+        <div class="section">
+          <h3>我方參數</h3>
+          <div class="param-group flex-container">
+            <div class="flex-item">
+              <label for="our_attack">攻擊力</label>
+              <input type="number" id="our_attack" placeholder="例如：1500">
+            </div>
+            <div class="flex-item">
+              <label for="our_penetration">穿透率 (%)</label>
+              <input type="text" id="our_penetration" placeholder="例如：10">
+            </div>
+            <div class="flex-item">
+              <label for="our_skill_multiplier">技能倍率 (%)</label>
+              <input type="text" id="our_skill_multiplier" placeholder="例如：200">
+            </div>
+            <div class="flex-item">
+              <label for="our_damage_increase">增傷率 (%)</label>
+              <input type="text" id="our_damage_increase" placeholder="例如：30">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Boss 參數 -->
+        <div class="section">
+          <h3>Boss 參數</h3>
+          <div class="param-group flex-container">
+            <div class="flex-item">
+              <label for="boss_physical_defense">現實防禦值</label>
+              <input type="number" id="boss_physical_defense" placeholder="例如：900">
+            </div>
+            <div class="flex-item">
+              <label for="boss_spirit_defense">精神防禦值</label>
+              <input type="number" id="boss_spirit_defense" placeholder="例如：850">
+            </div>
+            <div class="flex-item">
+              <label for="boss_defense_reduction">防降率 (%)</label>
+              <input type="text" id="boss_defense_reduction" placeholder="例如：18">
+            </div>
+            <div class="flex-item">
+              <label for="boss_damage_vulnerability">易受傷害加成 (%)</label>
+              <input type="text" id="boss_damage_vulnerability" placeholder="例如：12">
+            </div>
+          </div>
+        </div>
+<!-- 攻擊類型與暴擊選項 -->
+        <div class="section">
+          <h3>攻擊設定</h3>
+          <div class="flex-container">
+            <div class="flex-item">
+              <label for="damage_type">攻擊類型：</label>
+              <select id="damage_type">
+                <option value="physical">現實攻擊</option>
+                <option value="spirit">精神攻擊</option>
+              </select>
+            </div>
+            <div class="flex-item">
+              <label>
+                <input type="checkbox" id="is_critical"> 暴擊
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 按鈕區 -->
+        <div class="section" style="text-align:center; margin-top: 20px;">
+          <button onclick="calculateDamage()">計算傷害</button>
+          <button onclick="saveParameters()">保存參數</button>
+          <button onclick="loadParameters()">讀取參數</button>
+        </div>
+        
+        <!-- 結果顯示區 -->
+        <div class="result" id="damageResult">
+          計算結果將顯示在這裡
+        </div>
+      </div>
+    </div>
+<!-- 徵集模擬器 -->
+    <div id="gacha-sim" class="tab-content">
+      <h2>徵集模擬器</h2>
+      <p>模擬抽卡體驗，測試您的運氣。</p>
+      
+      <div class="gacha-simulator">
+        <div class="section">
+          <label for="eventSelect">選擇活動徵集：</label>
+          <select id="eventSelect">
+            <option value="赤心如晝明">赤心如晝明</option>
+            <option value="盡杯酌">盡杯酌</option>
+            <option value="幕間蒙太奇">幕間蒙太奇</option>
+            <option value="湖的漣漪">湖的漣漪</option>
+            <option value="湖的啟示">湖的啟示</option>
+          </select>
+        </div>
+        
+        <div id="eventInfo" class="event-info">
+          <div class="event-title">赤心如晝明</div>
+          <div>活動類型: 度朔節限定徵集</div>
+          <div>活動期間: 4/24版本更新後 - 5/29 4:59</div>
+          <div>6★ UP角色: <span class="up-character">梁月（星）</span></div>
+          <div>5★ UP角色: <span class="up-character">空腦袋（木）</span></div>
+        </div>
+        
+        <div id="gacha-stats" class="stats-display">
+          <div class="stat-item">
+            <div class="stat-label">總抽數</div>
+            <div class="stat-value">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">當前保底</div>
+            <div class="stat-value">0 / 70</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">距離6★保底</div>
+            <div class="stat-value">70 抽</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">下次6★必定UP</div>
+            <div class="stat-value">否</div>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="single-draw" id="singleDrawBtn">單抽</button>
+          <button class="ten-draw" id="tenDrawBtn">十連抽</button>
+          <button class="reset-btn" id="resetBtn">重置</button>
+        </div>
+        
+        <div class="result-container" id="gachaResults">
+          <div class="empty-results">尚未抽到 5★ 或 6★</div>
+        </div>
+      </div>
+    </div>
+
+<!-- 實用連結 -->
+    <div id="links" class="tab-content">
+      <h2>實用連結</h2>
+      <p>收集了重返未來：1999 相關的實用資源和社區連結。</p>
+      
+      <div class="links-grid">
+        <div class="link-card">
+          <h3>官方資源</h3>
+          <a href="https://forum.gamer.com.tw/B.php?bsn=75028" target="_blank">
+            <i class="fas fa-gamepad"></i> 巴哈姆特遊戲討論區
+          </a>
+          <a href="https://space.bilibili.com/1197454103" target="_blank">
+            <i class="fas fa-tv"></i> 官方Bilibili頻道
+          </a>
+        </div>
+        
+        <div class="link-card">
+          <h3>社交媒體</h3>
+          <a href="https://discord.com/invite/rD8AEWsauB" target="_blank">
+            <i class="fab fa-discord"></i> 官方Discord伺服器
+          </a>
+          <a href="https://discord.com/invite/S58DPWxhXg" target="_blank">
+            <i class="fab fa-discord"></i> 中文Discord社群
+          </a>
+          <a href="https://www.facebook.com/share/g/15T2aJJYiD/" target="_blank">
+            <i class="fab fa-facebook"></i> Facebook粉絲專頁
+          </a>
+        </div>
+        
+        <div class="link-card">
+          <h3>資源下載</h3>
+          <a href="https://drive.google.com/drive/folders/1Q0lFNZKMQrtTwjquA66wKVZxJDl4wafK" target="_blank">
+            <i class="fab fa-google-drive"></i> 1999美術圖
+          </a>
+          <a href="https://drive.google.com/drive/folders/1QWOxWAm0uBhTnGdXe9nSCpKjSQXuh01L" target="_blank">
+            <i class="fab fa-google-drive"></i> 1999 ost
+          </a>
+          <a href="https://drive.google.com/drive/folders/1b64bCkYbPfCHq-8JX07PDbOXD46knEuY" target="_blank">
+            <i class="fab fa-google-drive"></i> 1999貼圖
+          </a>
+        </div>
+        
+        <div class="link-card">
+          <h3>攻略工具</h3>
+          <a href="https://windbow27.github.io/kornblume/" target="_blank">
+            <i class="fas fa-calculator"></i> Kornblume 角色計算工具</a>
+          <a href="https://voyager-reverse-1999ww.on.drv.tw/rrrrrrrrrr.html" target="_blank">
+            <i class="fas fa-tools"></i> 輔助計算工具
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 重返未來：1999 綜合導航頁面 | 非官方網站
+  </footer>
+<script>
+    // 標籤切換功能
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // 移除所有標籤的 active 類別
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        // 隱藏所有內容
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        // 加入當前標籤的 active 類別
+        tab.classList.add('active');
+        // 顯示對應的內容
+        const tabId = tab.dataset.tab;
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+
+    // 禮包計算器完整代碼
+    // 素材轉換表
+    const MATERIAL_CONVERSION = {
+      "饕餮": 900,
+      "共鳴晶匣": 600,
+      "片刻的喧囂": 60,
+      "一瞬的躁動": 10,
+      "苦目糖果": 30,
+      "苦目糖罐": 60,
+      "高階秘物匣子": 60,
+      "中階秘物匣子": 15,
+      "悠遠的振響": 180,
+      "純雨滴": 1,
+      "特階秘物匣子": 120,
+      "低階秘物匣子": 5,
+      "低頻偏振": 5,
+      "高頻偏振": 30,
+      "微頻偏振": 5,
+      "洞見之聲": 300,
+      "先覺之聲": 300,
+      "五星造像": 10,
+      "思潮之鑰": 30,
+      "浮想之芽": 5,
+      "靈機之種": 0.5,
+      "規序影像": 5,
+      "微塵": 0.01,
+      "利齒子兒": 0.01,
+      "荒原齒貝": 0.3
+    }; const packages = [
+        {
+          name: "金線典藏",
+          price: 33,
+          usdPrice: 0.99,
+          unique: 1,
+          drops: 0,
+          rank: "B",
+          category: "常駐",
+          materials: "微塵 ×10000\n利齒子兒 ×10000",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首儲1980粹",
+          price: 990,
+          usdPrice: 29.99,
+          unique: 0,
+          drops: 3960,
+          rank: "S",
+          category: "粹包",
+          materials: "純雨滴 ×3960",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首儲300粹",
+          price: 170,
+          usdPrice: 4.99,
+          unique: 0,
+          drops: 600,
+          rank: "S",
+          category: "粹包",
+          materials: "純雨滴 ×600",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首儲3280粹",
+          price: 1690,
+          usdPrice: 49.99,
+          unique: 0,
+          drops: 6560,
+          rank: "S",
+          category: "粹包",
+          materials: "純雨滴 ×6560",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首儲60粹",
+          price: 33,
+          usdPrice: 0.99,
+          unique: 0,
+          drops: 120,
+          rank: "S",
+          category: "粹包",
+          materials: "純雨滴 ×120",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首儲6480粹",
+          price: 3290,
+          usdPrice: 99.99,
+          unique: 0,
+          drops: 12960,
+          rank: "S",
+          category: "粹包",
+          materials: "純雨滴 ×12960",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首儲980粹",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 0,
+          drops: 1960,
+          rank: "S",
+          category: "粹包",
+          materials: "純雨滴 ×1960",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "首輪徵集狂歡",
+          price: 690,
+          usdPrice: 19.99,
+          unique: 20,
+          drops: 0,
+          rank: "A",
+          category: "新人",
+          materials: "獨一律 ×20",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "荒原購物狂歡",
+          price: 100,
+          usdPrice: 2.99,
+          unique: 0,
+          drops: 400,
+          rank: "A",
+          category: "新人",
+          materials: "荒原齒貝 ×1500",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "新人啟程購物日",
+          price: 33,
+          usdPrice: 0.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "新人",
+          materials: "苦目糖罐 ×1\n五星造像 ×1",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "新客特惠",
+          price: 330,
+          usdPrice: 9.99,
+          unique: 0,
+          drops: 1360,
+          rank: "A",
+          category: "新人",
+          materials: "利齒子兒 ×35000\n微塵 ×30000\n中階秘物匣子 ×6\n低階秘物匣子 ×6",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "新客特遞",
+          price: 70,
+          usdPrice: 1.99,
+          unique: 4,
+          drops: 120,
+          rank: "A",
+          category: "新人",
+          materials: "苦目糖罐 ×1\n利齒子兒 ×40000",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "邀約專享促銷",
+          price: 330,
+          usdPrice: 9.99,
+          unique: 10,
+          drops: 100,
+          rank: "A",
+          category: "新人",
+          materials: "純雨滴 ×100\n獨一律 ×10",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "永久"
+        },
+        {
+          name: "1980粹",
+          price: 990,
+          usdPrice: 29.99,
+          unique: 0,
+          drops: 2380,
+          rank: "C",
+          category: "粹包",
+          materials: "純雨滴 ×2380",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "300粹",
+          price: 170,
+          usdPrice: 4.99,
+          unique: 0,
+          drops: 330,
+          rank: "C",
+          category: "粹包",
+          materials: "純雨滴 ×330",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "3280粹",
+          price: 1690,
+          usdPrice: 49.99,
+          unique: 0,
+          drops: 4080,
+          rank: "C",
+          category: "粹包",
+          materials: "純雨滴 ×4080",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "60粹",
+          price: 33,
+          usdPrice: 0.99,
+          unique: 0,
+          drops: 60,
+          rank: "C",
+          category: "粹包",
+          materials: "純雨滴 ×60",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "6480粹",
+          price: 3290,
+          usdPrice: 99.99,
+          unique: 0,
+          drops: 8380,
+          rank: "C",
+          category: "粹包",
+          materials: "純雨滴 ×8380",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "980粹",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 0,
+          drops: 1130,
+          rank: "C",
+          category: "粹包",
+          materials: "純雨滴 ×1130",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "成長速遞",
+          price: 240,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 900,
+          rank: "A",
+          category: "常駐",
+          materials: "純雨滴 ×900\n洞見之聲 ×1",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "1/9版本更新後"
+        },
+        {
+          name: "咆哮的一月",
+          price: 170,
+          usdPrice: 4.99,
+          unique: 0,
+          drops: 3000,
+          rank: "S",
+          category: "常駐",
+          materials: "純雨滴 ×300\n苦目糖果 ×30\n純雨滴 ×2700",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "月度特售",
+          price: 2190,
+          usdPrice: 64.99,
+          unique: 10,
+          drops: 5000,
+          rank: "B",
+          category: "常駐",
+          materials: "利齒子兒 ×150000\n微塵 ×200000",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "月度素材酬賓",
+          price: 100,
+          usdPrice: 2.99,
+          unique: 0,
+          drops: 0,
+          rank: "B",
+          category: "常駐",
+          materials: "特階秘物匣子 ×2\n高階秘物匣子 ×5",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "月度徵集酬賓",
+          price: 830,
+          usdPrice: 24.99,
+          unique: 10,
+          drops: 1800,
+          rank: "A",
+          category: "常駐",
+          materials: "純雨滴 ×1800\n獨一律 ×10",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "回聲典藏",
+          price: 330,
+          usdPrice: 9.99,
+          unique: 0,
+          drops: 0,
+          rank: "B",
+          category: "常駐",
+          materials: "悠遠的振響 ×5\n片刻的喧囂 ×15\n一瞬的躁動 ×20\n利齒子兒 ×30000",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "徵集購物日",
+          price: 2990,
+          usdPrice: 89.99,
+          unique: 40,
+          drops: 0,
+          rank: "C",
+          category: "常駐",
+          materials: "高階秘物匣子 ×20\n利齒子兒 ×400000\n微塵 ×500000",
+          quantity: 1,
+          purchaseLimit: null,
+          purchaseTime: "永久"
+        },
+        {
+          name: "成長新聲",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 10,
+          drops: 0,
+          rank: "A",
+          category: "常駐",
+          materials: "獨一律 ×10\n洞見之聲 ×1\n先覺之聲 ×1",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後"
+        },
+        {
+          name: "重返新風尚",
+          price: 390,
+          usdPrice: 10.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "ADVANCED、GARMENT 各1 隨機\n重複轉純雨滴",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "喧笑月曆集",
+          price: 330,
+          usdPrice: 9.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "活動",
+          materials: "咆哮的一月有效期+90日\n純雨滴 ×900\n苦目糖罐 ×15",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "十全調·湖的漣漪",
+          price: 390,
+          usdPrice: 10.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "限時",
+          materials: "十全調·湖的漣漪 ×1",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "4/24版本更新後 - 5/22 04:59"
+        },
+        {
+          name: "十全調•盡杯酌",
+          price: 390,
+          usdPrice: 10.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "限時",
+          materials: "十全調•盡杯酌 ×1",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "5/03 05:00 - 5/17 04:59"
+        },
+        {
+          name: "度朔致意•湖的啟示",
+          price: 390,
+          usdPrice: 10.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "限時",
+          materials: "十全調•湖的啟示 ×1",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "5/10 10:00 - 5/21 23:59"
+        },
+        {
+          name: "1.5週年熱銷",
+          price: 2490,
+          usdPrice: 67.99,
+          unique: 15,
+          drops: 5000,
+          rank: "A",
+          category: "限時",
+          materials: "純雨滴 ×5000\n獨一律 ×15\n特階秘物匣子 ×5\n思潮之鑰 ×12\n浮想之芽 ×120\n靈機之種 ×2400\n利齒子兒 ×150000\n微塵 ×200000",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "5/01 00:00 - 5/21 23:59"
+        },
+        {
+          name: "燈如晝",
+          price: 100,
+          usdPrice: 2.99,
+          unique: 2,
+          drops: 0,
+          rank: "A",
+          category: "限時",
+          materials: "獨一律 ×2\n紀念建築「火樹銀花」 ×1",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "5/01 00:00 - 5/21 23:59"
+        },
+        {
+          name: "1.5週年酬賓",
+          price: 830,
+          usdPrice: 24.99,
+          unique: 10,
+          drops: 1000,
+          rank: "A",
+          category: "限時",
+          materials: "純雨滴 ×1000\n獨一律 ×10\n共鳴晶匣 ×1\n規序影像 ×50\n片刻的喧囂 ×8\n浮想之芽 ×15",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "5/01 00:00 - 5/21 23:59"
+        },
+        {
+          name: "1.5週年特惠",
+          price: 1290,
+          usdPrice: 37.99,
+          unique: 10,
+          drops: 2000,
+          rank: "A",
+          category: "限時",
+          materials: "純雨滴 ×2000\n獨一律 ×10\n秘物匣子 ×15\n悠遠的振響 ×4\n思潮之鑰 ×2",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "5/01 00:00 - 5/21 23:59"
+        },
+        {
+          name: "社火的紀忿",
+          price: 1690,
+          usdPrice: 49.99,
+          unique: 20,
+          drops: 1500,
+          rank: "A",
+          category: "限時",
+          materials: "純雨滴 ×1500\n獨一律 ×20\n饕餮 ×1\n共鳴晶匣 ×1\n利齒子兒 ×100000\n悠遠的振響 ×5\n思潮之鑰 ×3",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "巡夜的紀念",
+          price: 990,
+          usdPrice: 29.99,
+          unique: 12,
+          drops: 1200,
+          rank: "A",
+          category: "限時",
+          materials: "純雨滴 ×1200\n獨一律 ×12\n共鳴晶匣 ×1\n低頻偏振 ×15\n片刻的喧囂 ×10\n浮想之芽 ×20",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "銀幕的贈禮",
+          price: 170,
+          usdPrice: 4.99,
+          unique: 4,
+          drops: 5,
+          rank: "A",
+          category: "限時",
+          materials: "獨一律 ×4\n一瞬的躁動 ×5\n苦目糖果 ×1\n利齒子兒 ×30000",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "片場的贈禮",
+          price: 70,
+          usdPrice: 1.99,
+          unique: 2,
+          drops: 0,
+          rank: "A",
+          category: "限時",
+          materials: "獨一律 ×2\n苦目糖果 ×1",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "成像研究",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 4,
+          drops: 980,
+          rank: "A",
+          category: "限時",
+          materials: "純雨滴 ×980\n獨一律 ×4\n規序影像 ×30",
+          quantity: 1,
+          purchaseLimit: 2,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "辛勤酬賓",
+          price: 830,
+          usdPrice: 24.99,
+          unique: 10,
+          drops: 1000,
+          rank: "A",
+          category: "活動",
+          materials: "純雨滴 ×1000\n獨一律 ×10\n共鳴晶匣 ×1\n規序影像 ×50\n片刻的喧囂 ×8\n浮想之芽 ×15",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/30 05:00 - 5/10 04:59"
+        },
+        {
+          name: "辛勤特惠",
+          price: 1290,
+          usdPrice: 37.99,
+          unique: 10,
+          drops: 2000,
+          rank: "A",
+          category: "活動",
+          materials: "純雨滴 ×2000\n獨一律 ×10\n饕餮 ×1\n規序影像 ×80\n高階秘物匣子 ×15\n中階秘物匣子 ×15\n悠遠的振響 ×4\n思潮之鑰 ×2",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/30 05:00 - 5/10 04:59"
+        },
+        {
+          name: "素材自助暢飲",
+          price: 170,
+          usdPrice: 4.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "素材",
+          materials: "高階秘物匣子 / 片刻的喧囂 / 微頻偏振 / 微塵 / 利齒子兒 / 浮想之芽 / 靈機之種",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "素材豐收派對",
+          price: 330,
+          usdPrice: 9.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "素材",
+          materials: "饕餮 / 共鳴晶匣 / 特階秘物匣子 / 悠遠的振響 / 高頻偏振 / 浮想之芽 / 思潮之鑰",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "神秘遠鄰",
+          price: 70,
+          usdPrice: 1.99,
+          unique: 0,
+          drops: 240,
+          rank: "A",
+          category: "造型",
+          materials: "純雨滴 ×240\n頭像「骨與海」\n頭像「石上餘燼」",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59"
+        },
+        {
+          name: "「舊卷新談」系列：「壁上桃源」 - 曲娘",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "新衣著限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "曲娘",
+          costume: "壁上桃源"
+        },
+        {
+          name: "「舊卷新談」系列：「玉瓶寶鑑」 - 藍手帕",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "新衣著限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "藍手帕",
+          costume: "玉瓶寶鑑"
+        },
+        {
+          name: "「舊卷新談」系列：「紅線緣」 - 蘇芙比",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "新衣著限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "蘇芙比",
+          costume: "紅線緣"
+        },
+        {
+          name: "「策馬行山河」 - 未鏽鎧",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "未鏽鎧",
+          costume: "策馬行山河"
+        },
+        {
+          name: "「鬧蛾兒」 - 槲寄生",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "槲寄生",
+          costume: "鬧蛾兒"
+        },
+        {
+          name: "「夜晚如此祥和」 - 梅蘭妮",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "梅蘭妮",
+          costume: "夜晚如此祥和"
+        },
+        {
+          name: "「快樂的捕鳥人」 - 37",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "37",
+          costume: "快樂的捕鳥人"
+        },
+        {
+          name: "「宇宙寫真者」 - 兔毛手袋",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "兔毛手袋",
+          costume: "宇宙寫真者"
+        },
+        {
+          name: "「極地遠望」 - 溫妮弗雷德",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "溫妮弗雷德",
+          costume: "極地遠望"
+        },
+        {
+          name: "「啟航！向明日」 - 星銻",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "星銻",
+          costume: "啟航！向明日"
+        },
+        {
+          name: "「午後曳航」 - 潔西卡",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "潔西卡",
+          costume: "午後曳航"
+        },
+        {
+          name: "「再一次上路」 - 遠旅",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "遠旅",
+          costume: "再一次上路"
+        },
+        {
+          name: "「勝利衝刺」 - 可燃點",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "可燃點",
+          costume: "勝利衝刺"
+        },
+        {
+          name: "「何時何地」 - 6",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "6",
+          costume: "何時何地"
+        },
+        {
+          name: "「爵士春秋」 - 伊索爾德",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "伊索爾德",
+          costume: "爵士春秋"
+        },
+        {
+          name: "「噫~嗬！」 - 愛茲拉",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "愛茲拉",
+          costume: "噫~嗬！"
+        },
+        {
+          name: "「勾手，起跳，懸停」 - 伽菈波那",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "伽菈波那",
+          costume: "勾手，起跳，懸停"
+        },
+        {
+          name: "「於火中得見」 - 6",
+          price: 330,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "6",
+          costume: "於火中得見"
+        },
+        {
+          name: "「曲線的居所」 - 圖圖石子",
+          price: 230,
+          usdPrice: 6.99,
+          unique: 0,
+          drops: 0,
+          rank: "A",
+          category: "造型",
+          materials: "返場限時售賣",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "圖圖石子",
+          costume: "曲線的居所"
+        }
+,{
+          name: "「吼吼點唱機：神通拍檔」 ",
+          price: 330,
+          usdPrice: 9.99,
+          unique: 0,
+          drops: 0,
+          rank: "S",
+          category: "造型",
+          materials: "大月卡",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+         character: "槲寄生",
+          costume: "荊棘環繞處"
+
+        },{
+          name: "「吼吼點唱機組：神通拍檔」 ",
+          price: 490,
+          usdPrice: 14.99,
+          unique: 0,
+          drops: 0,
+          rank: "S",
+          category: "造型",
+          materials: "大月卡",
+          quantity: 1,
+          purchaseLimit: 1,
+          purchaseTime: "4/24版本更新後 - 5/29 04:59",
+          character: "槲寄生",
+          costume: "荊棘環繞處"
+        }
+
+      ];const selectedPackages = new Set();
+    
+    function initPackageCalc() {
+      updateTable();
+      
+      // 篩選與排序變更
+      const filterSelect = document.getElementById('filter');
+      const sortSelect = document.getElementById('sort');
+      
+      if (filterSelect) {
+        filterSelect.addEventListener('change', () => {
+          updateTable();
+        });
+      }
+      
+      if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+          updateTable();
+        });
+      }
+      
+      // 清除選擇按鈕
+      const clearBtn = document.getElementById('clearBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          selectedPackages.clear();
+          updateTable();
+          updateTotals();
+        });
+      }
+      
+      // 視圖模式切換
+      const tableViewBtn = document.getElementById('tableViewBtn');
+      const cardViewBtn = document.getElementById('cardViewBtn');
+      
+      if (tableViewBtn && cardViewBtn) {
+        tableViewBtn.addEventListener('click', () => {
+          tableViewBtn.classList.add('active');
+          cardViewBtn.classList.remove('active');
+        });
+        
+        cardViewBtn.addEventListener('click', () => {
+          cardViewBtn.classList.add('active');
+          tableViewBtn.classList.remove('active');
+        });
+      }
+    }// 計算單一禮包的「兔子價格」
+    function getRabbitPrice(pkg) {
+      const totalValue = (pkg.unique || 0) + (pkg.drops || 0) / 180;
+      
+      if (totalValue === 0) {
+        return "N/A";
+      } else {
+        return (pkg.price / totalValue).toFixed(2);
+      }
+    }
+    
+    // 分析素材
+    function parseMaterials(str) {
+      if (!str) return { totalDrops: 0, items: {} };
+      
+      let totalDrops = 0;
+      let items = {};
+      const lines = str.split(/\n/);
+      
+      lines.forEach(line => {
+        const match = line.match(/(.+)\s*×\s*(\d+)/);
+        if (match) {
+          const itemName = match[1].trim();
+          const itemQty = parseInt(match[2], 10);
+          items[itemName] = (items[itemName] || 0) + itemQty;
+          // 若有對應的轉換率，計算折算雨滴
+          if (MATERIAL_CONVERSION[itemName]) {
+            totalDrops += MATERIAL_CONVERSION[itemName] * itemQty;
+          }
+        }
+      });
+      
+      return { totalDrops, items };
+    }
+    
+    // 排序規則
+    function sortPackages(list, sortValue) {
+      return [...list].sort((a, b) => {
+        switch (sortValue) {
+          case 'price':
+            return a.price - b.price;
+          case 'value': {
+            let aVal = (a.unique || 0) + (a.drops || 0) / 180;
+            let bVal = (b.unique || 0) + (b.drops || 0) / 180;
+            
+            let aPricePer = aVal === 0 ? Infinity : a.price / aVal;
+            let bPricePer = bVal === 0 ? Infinity : b.price / bVal;
+            
+            return aPricePer - bPricePer;
+          }
+          case 'unique':
+            return (b.unique || 0) - (a.unique || 0);
+          case 'drops': {
+            const aTotal = (a.drops || 0);
+            const bTotal = (b.drops || 0);
+            return bTotal - aTotal;
+          }
+          case 'rabbitPrice': {
+            const aRP = getRabbitPrice(a) === "N/A" ? Infinity : parseFloat(getRabbitPrice(a));
+            const bRP = getRabbitPrice(b) === "N/A" ? Infinity : parseFloat(getRabbitPrice(b));
+            return aRP - bRP;
+          }
+          case 'usdPrice':
+            return a.usdPrice - b.usdPrice;
+          default:
+            return 0;
+        }
+      });
+    }
+    // 更新表格視圖
+      function updateTable() {
+        console.log("開始更新表格...");
+        const tbody = document.getElementById('packageList');
+        if (!tbody) {
+          console.error("找不到packageList元素");
+          return;
+        }
+        
+        const filterValue = document.getElementById('filter').value;
+        const sortValue = document.getElementById('sort').value;
+        
+        // 篩選與排序
+        let displayPackages = filterValue === 'all' ?
+          packages :
+          packages.filter(pkg => pkg.category.includes(filterValue));
+        
+        console.log(`篩選後顯示 ${displayPackages.length} 個禮包`);
+        displayPackages = sortPackages(displayPackages, sortValue);
+        
+        // 清空表格
+        tbody.innerHTML = '';
+        
+        // 添加每一行
+        displayPackages.forEach(pkg => {
+          const row = document.createElement('tr');
+          row.className = selectedPackages.has(pkg.name) ? 'selected' : '';
+          row.dataset.rank = pkg.rank;
+          
+          // 點擊整行進行選擇
+          row.addEventListener('click', (e) => {
+            if (e.target.type !== 'checkbox' && e.target.type !== 'number') {
+              if (selectedPackages.has(pkg.name)) {
+                selectedPackages.delete(pkg.name);
+              } else {
+                selectedPackages.add(pkg.name);
+              }
+              updateTable();
+              updateCardView();
+              updateTotals();
+            }
+          });
+          
+          // Checkbox
+          const checkCell = document.createElement('td');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = selectedPackages.has(pkg.name);
+          checkbox.onclick = e => handleCheckboxClick(e, pkg.name);
+          checkCell.appendChild(checkbox);
+          row.appendChild(checkCell);
+          
+          // 禮包名稱
+          const nameCell = document.createElement('td');
+          nameCell.textContent = pkg.name;
+          // 若有限購，添加標記
+          if (pkg.purchaseLimit) {
+            const limitBadge = document.createElement('span');
+            limitBadge.className = 'limit-badge purchase-limit';
+            limitBadge.textContent = `限${pkg.purchaseLimit}`;
+            nameCell.appendChild(limitBadge);
+          }
+          // 若是限時，加上標記
+          if (pkg.purchaseTime && pkg.purchaseTime !== '永久') {
+            const timeBadge = document.createElement('span');
+            timeBadge.className = 'limit-badge time-limit';
+            timeBadge.textContent = '限時';
+            nameCell.appendChild(timeBadge);
+          }
+          row.appendChild(nameCell);
+          
+          // 價格（NTD）
+          const priceCellNTD = document.createElement('td');
+          priceCellNTD.textContent = pkg.price;
+          row.appendChild(priceCellNTD);
+          
+          // 價格（USD）
+          const priceCellUSD = document.createElement('td');
+          priceCellUSD.textContent = pkg.usdPrice.toFixed(2);
+          row.appendChild(priceCellUSD);
+          
+          // 獨一律
+          const uniqueCell = document.createElement('td');
+          uniqueCell.textContent = pkg.unique || 0;
+          row.appendChild(uniqueCell);
+          
+          // 雨滴
+          const dropsCell = document.createElement('td');
+          dropsCell.textContent = pkg.drops || 0;
+          row.appendChild(dropsCell);
+          
+          // 數量（可調整）
+          const qtyCell = document.createElement('td');
+          const qtyInput = document.createElement('input');
+          qtyInput.type = 'number';
+          qtyInput.min = '1';
+          qtyInput.max = pkg.purchaseLimit || '99';
+          qtyInput.value = pkg.quantity;
+          qtyInput.style.width = '50px';
+          qtyInput.addEventListener('change', e => {
+            const newQty = parseInt(e.target.value, 10) || 1;
+            pkg.quantity = Math.min(newQty, pkg.purchaseLimit || 99);
+            e.target.value = pkg.quantity;
+            updateTotals();
+          });
+          qtyCell.appendChild(qtyInput);
+          row.appendChild(qtyCell);
+          
+          // 素材（逐行顯示）
+          const matCell = document.createElement('td');
+          const materialLines = (pkg.materials || '').split('\n');
+          const materialUl = document.createElement('ul');
+          materialUl.style.margin = '0';
+          materialUl.style.paddingLeft = '20px';
+          
+          materialLines.forEach(line => {
+            if (line.trim()) {
+              const li = document.createElement('li');
+              li.textContent = line.trim();
+              materialUl.appendChild(li);
+            }
+          });
+          
+          matCell.appendChild(materialUl);
+          row.appendChild(matCell);
+          
+          // 評級
+          const rankCell = document.createElement('td');
+          rankCell.className = 'rank-cell';
+          const rankBadge = document.createElement('span');
+          rankBadge.className = `card-rank-badge rank-${pkg.rank}`;
+          rankBadge.textContent = pkg.rank;
+          rankCell.appendChild(rankBadge);
+          row.appendChild(rankCell);
+          
+          // 兔子價格
+          const rabbitPriceCell = document.createElement('td');
+          rabbitPriceCell.textContent = getRabbitPrice(pkg);
+          row.appendChild(rabbitPriceCell);
+          
+          // 限購次數
+          const purchaseLimitCell = document.createElement('td');
+          purchaseLimitCell.textContent = pkg.purchaseLimit !== null ? pkg.purchaseLimit : '-';
+          row.appendChild(purchaseLimitCell);
+          
+          // 購買時間
+          const purchaseTimeCell = document.createElement('td');
+          purchaseTimeCell.textContent = pkg.purchaseTime || '';
+          if (pkg.purchaseTime && pkg.purchaseTime !== '永久') {
+            purchaseTimeCell.className = 'time-limited';
+          }
+          row.appendChild(purchaseTimeCell);
+          
+          // 造型
+          const costumeCell = document.createElement('td');
+          if (pkg.character && pkg.costume) {
+            costumeCell.textContent = `${pkg.character} - ${pkg.costume}`;
+          } else if (pkg.category === '造型') {
+            costumeCell.textContent = '✓';
+          }
+          row.appendChild(costumeCell);
+          
+          tbody.appendChild(row);
+        });
+        
+        updateTotals();
+        console.log("表格更新完成");
+      }
+      
+      // 更新卡片視圖
+      function updateCardView() {
+        console.log("開始更新卡片視圖...");
+        const cardContainer = document.getElementById('cardView');
+        if (!cardContainer) {
+          console.error("找不到cardView元素");
+          return;
+        }
+        
+        const filterValue = document.getElementById('filter').value;
+        const sortValue = document.getElementById('sort').value;
+        
+        // 篩選與排序
+        let displayPackages = filterValue === 'all' ?
+          packages :
+          packages.filter(pkg => pkg.category.includes(filterValue));
+        
+        displayPackages = sortPackages(displayPackages, sortValue);
+        
+        // 清空卡片容器
+        cardContainer.innerHTML = '';
+        
+        // 創建每個卡片
+        displayPackages.forEach(pkg => {
+          const card = document.createElement('div');
+          card.className = 'package-card';
+          card.dataset.rank = pkg.rank;
+          if (selectedPackages.has(pkg.name)) {
+            card.classList.add('selected');
+          }
+          
+          // 點擊卡片進行選擇
+          card.addEventListener('click', (e) => {
+            if (e.target.type !== 'checkbox' && e.target.type !== 'number' && 
+                e.target.className !== 'qty-btn') {
+              if (selectedPackages.has(pkg.name)) {
+                selectedPackages.delete(pkg.name);
+              } else {
+                selectedPackages.add(pkg.name);
+              }
+              updateTable();
+              updateCardView();
+              updateTotals();
+            }
+          });
+          
+          // 卡片標籤（類別）
+          const categoryBadge = document.createElement('div');
+          categoryBadge.className = 'card-badge';
+          categoryBadge.textContent = pkg.category;
+          card.appendChild(categoryBadge);
+          
+          // 卡片頭部
+          const cardHeader = document.createElement('div');
+          cardHeader.className = 'card-header';
+          
+          const cardTitle = document.createElement('div');
+          cardTitle.className = 'card-title';
+          cardTitle.textContent = pkg.name;
+          
+          // 添加限購標記
+          if (pkg.purchaseLimit) {
+            const limitBadge = document.createElement('span');
+            limitBadge.className = 'limit-badge purchase-limit';
+            limitBadge.textContent = `限${pkg.purchaseLimit}`;
+            limitBadge.style.marginLeft = '5px';
+            limitBadge.style.fontSize = '11px';
+            cardTitle.appendChild(limitBadge);
+          }
+          
+          // 添加限時標記
+          if (pkg.purchaseTime && pkg.purchaseTime !== '永久') {
+            const timeBadge = document.createElement('span');
+            timeBadge.className = 'limit-badge time-limit';
+            timeBadge.textContent = '限時';
+            timeBadge.style.marginLeft = '5px';
+            timeBadge.style.fontSize = '11px';
+            cardTitle.appendChild(timeBadge);
+          }
+          
+          const cardSelect = document.createElement('div');
+          cardSelect.className = 'card-select';
+          
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = selectedPackages.has(pkg.name);
+          checkbox.addEventListener('change', (e) => {
+            e.stopPropagation();
+            if (e.target.checked) {
+              selectedPackages.add(pkg.name);
+            } else {
+              selectedPackages.delete(pkg.name);
+            }
+            updateTable();
+            updateCardView();
+            updateTotals();
+          });
+          
+          cardSelect.appendChild(checkbox);
+          cardHeader.appendChild(cardTitle);
+          cardHeader.appendChild(cardSelect);
+          card.appendChild(cardHeader);
+          
+          // 卡片信息
+          const cardInfo = document.createElement('div');
+          cardInfo.className = 'card-info';
+          
+          // 價格行
+          const priceRow = document.createElement('div');
+          priceRow.className = 'card-row';
+          const priceLabel = document.createElement('span');
+          priceLabel.textContent = '價格:';
+          const priceValue = document.createElement('span');
+          priceValue.textContent = `${pkg.price} TWD (${pkg.usdPrice.toFixed(2)} USD)`;
+          priceRow.appendChild(priceLabel);
+          priceRow.appendChild(priceValue);
+          cardInfo.appendChild(priceRow);
+          
+          // 獨一律行
+          const uniqueRow = document.createElement('div');
+          uniqueRow.className = 'card-row';
+          const uniqueLabel = document.createElement('span');
+          uniqueLabel.textContent = '獨一律:';
+          const uniqueValue = document.createElement('span');
+          uniqueValue.textContent = pkg.unique || 0;
+          uniqueRow.appendChild(uniqueLabel);
+          uniqueRow.appendChild(uniqueValue);
+          cardInfo.appendChild(uniqueRow);
+          
+          // 雨滴行
+          const dropsRow = document.createElement('div');
+          dropsRow.className = 'card-row';
+          const dropsLabel = document.createElement('span');
+          dropsLabel.textContent = '雨滴:';
+          const dropsValue = document.createElement('span');
+          dropsValue.textContent = pkg.drops || 0;
+          dropsRow.appendChild(dropsLabel);
+          dropsRow.appendChild(dropsValue);
+          cardInfo.appendChild(dropsRow);
+          
+          // 兔子價格行
+          const rabbitRow = document.createElement('div');
+          rabbitRow.className = 'card-row';
+          const rabbitLabel = document.createElement('span');
+          rabbitLabel.textContent = '兔子價格:';
+          const rabbitValue = document.createElement('span');
+          rabbitValue.textContent = getRabbitPrice(pkg);
+          rabbitRow.appendChild(rabbitLabel);
+          rabbitRow.appendChild(rabbitValue);
+          cardInfo.appendChild(rabbitRow);
+          
+          // 添加角色與造型信息（如果有）
+          if (pkg.character && pkg.costume) {
+            const costumeRow = document.createElement('div');
+            costumeRow.className = 'card-row';
+            const costumeLabel = document.createElement('span');
+            costumeLabel.textContent = '角色造型:';
+            const costumeValue = document.createElement('span');
+            costumeValue.textContent = `${pkg.character} - ${pkg.costume}`;
+            costumeRow.appendChild(costumeLabel);
+            costumeRow.appendChild(costumeValue);
+            cardInfo.appendChild(costumeRow);
+          }
+          
+          card.appendChild(cardInfo);
+          
+          // 素材信息
+          const materials = document.createElement('div');
+          materials.className = 'card-materials';
+          
+          const materialTitle = document.createElement('div');
+          materialTitle.style.fontWeight = 'bold';
+          materialTitle.textContent = '素材:';
+          materials.appendChild(materialTitle);
+          
+          const materialList = document.createElement('ul');
+          const materialLines = (pkg.materials || '').split('\n');
+          
+          materialLines.forEach(line => {
+            if (line.trim()) {
+              const item = document.createElement('li');
+              item.textContent = line.trim();
+              materialList.appendChild(item);
+            }
+          });
+          
+          materials.appendChild(materialList);
+          card.appendChild(materials);
+          
+          // 數量控制
+          const quantityControl = document.createElement('div');
+          quantityControl.className = 'quantity-control';
+          
+          const minusBtn = document.createElement('button');
+          minusBtn.className = 'qty-btn';
+          minusBtn.textContent = '-';
+          minusBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (pkg.quantity > 1) {
+              pkg.quantity--;
+              qtyInput.value = pkg.quantity;
+              updateTotals();
+            }
+          });
+          
+          const qtyInput = document.createElement('input');
+          qtyInput.className = 'qty-input';
+          qtyInput.type = 'number';
+          qtyInput.min = '1';
+          qtyInput.max = pkg.purchaseLimit || '99';
+          qtyInput.value = pkg.quantity;
+          qtyInput.addEventListener('change', (e) => {
+            e.stopPropagation();
+            const newQty = parseInt(e.target.value, 10) || 1;
+            pkg.quantity = Math.min(newQty, pkg.purchaseLimit || 99);
+            e.target.value = pkg.quantity;
+            updateTotals();
+          });
+          
+          const plusBtn = document.createElement('button');
+          plusBtn.className = 'qty-btn';
+          plusBtn.textContent = '+';
+          plusBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!pkg.purchaseLimit || pkg.quantity < pkg.purchaseLimit) {
+              pkg.quantity++;
+              qtyInput.value = pkg.quantity;
+              updateTotals();
+            }
+          });
+          
+          quantityControl.appendChild(minusBtn);
+          quantityControl.appendChild(qtyInput);
+          quantityControl.appendChild(plusBtn);
+          card.appendChild(quantityControl);
+          
+          // 卡片頁腳
+          const cardFooter = document.createElement('div');
+          cardFooter.className = 'card-footer';
+          
+          // 評級
+          const rankDisplay = document.createElement('div');
+          const rankBadge = document.createElement('span');
+          rankBadge.className = `card-rank-badge rank-${pkg.rank}`;
+          rankBadge.textContent = pkg.rank;
+          rankDisplay.appendChild(rankBadge);
+          rankDisplay.appendChild(document.createTextNode(' 評級'));
+          
+          // 購買時間
+          const timeDisplay = document.createElement('div');
+          timeDisplay.textContent = pkg.purchaseTime && pkg.purchaseTime !== '永久' ?
+            `限時: ${pkg.purchaseTime.split(' - ')[1] || pkg.purchaseTime}` : '';
+          
+          cardFooter.appendChild(rankDisplay);
+          cardFooter.appendChild(timeDisplay);
+          card.appendChild(cardFooter);
+          
+          cardContainer.appendChild(card);
+        });
+        
+        console.log("卡片視圖更新完成");
+      }
+
+// 更新總計函數 - 不將素材折算雨滴計入兔子計算
+function updateTotals() {
+  let totalPrice = 0;
+  let totalUsdPrice = 0;
+  let totalUnique = 0;
+  let totalDrops = 0;
+  let totalMatDrops = 0;  // 仍然計算但不納入兔子計算
+  let finalItems = { "獨一律": 0 };
+  
+  selectedPackages.forEach(name => {
+    const pkg = packages.find(p => p.name === name);
+    if (pkg) {
+      const count = pkg.quantity || 1;
+      
+      totalPrice += pkg.price * count;
+      totalUsdPrice += pkg.usdPrice * count;
+      totalUnique += (pkg.unique || 0) * count;
+      totalDrops += (pkg.drops || 0) * count;
+      
+      // 仍然計算素材折算雨滴，但僅用於顯示，不納入兔子計算
+      const { totalDrops: matDrops, items } = parseMaterials(pkg.materials || '');
+      totalMatDrops += matDrops * count;
+      
+      finalItems["獨一律"] += (pkg.unique || 0) * count;
+      
+      Object.keys(items).forEach(matName => {
+        if (!finalItems[matName]) finalItems[matName] = 0;
+        finalItems[matName] += items[matName] * count;
+      });
+    }
+  });function initPackageCalc() {
+  // … 既有的 init code …
+
+  // 新增：全選 / 取消全選
+  const selectAll = document.getElementById('selectAll');
+  selectAll.addEventListener('change', e => {
+    // 拿到所有禮包名
+    packages.forEach(pkg => {
+      if (e.target.checked) selectedPackages.add(pkg.name);
+      else                  selectedPackages.delete(pkg.name);
+    });
+    updateTable();
+    updateCardView();
+    updateTotals();
+  });
+}
+      
+      // 總兔子數 = 獨一律 + [(雨滴) / 180]
+      const totalUniquePlusDrops = totalUnique + (totalDrops) / 180;
+      let totalRabbitPrice = "N/A";
+      
+      if (totalUniquePlusDrops > 0) {
+        totalRabbitPrice = (totalPrice / totalUniquePlusDrops).toFixed(2);
+      }
+      
+      // 更新總計顯示
+      document.getElementById('totalPrice').textContent = totalPrice.toString();
+      document.getElementById('totalUnique').textContent = totalUnique.toString();
+      document.getElementById('totalDrops').textContent = totalDrops.toString();
+      document.getElementById('totalMatDrops').textContent = totalMatDrops.toString();
+      document.getElementById('totalRabbitPrice').textContent = totalRabbitPrice;
+    }
+// 傷害計算器相關代碼 - 完整實現
+    function parsePercentage(input) {
+      if (!input || input === '') return 0;
+      let value = input.toString().trim();
+      // 移除可能的 % 符號
+      if (value.endsWith("%")) {
+        value = value.slice(0, -1);
+      }
+      return parseFloat(value) / 100;
+    }
+    
+    function getOurParams() {
+      return {
+        attack: parseFloat(document.getElementById('our_attack').value) || 0,
+        penetration: parsePercentage(document.getElementById('our_penetration').value) || 0,
+        skill_multiplier: parsePercentage(document.getElementById('our_skill_multiplier').value) || 1,
+        damage_increase: parsePercentage(document.getElementById('our_damage_increase').value) || 0,
+        trauma_bonus: parsePercentage(document.getElementById('our_trauma_bonus')?.value) || 0,
+        magic_bonus: parsePercentage(document.getElementById('our_magic_bonus')?.value) || 0,
+        attribute_multiplier: parsePercentage(document.getElementById('our_attribute_multiplier')?.value) || 1,
+        technique: parsePercentage(document.getElementById('our_technique')?.value) || 0
+      };
+    }
+    
+    function getBossParams() {
+      return {
+        physical_defense: parseFloat(document.getElementById('boss_physical_defense').value) || 0,
+        spirit_defense: parseFloat(document.getElementById('boss_spirit_defense').value) || 0,
+        defense_reduction: parsePercentage(document.getElementById('boss_defense_reduction').value) || 0,
+        enemy_damage_vulnerability: parsePercentage(document.getElementById('boss_damage_vulnerability').value) || 0,
+        enemy_damage_reduction: parsePercentage(document.getElementById('boss_damage_reduction')?.value) || 0,
+        enemy_crit_defense: parsePercentage(document.getElementById('boss_crit_defense')?.value) || 0,
+        reforge_effect: parsePercentage(document.getElementById('boss_reforge_effect')?.value) || 0
+      };
+    }
+    
+    function calculateDamage() {
+      try {
+        const our = getOurParams();
+        const enemy = getBossParams();
+        const damageType = document.getElementById('damage_type').value;
+        const isCritical = document.getElementById('is_critical').checked;
+        
+        // 獲取防禦值
+        let enemyDef;
+        if (damageType === 'physical') {
+          enemyDef = enemy.physical_defense;
+        } else if (damageType === 'spirit') {
+          enemyDef = enemy.spirit_defense;
+        } else {
+          enemyDef = Math.min(enemy.physical_defense, enemy.spirit_defense);
+        }
+        
+        // 再造效果加成
+        const effectiveEnemyDef = enemyDef * (1 + (enemy.reforge_effect || 0));
+        
+        // 基礎傷害計算
+        let baseDamage = (our.attack - effectiveEnemyDef) *
+                       (1 - (enemy.defense_reduction || 0)) *
+                       (1 - (our.penetration || 0));
+        
+        // 如果基礎傷害為負，將其設為最小傷害
+        baseDamage = Math.max(baseDamage, our.attack * 0.1);
+        
+        // 技能倍率
+        baseDamage *= (our.skill_multiplier || 1);
+        
+        // 總增傷加成
+        const totalBonus = (our.damage_increase || 0) + 
+                          (our.trauma_bonus || 0) + 
+                          (our.magic_bonus || 0);
+        baseDamage *= (1 + totalBonus);
+        
+        // 易受傷害和減傷計算
+        baseDamage *= (1 + (enemy.enemy_damage_vulnerability || 0));
+        baseDamage *= (1 - (enemy.enemy_damage_reduction || 0));
+        
+        // 屬性克制
+        baseDamage *= (our.attribute_multiplier || 1);
+        
+        // 暴擊計算
+        if (isCritical) {
+          const critRate = (our.technique || 0) - (enemy.enemy_crit_defense || 0);
+          baseDamage *= (1 + Math.max(0.5, critRate));
+        }
+        
+        // 顯示結果
+        const resultArea = document.getElementById('damageResult');
+        resultArea.innerHTML = `
+          <strong>計算結果：</strong><br>
+          <strong>攻擊類型：</strong>${damageType === 'physical' ? '現實攻擊' : '精神攻擊'}<br>
+          <strong>是否暴擊：</strong>${isCritical ? '是' : '否'}<br>
+          <strong>基礎傷害：</strong>${Math.floor(baseDamage)}<br>
+          <strong>估計傷害範圍：</strong>${Math.floor(baseDamage * 0.95)} ~ ${Math.floor(baseDamage * 1.05)}
+        `;
+        
+        // 變更結果區域的背景顏色以提高可視性
+        resultArea.style.backgroundColor = 'rgba(40, 60, 100, 0.6)';
+        
+        return baseDamage;
+      } catch (error) {
+        console.error("傷害計算錯誤:", error);
+        const resultArea = document.getElementById('damageResult');
+        resultArea.innerHTML = `<strong>計算出錯：</strong>${error.message}`;
+        resultArea.style.backgroundColor = 'rgba(150, 30, 30, 0.6)';
+        return 0;
+      }
+    }
+    
+    function saveParameters() {
+      try {
+        const our = getOurParams();
+        const enemy = getBossParams();
+        const damageType = document.getElementById('damage_type').value;
+        const isCritical = document.getElementById('is_critical').checked;
+        
+        // 保存所有參數
+        const savedData = {
+          our: our,
+          enemy: enemy,
+          damageType: damageType,
+          isCritical: isCritical
+        };
+        
+        localStorage.setItem("damageCalcParams", JSON.stringify(savedData));
+        
+        // 顯示保存成功訊息
+        const resultArea = document.getElementById('damageResult');
+        resultArea.innerHTML = "<strong>參數已成功保存！</strong>";
+        resultArea.style.backgroundColor = 'rgba(30, 100, 30, 0.6)';
+        
+        // 3秒後自動關閉提示
+        setTimeout(() => {
+          resultArea.innerHTML = "計算結果將顯示在這裡";
+          resultArea.style.backgroundColor = 'rgba(30, 30, 40, 0.6)';
+        }, 3000);
+      } catch (error) {
+        console.error("保存參數失敗:", error);
+        alert("保存參數失敗: " + error.message);
+      }
+    }
+    
+    function loadParameters() {
+      try {
+        const savedData = localStorage.getItem("damageCalcParams");
+        if (!savedData) {
+          alert("找不到已保存的參數");
+          return;
+        }
+        
+        const params = JSON.parse(savedData);
+        
+        // 設置我方參數
+        if (params.our) {
+          document.getElementById('our_attack').value = params.our.attack || '';
+          document.getElementById('our_penetration').value = params.our.penetration ? (params.our.penetration * 100).toFixed(0) : '';
+          document.getElementById('our_skill_multiplier').value = params.our.skill_multiplier ? (params.our.skill_multiplier * 100).toFixed(0) : '';
+          document.getElementById('our_damage_increase').value = params.our.damage_increase ? (params.our.damage_increase * 100).toFixed(0) : '';
+        }
+        
+        // 設置Boss參數
+        if (params.enemy) {
+          document.getElementById('boss_physical_defense').value = params.enemy.physical_defense || '';
+          document.getElementById('boss_spirit_defense').value = params.enemy.spirit_defense || '';
+          document.getElementById('boss_defense_reduction').value = params.enemy.defense_reduction ? (params.enemy.defense_reduction * 100).toFixed(0) : '';
+          document.getElementById('boss_damage_vulnerability').value = params.enemy.enemy_damage_vulnerability ? (params.enemy.enemy_damage_vulnerability * 100).toFixed(0) : '';
+        }
+        
+        // 設置其他參數
+        if (params.damageType) {
+          document.getElementById('damage_type').value = params.damageType;
+        }
+        if (params.isCritical !== undefined) {
+          document.getElementById('is_critical').checked = params.isCritical;
+        }
+        
+        // 顯示載入成功訊息
+        const resultArea = document.getElementById('damageResult');
+        resultArea.innerHTML = "<strong>參數已成功載入！</strong>";
+        resultArea.style.backgroundColor = 'rgba(30, 100, 30, 0.6)';
+        
+        // 3秒後自動關閉提示
+        setTimeout(() => {
+          resultArea.innerHTML = "計算結果將顯示在這裡";
+          resultArea.style.backgroundColor = 'rgba(30, 30, 40, 0.6)';
+        }, 3000);
+      } catch (error) {
+        console.error("載入參數失敗:", error);
+        alert("載入參數失敗: " + error.message);
+      }
+    }document.addEventListener('DOMContentLoaded', function() {
+  // 修復傷害計算器部分功能
+  
+  // 確保表單元素存在
+  const damageCalcFields = [
+    'our_attack', 'our_penetration', 'our_skill_multiplier', 'our_damage_increase',
+    'boss_physical_defense', 'boss_spirit_defense', 'boss_defense_reduction', 'boss_damage_vulnerability',
+    'damage_type', 'is_critical', 'damageResult'
+  ];
+  
+  // 檢查所有必要的元素是否存在，避免執行錯誤
+  let allElementsExist = true;
+  damageCalcFields.forEach(fieldId => {
+    if (!document.getElementById(fieldId)) {
+      console.warn(`傷害計算器缺少元素: ${fieldId}`);
+      allElementsExist = false;
+    }
+  });
+  
+  // 如果不存在所有元素，不執行後續代碼
+  if (!allElementsExist) return;
+  
+  // 為表單添加驗證
+  const damageForm = document.querySelector('.damage-calculator');
+  if (damageForm) {
+    // 為所有數值輸入添加最小值 0
+    const numInputs = damageForm.querySelectorAll('input[type="number"]');
+    numInputs.forEach(input => {
+      input.min = 0;
+    });
+    
+    // 初始顯示計算按鈕
+    const calcButton = damageForm.querySelector('button[onclick="calculateDamage()"]');
+    if (calcButton) {
+      calcButton.removeAttribute('onclick');
+      calcButton.addEventListener('click', function() {
+        calculateDamage();
+      });
+    }
+    
+    // 修復保存和載入功能
+    const saveButton = damageForm.querySelector('button[onclick="saveParameters()"]');
+    if (saveButton) {
+      saveButton.removeAttribute('onclick');
+      saveButton.addEventListener('click', function() {
+        saveParameters();
+      });
+    }
+    
+    const loadButton = damageForm.querySelector('button[onclick="loadParameters()"]');
+    if (loadButton) {
+      loadButton.removeAttribute('onclick');
+      loadButton.addEventListener('click', function() {
+        loadParameters();
+      });
+    }
+  }
+  
+  // 防止表單提交刷新頁面
+  const forms = document.querySelectorAll('form');
+  forms.forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+    });
+  });
+});
+
+// 修復傷害計算邏輯中的潛在錯誤
+function calculateDamage() {
+  try {
+    const our = getOurParams();
+    const enemy = getBossParams();
+    const damageType = document.getElementById('damage_type').value;
+    const isCritical = document.getElementById('is_critical').checked;
+    
+    // 獲取防禦值
+    let enemyDef;
+    if (damageType === 'physical') {
+      enemyDef = enemy.physical_defense;
+    } else if (damageType === 'spirit') {
+      enemyDef = enemy.spirit_defense;
+    } else {
+      enemyDef = Math.min(enemy.physical_defense, enemy.spirit_defense);
+    }
+    
+    // 防止NaN錯誤
+    const effectiveEnemyDef = enemyDef * (1 + (enemy.reforge_effect || 0)) || 0;
+    
+    // 基礎傷害計算
+    let baseDamage = Math.max(0, (our.attack || 0) - effectiveEnemyDef);
+    baseDamage *= (1 - (enemy.defense_reduction || 0));
+    baseDamage *= (1 - (our.penetration || 0));
+    
+    // 如果基礎傷害為負，將其設為最小傷害
+    baseDamage = Math.max(baseDamage, (our.attack || 1) * 0.1);
+    
+    // 技能倍率
+    baseDamage *= (our.skill_multiplier || 1);
+    
+    // 總增傷加成
+    const totalBonus = (our.damage_increase || 0) + 
+                      (our.trauma_bonus || 0) + 
+                      (our.magic_bonus || 0);
+    baseDamage *= (1 + totalBonus);
+    
+    // 易受傷害和減傷計算
+    baseDamage *= (1 + (enemy.enemy_damage_vulnerability || 0));
+    baseDamage *= (1 - (enemy.enemy_damage_reduction || 0));
+    
+    // 屬性克制
+    baseDamage *= (our.attribute_multiplier || 1);
+    
+    // 暴擊計算
+    if (isCritical) {
+      const critRate = (our.technique || 0) - (enemy.enemy_crit_defense || 0);
+      baseDamage *= (1 + Math.max(0.5, critRate));
+    }
+    
+    // 顯示結果
+    const resultArea = document.getElementById('damageResult');
+    resultArea.innerHTML = `
+      <strong>計算結果：</strong><br>
+      <strong>攻擊類型：</strong>${damageType === 'physical' ? '現實攻擊' : '精神攻擊'}<br>
+      <strong>是否暴擊：</strong>${isCritical ? '是' : '否'}<br>
+      <strong>基礎傷害：</strong>${Math.floor(baseDamage)}<br>
+      <strong>估計傷害範圍：</strong>${Math.floor(baseDamage * 0.95)} ~ ${Math.floor(baseDamage * 1.05)}
+    `;
+    
+    // 變更結果區域的背景顏色以提高可視性
+    resultArea.style.backgroundColor = 'rgba(40, 60, 100, 0.6)';
+    
+    return baseDamage;
+  } catch (error) {
+    console.error("傷害計算錯誤:", error);
+    const resultArea = document.getElementById('damageResult');
+    resultArea.innerHTML = `<strong>計算出錯：</strong>${error.message}`;
+    resultArea.style.backgroundColor = 'rgba(150, 30, 30, 0.6)';
+    return 0;
+  }
+}
+    
+  document.getElementById('recordCalcBtn')?.addEventListener('click', function(){
+  const pulls = parseInt(document.getElementById('recordPulls')?.value || 0, 10);
+  const upCount = parseInt(document.getElementById('recordUp')?.value || 0, 10);
+  const missCount = parseInt(document.getElementById('recordMiss')?.value || 0, 10);
+  const totalSix = upCount + missCount;
+  
+  // 計算平均多少抽一個6星
+  const avg6StarRate = totalSix > 0 ? (pulls / totalSix).toFixed(1) : 0;
+  
+  // 計算資源消耗（假設1抽=600獨一律）
+   
+  let outputMsg = `📊 您的抽卡記錄分析：\n\n`;
+  outputMsg += `💎 總抽數：${pulls} 次\n`;
+  outputMsg += `✨ 6★總數：${totalSix} 個\n`;
+  outputMsg += `  ├─ UP 6★：${upCount} 個\n`;
+  outputMsg += `  └─ 歪 6★：${missCount} 個\n`;
+  
+  if(totalSix > 0) {
+    const upRate = (upCount / totalSix) * 100;
+    const missRate = (missCount / totalSix) * 100;
+    
+    outputMsg += `\n📈 數據分析：\n`;
+    outputMsg += `  ├─ UP 率：${upRate.toFixed(1)}%\n`;
+    outputMsg += `  ├─ 歪 率：${missRate.toFixed(1)}%\n`;
+    outputMsg += `  ├─ 平均：${avg6StarRate} 抽/6★\n`;
+      
+    // 評級
+    let rating = "";
+    if (avg6StarRate <= 35) rating = "歐皇";
+    else if (avg6StarRate <= 45) rating = "歐";
+    else if (avg6StarRate <= 55) rating = "還行";
+    else if (avg6StarRate <= 65) rating = "普通";
+    else if (avg6StarRate <= 80) rating = "非";
+    else if (avg6StarRate <= 100) rating = "非酋";
+    else rating = "極非酋";
+    
+    outputMsg += `\n💰 抽卡評級：${rating}`;
+  }
+  
+  const outputElement = document.getElementById('recordOutput');
+  if (outputElement) {
+    outputElement.textContent = outputMsg;
+  }
+});const EVENTS = {
+  "赤心如晝明": {
+    name: "赤心如晝明",
+    period: "4/24版本更新後 - 5/29 4:59",
+    type: "度朔節限定徵集",
+    boosted6: ["梁月（星）"],
+    boosted5: ["空腦袋（木）"]
+  },
+  "盡杯酌": {
+    name: "盡杯酌",
+    period: "5/3 5:00 - 5/17 4:59",
+    type: "度朔節限定徵集",
+    boosted6: ["曲娘（岩）"],
+    boosted5: ["小葉尼塞（星）", "坦南特（獸）"]
+  },
+  "幕間蒙太奇": {
+    name: "幕間蒙太奇",
+    period: "5/8 5:00 - 5/29 4:59",
+    type: "限時角色徵集",
+    boosted6: ["菲林士多（木）"],
+    boosted5: ["瑪麗蓮（獸）", "夏利（星）"]
+  },
+  "湖的漣漪": {
+    name: "湖的漣漪",
+    period: "4/24版本更新後 ~ 5/22 4:59",
+    type: "限時活動徵集",
+    description: "首次6★必定為所選角色，後續50%機率",
+    selectablePool: ["皮克勒斯", "泥鯭的士", "蘇芙比", "槲寄生", "潔西卡"]
+  },
+  "湖的啟示": {
+    name: "湖的啟示",
+    period: "5/1 0:00 - 5/21 23:59",
+    type: "限時活動徵集",
+    description: "可選擇兩位6★角色，70%機率獲得所選角色之一",
+    dualSelectablePool: true,
+    selectablePool: [
+      "槲寄生", "紅弩箭", "未鏽鎧", "蘇芙比", "星銻", "百夫長", "泥鯭的士",
+      "兔毛手袋", "温妮弗雷德", "新巴別塔", "遠旅", "梅蘭妮", "皮克勒斯",
+      "牙仙", "潔西卡", "伽菈波那", "鬃毛沙礫", "37", "6", "可燃點", "愛茲拉"
+    ]
+  }
+};
+const CHARACTERS = {
+  SIX_STAR: [
+    "槲寄生", "紅弩箭", "未鏽鎧", "蘇芙比", "星銻", "百夫長", "泥鯭的士",
+    "兔毛手袋", "温妮弗雷德", "新巴別塔", "遠旅", "梅蘭妮", "皮克勒斯",
+    "牙仙", "潔西卡", "伽菈波那", "鬃毛沙礫", "37", "6", "可燃點", "愛茲拉",
+    "葛天", "塞梅爾維斯", "伊索爾德", "馬庫斯", "維拉", "北方哨歌", "卡卡尼亞",
+    "藍手帕", "阿爾古斯", "J", "環狀水星", "洛佩拉"
+  ],
+  FIVE_STAR: [
+    "X", "瑪麗蓮", "嬰兒藍", "夏利", "柏林以東", "帕米埃", "氣球派對",
+    "訃告人", "五色月", "坦南特", "金蜜兒", "恐怖通", "挖掘藝術",
+    "坎吉拉", "沙絲絨", "小葉尼塞", "阿夫西維", "數羊羔", 
+  ]
+};
+
+// 定義保底機制常數
+const PITY_LIMIT = 70;
+const BASE_RATES = { SIX_STAR: 0.015, FIVE_STAR: 0.085 };
+
+// 初始化或獲取徵集狀態
+function getGachaState() {
+  let state = localStorage.getItem('gachaStats');
+  if (state) {
+    return JSON.parse(state);
+  }
+  return {
+    totalPulls: 0,
+    pity: 0,
+    guaranteedUp: false,
+    hasSelectedUp: false,
+    hasSelectedDualUp: false,
+    sixStarCount: 0,
+    upSixStarCount: 0,
+    spookSixStarCount: 0,
+    fiveStarCount: 0,
+    selectedEvent: document.getElementById('eventSelect').value,
+    results: []
+  };
+}
+
+// 保存徵集狀態
+function saveGachaState(state) {
+  localStorage.setItem('gachaStats', JSON.stringify(state));
+}
+
+// 更新事件信息
+function updateEventInfo() {
+  const eventSelect = document.getElementById('eventSelect');
+  const eventInfoElem = document.getElementById('eventInfo');
+  
+  if (eventSelect && eventInfoElem) {
+    const eventKey = eventSelect.value;
+    const event = EVENTS[eventKey];
+    
+    let infoHtml = `
+      <div class="event-title">${event.name}</div>
+      <div>活動類型: ${event.type || '標準徵集'}</div>
+      <div>活動期間: ${event.period || '未指定'}</div>
+    `;
+    
+    if (event.description) {
+      infoHtml += `<div>機制說明: ${event.description}</div>`;
+    }
+    
+    if (event.boosted6 && event.boosted6.length > 0) {
+      infoHtml += `<div>6★ UP角色: ${event.boosted6.map(char => `<span class="up-character">${char}</span>`).join(' ')}</div>`;
+    }
+    
+    if (event.boosted5 && event.boosted5.length > 0) {
+      infoHtml += `<div>5★ UP角色: ${event.boosted5.map(char => `<span class="up-character">${char}</span>`).join(' ')}</div>`;
+    }
+    
+    eventInfoElem.innerHTML = infoHtml;
+    
+    // 更新徵集狀態
+    updateGachaStats();
+  }
+}
+
+// 模擬抽卡
+function simulatePull(pulls) {
+  const state = getGachaState();
+  const newResults = [];
+  const resultContainer = document.getElementById('gachaResults');
+  
+  if (!resultContainer) return;
+  
+  // 清空結果容器
+  resultContainer.innerHTML = '';
+  
+  const eventKey = document.getElementById('eventSelect').value;
+  const event = EVENTS[eventKey];
+  
+  // 模擬抽卡
+  for (let i = 1; i <= pulls; i++) {
+    let random = Math.random();
+    // 保底機制
+    if (state.pity >= (PITY_LIMIT - 1)) {
+      random = 0; // 確保獲得6星
+    }
+    
+    let result = null;
+    
+    if (random < BASE_RATES.SIX_STAR) {
+      // 抽到6星
+      let isUp = false;
+      let character = "";
+      
+      // 處理UP機制
+      if (event.selectablePool && !event.dualSelectablePool) {
+        // 單選UP池
+        if (!state.hasSelectedUp) {
+          // 首次必定UP
+          isUp = true;
+          state.hasSelectedUp = true;
+          character = event.selectablePool[0];
+        } else {
+          // 後續50%機率
+          isUp = state.guaranteedUp ? true : (Math.random() < 0.5);
+          if (!isUp) state.guaranteedUp = true;
+          else state.guaranteedUp = false;
+          
+          character = isUp ? event.selectablePool[0] : 
+                    CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+        }
+      } else if (event.boosted6 && event.boosted6.length > 0) {
+        // 標準UP池
+        isUp = state.guaranteedUp ? true : (Math.random() < 0.5);
+        if (!isUp) state.guaranteedUp = true;
+        else state.guaranteedUp = false;
+        
+        character = isUp ? 
+          event.boosted6[Math.floor(Math.random() * event.boosted6.length)] : 
+          CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+      } else {
+        // 無UP角色
+        character = CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+      }
+      
+      // 重置保底
+      state.pity = 0;
+      
+      // 更新計數
+      state.sixStarCount++;
+      if (isUp) state.upSixStarCount++;
+      else state.spookSixStarCount++;
+      
+      result = {
+        rarity: 6,
+        isUp,
+        name: character,
+        pullNum: state.totalPulls + i
+      };
+    } else if (random < (BASE_RATES.SIX_STAR + BASE_RATES.FIVE_STAR)) {
+      // 抽到5星
+      const isUp = event.boosted5 && event.boosted5.length > 0 ? Math.random() < 0.5 : false;
+      const character = isUp && event.boosted5 ? 
+        event.boosted5[Math.floor(Math.random() * event.boosted5.length)] : 
+        CHARACTERS.FIVE_STAR[Math.floor(Math.random() * CHARACTERS.FIVE_STAR.length)];
+      
+      state.pity++;
+      state.fiveStarCount++;
+      
+      result = {
+        rarity: 5,
+        isUp,
+        name: character,
+        pullNum: state.totalPulls + i
+      };
+    } else {
+      // 抽到4星或以下，僅增加保底計數
+      state.pity++;
+    }
+    
+    if (result) {
+      newResults.push(result);
+      displayGachaResult(result, resultContainer);
+    }
+  }
+  
+  // 更新總抽數
+  state.totalPulls += pulls;
+  
+  // 保存狀態
+  saveGachaState(state);
+  
+  // 若沒有任何結果，顯示默認文字
+  if (resultContainer.children.length === 0) {
+    resultContainer.innerHTML = '<div class="empty-results">沒有抽到 5★ 或 6★</div>';
+  }
+  
+  // 更新統計信息
+  updateGachaStats();
+  
+  // 播放抽卡特效
+  if (newResults.some(r => r.rarity === 6 && r.isUp)) {
+    triggerUpAnimation();
+    spawnDynamicBg();
+  }
+}
+
+// 顯示抽卡結果
+function displayGachaResult(result, container) {
+  let className = "card-result ";
+  if (result.rarity === 6) { 
+    className += result.isUp ? "card-result-6up" : "card-result-6spook"; 
+  } else { 
+    className += result.isUp ? "card-result-5up" : "card-result-5spook"; 
+  }
+  
+  const resultCard = document.createElement('div');
+  resultCard.className = className;
+  resultCard.innerHTML = `
+    <span>
+      ${result.name} - ${result.rarity}★ ${result.isUp ? "(UP!)" : "(歪)"}
+    </span>
+    <span style="font-size: 0.9rem;">第 ${result.pullNum} 抽</span>
+  `;
+  
+  container.appendChild(resultCard);
+}
+
+// 更新抽卡統計
+function updateGachaStats() {
+  const statsElem = document.getElementById('gacha-stats');
+  if (!statsElem) return;
+  
+  const state = getGachaState();
+  
+  statsElem.innerHTML = `
+    <div class="stat-item">
+      <div class="stat-label">總抽數</div>
+      <div class="stat-value">${state.totalPulls}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">當前保底</div>
+      <div class="stat-value">${state.pity} / ${PITY_LIMIT}</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">距離6★保底</div>
+      <div class="stat-value">${Math.max(0, PITY_LIMIT - state.pity)} 抽</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">下次6★必定UP</div>
+      <div class="stat-value">${state.guaranteedUp ? '是' : '否'}</div>
+    </div>
+  `;
+}
+
+// 重置抽卡
+function resetGacha() {
+  if (confirm("確定要重置所有抽卡記錄嗎？")) {
+    localStorage.removeItem('gachaStats');
+    
+    const resultContainer = document.getElementById('gachaResults');
+    if (resultContainer) {
+      resultContainer.innerHTML = '<div class="empty-results">尚未抽到 5★ 或 6★</div>';
+    }
+    
+    updateGachaStats();
+  }
+}    
+    // 初始化頁面的所有功能
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化禮包計算器
+      initPackageCalc();
+      
+      // 初始化傷害計算器函數
+      window.calculateDamage = calculateDamage;
+      window.saveParameters = saveParameters;
+      window.loadParameters = loadParameters;
+      
+      // 初始化徵集模擬器
+      const eventSelect = document.getElementById('eventSelect');
+      if (eventSelect) {
+        eventSelect.addEventListener('change', updateEventInfo);
+        updateEventInfo();
+      }
+      
+      const singleDrawBtn = document.getElementById('singleDrawBtn');
+      const tenDrawBtn = document.getElementById('tenDrawBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      
+      if (singleDrawBtn) {
+        singleDrawBtn.addEventListener('click', () => simulatePull(1));
+      }
+      
+      if (tenDrawBtn) {
+        tenDrawBtn.addEventListener('click', () => simulatePull(10));
+      }
+      
+      if (resetBtn) {
+        resetBtn.addEventListener('click', resetGacha);
+      }
+    });
+ let karma = 0;
+    const karmaBtn = document.getElementById('karmaBtn');
+    const karmaDisplay = document.getElementById('karmaDisplay');
+    
+    // 初始功德值從本地存儲讀取
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedKarma = localStorage.getItem('gacha-karma');
+      if (savedKarma) {
+        karma = parseInt(savedKarma, 10);
+        karmaDisplay.textContent = `已累積功德: ${karma}`;
+      }
+    });
+    
+    karmaBtn.addEventListener('click', () => {
+      karma++;
+      localStorage.setItem('gacha-karma', karma);
+      
+      // 創建功德+1效果
+      const karmaAnim = document.createElement("div");
+      karmaAnim.className = "up-animation";
+      karmaAnim.textContent = "功德+1";
+      karmaAnim.style.fontSize = "2rem";
+      karmaAnim.style.color = "#ffd700";
+      karmaBtn.parentNode.appendChild(karmaAnim);
+      setTimeout(() => { karmaAnim.remove(); }, 1000);
+      
+      if (karma % 100 === 0) { 
+        alert('恭喜！陽壽 +1'); 
+        
+        // 特效
+        const fireworks = document.createElement("div");
+        fireworks.className = "fireworks";
+        document.body.appendChild(fireworks);
+        setTimeout(() => { fireworks.remove(); }, 3000);
+      }
+      
+      karmaDisplay.textContent = `已累積功德: ${karma}`;
+    }); function triggerUpAnimation() {
+      const animDiv = document.createElement("div");
+      animDiv.className = "up-animation";
+      animDiv.innerHTML = "🎉 UP! 🎉<br/>😎✨";
+      animDiv.style.textAlign = "center";
+      document.body.appendChild(animDiv);
+      setTimeout(() => { animDiv.remove(); }, 1500);
+    }
+    
+    function spawnDynamicBg() {
+      // 創建多個粒子效果
+      for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+          const emoji = ["🎊", "🎈", "💫", "✨", "🎉", "💎", "🌟", "⭐"];
+          const bgElem = document.createElement("div");
+          bgElem.textContent = emoji[Math.floor(Math.random() * emoji.length)];
+          bgElem.style.position = "fixed";
+          bgElem.style.top = Math.random() * window.innerHeight + "px";
+          bgElem.style.left = Math.random() * window.innerWidth + "px";
+          bgElem.style.fontSize = (Math.random() * 3 + 1) + "rem";
+          bgElem.style.opacity = 1;
+          bgElem.style.pointerEvents = "none";
+          bgElem.style.zIndex = "1000";
+          bgElem.style.transform = "translate(-50%, -50%)";
+          bgElem.style.transition = "all 3s ease-out";
+          document.body.appendChild(bgElem);
+          
+          // 添加動畫效果
+          setTimeout(() => { 
+            bgElem.style.transform = `translate(${(Math.random() * 200) - 100}px, ${(Math.random() * -200) - 100}px) rotate(${Math.random() * 360}deg)`;
+            bgElem.style.opacity = 0;
+          }, 50);
+          
+          setTimeout(() => { 
+            bgElem.remove(); 
+          }, 3000);
+        }, i * 100);
+      }
+    }document.addEventListener('DOMContentLoaded', function() {
+  // 修復徵集模擬器
+  
+  // 檢查必要元素是否存在
+  const gachaElements = [
+    'eventSelect', 'eventInfo', 'gacha-stats', 'singleDrawBtn', 
+    'tenDrawBtn', 'resetBtn', 'gachaResults'
+  ];
+  
+  let allGachaElementsExist = true;
+  gachaElements.forEach(elemId => {
+    if (!document.getElementById(elemId)) {
+      console.warn(`徵集模擬器缺少元素: ${elemId}`);
+      allGachaElementsExist = false;
+    }
+  });
+  
+  if (!allGachaElementsExist) return;
+  
+  // 初始化事件監聽器
+  const eventSelect = document.getElementById('eventSelect');
+  const singleDrawBtn = document.getElementById('singleDrawBtn');
+  const tenDrawBtn = document.getElementById('tenDrawBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  
+  // 確保事件選擇器正常工作
+  if (eventSelect) {
+    eventSelect.addEventListener('change', function() {
+      updateEventInfo();
+    });
+    
+    // 初始更新事件信息
+    updateEventInfo();
+  }
+  
+  // 確保按鈕正常工作
+  if (singleDrawBtn) {
+    singleDrawBtn.addEventListener('click', function() {
+      simulatePull(1);
+    });
+  }
+  
+  if (tenDrawBtn) {
+    tenDrawBtn.addEventListener('click', function() {
+      simulatePull(10);
+    });
+  }
+  
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      resetGacha();
+    });
+  }
+  
+  // 可能的前一個結果清除
+  const resultContainer = document.getElementById('gachaResults');
+  if (resultContainer && resultContainer.innerHTML.trim() === '') {
+    resultContainer.innerHTML = '<div class="empty-results">尚未抽到 5★ 或 6★</div>';
+  }
+});
+
+// 改進抽卡模擬函數
+function simulatePull(pulls) {
+  const state = getGachaState();
+  const newResults = [];
+  const resultContainer = document.getElementById('gachaResults');
+  
+  if (!resultContainer) return;
+  
+  // 清空結果容器，但只在首次抽取時顯示清除動畫
+  if (state.totalPulls === 0) {
+    resultContainer.innerHTML = '';
+    resultContainer.classList.add('fade-in');
+    setTimeout(() => {
+      resultContainer.classList.remove('fade-in');
+    }, 500);
+  } else {
+    // 保留之前的結果
+  }
+  
+  const eventKey = document.getElementById('eventSelect').value;
+  const event = EVENTS[eventKey];
+  
+  if (!event) {
+    console.error('徵集事件未找到:', eventKey);
+    return;
+  }
+  
+  // 模擬抽卡
+  for (let i = 1; i <= pulls; i++) {
+    let random = Math.random();
+    // 保底機制
+    if (state.pity >= (PITY_LIMIT - 1)) {
+      random = 0; // 確保獲得6星
+    }
+    
+    let result = null;
+    
+    if (random < BASE_RATES.SIX_STAR) {
+      // 抽到6星
+      let isUp = false;
+      let character = "";
+      
+      // 處理UP機制
+      if (event.selectablePool && !event.dualSelectablePool) {
+        // 單選UP池
+        if (!state.hasSelectedUp) {
+          // 首次必定UP
+          isUp = true;
+          state.hasSelectedUp = true;
+          character = event.selectablePool[0];
+        } else {
+          // 後續50%機率
+          isUp = state.guaranteedUp ? true : (Math.random() < 0.5);
+          if (!isUp) state.guaranteedUp = true;
+          else state.guaranteedUp = false;
+          
+          character = isUp ? event.selectablePool[0] : 
+                    CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+        }
+      } else if (event.boosted6 && event.boosted6.length > 0) {
+        // 標準UP池
+        isUp = state.guaranteedUp ? true : (Math.random() < 0.5);
+        if (!isUp) state.guaranteedUp = true;
+        else state.guaranteedUp = false;
+        
+        character = isUp ? 
+          event.boosted6[Math.floor(Math.random() * event.boosted6.length)] : 
+          CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+      } else {
+        // 無UP角色
+        character = CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+      }
+      
+      // 重置保底
+      state.pity = 0;
+      
+      // 更新計數
+      state.sixStarCount++;
+      if (isUp) state.upSixStarCount++;
+      else state.spookSixStarCount++;
+      
+      result = {
+        rarity: 6,
+        isUp,
+        name: character,
+        pullNum: state.totalPulls + i
+      };
+      
+      // 6星演出效果 (僅限UP)
+      if (isUp) {
+        setTimeout(() => {
+          triggerUpAnimation();
+        }, i * 100);
+      }
+    } else if (random < (BASE_RATES.SIX_STAR + BASE_RATES.FIVE_STAR)) {
+      // 抽到5星
+      const isUp = event.boosted5 && event.boosted5.length > 0 ? Math.random() < 0.5 : false;
+      const character = isUp && event.boosted5 ? 
+        event.boosted5[Math.floor(Math.random() * event.boosted5.length)] : 
+        CHARACTERS.FIVE_STAR[Math.floor(Math.random() * CHARACTERS.FIVE_STAR.length)];
+      
+      state.pity++;
+      state.fiveStarCount++;
+      
+      result = {
+        rarity: 5,
+        isUp,
+        name: character,
+        pullNum: state.totalPulls + i
+      };
+    } else {
+      // 抽到4星或以下，僅增加保底計數
+      state.pity++;
+    }
+    
+    if (result) {
+      newResults.push(result);
+      
+      // 延遲顯示結果，創造漸進效果
+      setTimeout(() => {
+        displayGachaResult(result, resultContainer);
+      }, i * 200);
+    }
+  }
+  
+  // 更新總抽數
+  state.totalPulls += pulls;
+  
+  // 保存狀態
+  saveGachaState(state);
+  
+  // 若沒有任何結果，顯示默認文字
+  if (resultContainer.children.length === 0 && newResults.length === 0) {
+    resultContainer.innerHTML = '<div class="empty-results">抽卡中... 沒有抽到 5★ 或 6★</div>';
+    
+    // 幾秒後換成正式文字
+    setTimeout(() => {
+      resultContainer.innerHTML = '<div class="empty-results">沒有抽到 5★ 或 6★</div>';
+    }, pulls * 200);
+  }
+  
+  // 更新統計信息
+  updateGachaStats();
+  
+  // 播放抽卡特效 (如果有6星UP)
+  if (newResults.some(r => r.rarity === 6 && r.isUp)) {
+    setTimeout(() => {
+      spawnDynamicBg();
+    }, pulls * 200);
+  }
+  
+  return newResults;
+}
+
+// 改進顯示抽卡結果函數
+function displayGachaResult(result, container) {
+  let className = "card-result ";
+  if (result.rarity === 6) { 
+    className += result.isUp ? "card-result-6up" : "card-result-6spook"; 
+  } else { 
+    className += result.isUp ? "card-result-5up" : "card-result-5spook"; 
+  }
+  
+  const resultCard = document.createElement('div');
+  resultCard.className = className;
+  resultCard.style.opacity = '0';
+  resultCard.style.transform = 'translateX(-20px)';
+  resultCard.style.transition = 'all 0.3s ease-out';
+  
+  resultCard.innerHTML = `
+    <span>
+      ${result.name} - ${result.rarity}★ ${result.isUp ? "<strong>(UP!)</strong>" : "(歪)"}
+    </span>
+    <span style="font-size: 0.9rem;">第 ${result.pullNum} 抽</span>
+  `;
+  
+  // 插入到容器最前面，使新結果顯示在頂部
+  if (container.firstChild) {
+    container.insertBefore(resultCard, container.firstChild);
+  } else {
+    container.appendChild(resultCard);
+  }
+  
+  // 動畫顯示
+  setTimeout(() => {
+    resultCard.style.opacity = '1';
+    resultCard.style.transform = 'translateX(0)';
+  }, 50);
+  
+  // 如果結果太多，刪除舊的
+  const MAX_RESULTS = 50;
+  const allResults = container.querySelectorAll('.card-result');
+  if (allResults.length > MAX_RESULTS) {
+    for (let i = MAX_RESULTS; i < allResults.length; i++) {
+      container.removeChild(allResults[i]);
+    }
+  }
+}
+
+// 改進重置函數
+function resetGacha() {
+  if (confirm("確定要重置所有抽卡記錄嗎？")) {
+    // 創建重置動畫
+    const resetAnim = document.createElement('div');
+    resetAnim.className = 'up-animation';
+    resetAnim.textContent = '✨ 重置成功 ✨';
+    resetAnim.style.fontSize = '2rem';
+    document.body.appendChild(resetAnim);
+    
+    // 刪除本地儲存
+    localStorage.removeItem('gachaStats');
+    
+    // 清空結果容器
+    const resultContainer = document.getElementById('gachaResults');
+    if (resultContainer) {
+      resultContainer.style.opacity = '0';
+      resultContainer.style.transition = 'opacity 0.5s';
+      
+      setTimeout(() => {
+        resultContainer.innerHTML = '<div class="empty-results">尚未抽到 5★ 或 6★</div>';
+        resultContainer.style.opacity = '1';
+      }, 500);
+    }
+    
+    // 更新統計
+    updateGachaStats();
+    
+    // 移除動畫
+    setTimeout(() => {
+      resetAnim.remove();
+    }, 1500);
+  }
+}// 改進抽卡模擬器的歷史記錄功能
+
+// 擴展抽卡狀態，加入歷史記錄
+function getGachaState() {
+  let state = localStorage.getItem('gachaStats');
+  if (state) {
+    return JSON.parse(state);
+  }
+  return {
+    totalPulls: 0,
+    pity: 0,
+    guaranteedUp: false,
+    hasSelectedUp: false,
+    hasSelectedDualUp: false,
+    sixStarCount: 0,
+    upSixStarCount: 0,
+    spookSixStarCount: 0,
+    fiveStarCount: 0,
+    upFiveStarCount: 0,
+    selectedEvent: document.getElementById('eventSelect')?.value || '赤心如晝明',
+    results: [],
+    history: [],       // 新增：抽卡歷史紀錄
+    sessionStart: new Date().toISOString()  // 記錄本次抽卡會話開始時間
+  };
+}
+
+// 改進抽卡模擬函數
+function simulatePull(pulls) {
+  const state = getGachaState();
+  const newResults = [];
+  const resultContainer = document.getElementById('gachaResults');
+  const historyContainer = document.getElementById('gachaHistory');
+  
+  if (!resultContainer) return;
+  
+  const eventKey = document.getElementById('eventSelect').value;
+  const event = EVENTS[eventKey];
+  
+  if (!event) {
+    console.error('徵集事件未找到:', eventKey);
+    return;
+  }
+  
+  // 記錄本次抽卡批次
+  const pullBatch = {
+    timestamp: new Date().toISOString(),
+    event: eventKey,
+    count: pulls,
+    results: []
+  };
+  
+  // 模擬抽卡
+  for (let i = 1; i <= pulls; i++) {
+    let random = Math.random();
+    // 保底機制
+    if (state.pity >= (PITY_LIMIT - 1)) {
+      random = 0; // 確保獲得6星
+    }
+    
+    let result = null;
+    let resultDetail = {
+      pullNumber: state.totalPulls + i,
+      pity: state.pity + 1,
+      rarity: 0
+    };
+    
+    if (random < BASE_RATES.SIX_STAR) {
+      // 抽到6星
+      let isUp = false;
+      let character = "";
+      
+      // 處理UP機制
+      if (event.selectablePool && !event.dualSelectablePool) {
+        // 單選UP池
+        if (!state.hasSelectedUp) {
+          // 首次必定UP
+          isUp = true;
+          state.hasSelectedUp = true;
+          character = event.selectablePool[0] || "未知角色";
+        } else {
+          // 後續50%機率
+          isUp = state.guaranteedUp ? true : (Math.random() < 0.5);
+          if (!isUp) state.guaranteedUp = true;
+          else state.guaranteedUp = false;
+          
+          character = isUp ? 
+            (event.selectablePool[0] || "未知角色") : 
+            CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+        }
+      } else if (event.boosted6 && event.boosted6.length > 0) {
+        // 標準UP池
+        isUp = state.guaranteedUp ? true : (Math.random() < 0.5);
+        if (!isUp) state.guaranteedUp = true;
+        else state.guaranteedUp = false;
+        
+        character = isUp ? 
+          event.boosted6[Math.floor(Math.random() * event.boosted6.length)] : 
+          CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+      } else {
+        // 無UP角色
+        character = CHARACTERS.SIX_STAR[Math.floor(Math.random() * CHARACTERS.SIX_STAR.length)];
+      }
+      
+      // 重置保底
+      state.pity = 0;
+      
+      // 更新計數
+      state.sixStarCount++;
+      if (isUp) state.upSixStarCount++;
+      else state.spookSixStarCount++;
+      
+      result = {
+        rarity: 6,
+        isUp,
+        name: character,
+        pullNum: state.totalPulls + i
+      };
+      
+      // 增加更詳細的結果記錄
+      resultDetail.rarity = 6;
+      resultDetail.character = character;
+      resultDetail.isUp = isUp;
+      resultDetail.resetPity = true;
+      
+      // 6星演出效果 (僅限UP)
+      if (isUp) {
+        setTimeout(() => {
+          triggerUpAnimation();
+        }, i * 100);
+      }
+    } else if (random < (BASE_RATES.SIX_STAR + BASE_RATES.FIVE_STAR)) {
+      // 抽到5星
+      const isUp = event.boosted5 && event.boosted5.length > 0 ? 
+        Math.random() < 0.5 : false;
+      
+      const character = isUp && event.boosted5 ? 
+        event.boosted5[Math.floor(Math.random() * event.boosted5.length)] : 
+        CHARACTERS.FIVE_STAR[Math.floor(Math.random() * CHARACTERS.FIVE_STAR.length)];
+      
+      state.pity++;
+      state.fiveStarCount++;
+      if (isUp) state.upFiveStarCount++;
+      
+      result = {
+        rarity: 5,
+        isUp,
+        name: character,
+        pullNum: state.totalPulls + i
+      };
+      
+      // 增加更詳細的結果記錄
+      resultDetail.rarity = 5;
+      resultDetail.character = character;
+      resultDetail.isUp = isUp;
+    } else {
+      // 抽到4星或以下，僅增加保底計數
+      state.pity++;
+      resultDetail.rarity = Math.random() < 0.4 ? 4 : 3; // 簡單模擬4星與3星
+      resultDetail.character = "普通角色";
+    }
+    
+    if (result) {
+      newResults.push(result);
+      
+      // 延遲顯示結果，創造漸進效果
+      setTimeout(() => {
+        displayGachaResult(result, resultContainer);
+      }, i * 200);
+    }
+    
+    // 添加到抽卡批次結果中
+    pullBatch.results.push(resultDetail);
+  }
+  
+  // 更新總抽數
+  state.totalPulls += pulls;
+  
+  // 添加這次抽卡批次到歷史記錄
+  state.history.push(pullBatch);
+  // 限制歷史記錄長度，防止過大
+  if (state.history.length > 50) {
+    state.history = state.history.slice(-50);
+  }
+  
+  // 保存狀態
+  saveGachaState(state);
+  
+  // 更新歷史顯示
+  updateGachaHistory(historyContainer);
+  
+  // 若沒有任何結果，顯示默認文字
+  if (resultContainer.children.length === 0 && newResults.length === 0) {
+    resultContainer.innerHTML = '<div class="empty-results">抽卡中... 沒有抽到 5★ 或 6★</div>';
+    
+    // 幾秒後換成正式文字
+    setTimeout(() => {
+      resultContainer.innerHTML = '<div class="empty-results">沒有抽到 5★ 或 6★</div>';
+    }, pulls * 200);
+  }
+  
+  // 更新統計信息
+  updateGachaStats();
+  
+  // 播放抽卡特效 (如果有6星UP)
+  if (newResults.some(r => r.rarity === 6 && r.isUp)) {
+    setTimeout(() => {
+      spawnDynamicBg();
+    }, pulls * 200);
+  }
+  
+  return newResults;
+}
+
+// 新增：更新抽卡歷史顯示
+function updateGachaHistory(container) {
+  if (!container) {
+    // 如果容器不存在，自動創建
+    const resultContainer = document.getElementById('gachaResults');
+    if (resultContainer && resultContainer.parentNode) {
+      container = document.createElement('div');
+      container.id = 'gachaHistory';
+      container.className = 'gacha-history-container';
+      resultContainer.parentNode.insertBefore(container, resultContainer.nextSibling);
+    } else {
+      return; // 無法找到合適的位置創建
+    }
+  }
+  
+  const state = getGachaState();
+  
+  // 如果沒有歷史記錄，顯示提示
+  if (!state.history || state.history.length === 0) {
+    container.innerHTML = '<div class="history-empty">尚無抽卡記錄</div>';
+    return;
+  }
+  
+  // 清空容器
+  container.innerHTML = '';
+  
+  // 創建歷史記錄標題
+  const historyTitle = document.createElement('div');
+  historyTitle.className = 'history-title';
+  historyTitle.innerHTML = '<i class="fas fa-history"></i> 抽卡歷史記錄';
+  container.appendChild(historyTitle);
+  
+  // 創建歷史記錄列表
+  const historyList = document.createElement('div');
+  historyList.className = 'history-list';
+  
+  // 獲取所有6星記錄
+  const allSixStars = [];
+  state.history.forEach(batch => {
+    batch.results.forEach(result => {
+      if (result.rarity === 6) {
+        allSixStars.push({
+          character: result.character,
+          isUp: result.isUp,
+          pullNumber: result.pullNumber,
+          pity: result.pity,
+          event: batch.event,
+          timestamp: batch.timestamp
+        });
+      }
+    });
+  });
+  
+  // 按抽取順序降序排列
+  allSixStars.sort((a, b) => b.pullNumber - a.pullNumber);
+  
+  // 計算平均抽數
+  const totalSixStars = allSixStars.length;
+  let totalPullsForSixStars = 0;
+  let prevPullNumber = 0;
+  
+  allSixStars.forEach((sixStar, index) => {
+    // 計算該6星角色花了多少抽
+    const pullCount = index === allSixStars.length - 1 ? 
+      sixStar.pullNumber : 
+      sixStar.pullNumber - (allSixStars[index + 1]?.pullNumber || 0);
+    
+    totalPullsForSixStars += pullCount;
+    
+    // 創建記錄項
+    const historyItem = document.createElement('div');
+    historyItem.className = `history-item ${sixStar.isUp ? 'up-character' : 'spook-character'}`;
+    
+    // 格式化時間
+    const date = new Date(sixStar.timestamp);
+    const timeStr = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+    
+    historyItem.innerHTML = `
+      <div class="history-item-header">
+        <span class="history-item-number">#${sixStar.pullNumber}</span>
+        <span class="history-item-time">${timeStr}</span>
+      </div>
+      <div class="history-item-content">
+        <span class="history-item-name">${sixStar.character} ${sixStar.isUp ? '<span class="up-tag">UP!</span>' : ''}</span>
+        <span class="history-item-pity">保底: ${pullCount}</span>
+      </div>
+    `;
+    
+    historyList.appendChild(historyItem);
+  });
+  
+  container.appendChild(historyList);
+  
+  // 添加歷史統計信息
+  const historyStats = document.createElement('div');
+  historyStats.className = 'history-stats';
+  
+  const avgPulls = totalSixStars > 0 ? 
+    (totalPullsForSixStars / totalSixStars).toFixed(1) : 
+    'N/A';
+  
+  const upRate = totalSixStars > 0 ? 
+    ((allSixStars.filter(s => s.isUp).length / totalSixStars) * 100).toFixed(1) : 
+    'N/A';
+  
+  historyStats.innerHTML = `
+    <div class="stats-item">
+      <div class="stats-label">總6★數量:</div>
+      <div class="stats-value">${totalSixStars}</div>
+    </div>
+    <div class="stats-item">
+      <div class="stats-label">平均抽數/6★:</div>
+      <div class="stats-value">${avgPulls}</div>
+    </div>
+    <div class="stats-item">
+      <div class="stats-label">UP率:</div>
+      <div class="stats-value">${upRate}%</div>
+    </div>
+  `;
+  
+  container.appendChild(historyStats);
+  
+  // 添加導出按鈕
+  const exportButton = document.createElement('button');
+  exportButton.className = 'export-history-btn';
+  exportButton.innerHTML = '<i class="fas fa-download"></i> 導出抽卡記錄';
+  exportButton.addEventListener('click', exportGachaHistory);
+  
+  container.appendChild(exportButton);
+}
+
+// 導出抽卡歷史
+function exportGachaHistory() {
+  const state = getGachaState();
+  if (!state.history || state.history.length === 0) {
+    alert('沒有可導出的抽卡記錄');
+    return;
+  }
+  
+  // 準備導出數據
+  const exportData = {
+    username: "旅行者", // 可以讓用戶自定義
+    exportDate: new Date().toISOString(),
+    totalPulls: state.totalPulls,
+    sixStarCount: state.sixStarCount,
+    upSixStarCount: state.upSixStarCount,
+    fiveStarCount: state.fiveStarCount,
+    history: state.history
+  };
+  
+  // 轉換為JSON
+  const jsonStr = JSON.stringify(exportData, null, 2);
+  
+  // 創建下載鏈接
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `重返未來1999_抽卡記錄_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  
+  // 清理
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 0);
+}
+
+// 改進重置函數，包括確認對話框
+function resetGacha() {
+  // 創建自定義確認對話框
+  const confirmDialog = document.createElement('div');
+  confirmDialog.className = 'gacha-confirm-dialog';
+  confirmDialog.innerHTML = `
+    <div class="confirm-content">
+      <h3>確定要重置抽卡記錄嗎？</h3>
+      <p>所有抽卡統計和歷史記錄將被清除。</p>
+      <div class="confirm-buttons">
+        <button class="confirm-yes">確定</button>
+        <button class="confirm-no">取消</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(confirmDialog);
+  
+  // 添加確認和取消事件
+  const yesButton = confirmDialog.querySelector('.confirm-yes');
+  const noButton = confirmDialog.querySelector('.confirm-no');
+  
+  yesButton.addEventListener('click', () => {
+    // 創建重置動畫
+    const resetAnim = document.createElement('div');
+    resetAnim.className = 'up-animation';
+    resetAnim.textContent = '✨ 重置成功 ✨';
+    resetAnim.style.fontSize = '2rem';
+    document.body.appendChild(resetAnim);
+    
+    // 刪除本地儲存
+    localStorage.removeItem('gachaStats');
+    
+    // 清空結果容器
+    const resultContainer = document.getElementById('gachaResults');
+    if (resultContainer) {
+      resultContainer.style.opacity = '0';
+      resultContainer.style.transition = 'opacity 0.5s';
+      
+      setTimeout(() => {
+        resultContainer.innerHTML = '<div class="empty-results">尚未抽到 5★ 或 6★</div>';
+        resultContainer.style.opacity = '1';
+      }, 500);
+    }
+    
+    // 清空歷史記錄
+    const historyContainer = document.getElementById('gachaHistory');
+    if (historyContainer) {
+      historyContainer.innerHTML = '<div class="history-empty">尚無抽卡記錄</div>';
+    }
+    
+    // 更新統計
+    updateGachaStats();
+    
+    // 移除動畫和對話框
+    setTimeout(() => {
+      resetAnim.remove();
+      document.body.removeChild(confirmDialog);
+    }, 1500);
+  });
+  
+  noButton.addEventListener('click', () => {
+    document.body.removeChild(confirmDialog);
+  });
+}
+
+// 在DOM載入後初始化歷史記錄
+document.addEventListener('DOMContentLoaded', function() {
+  // 檢查是否需要創建歷史記錄容器
+  if (!document.getElementById('gachaHistory')) {
+    const resultContainer = document.getElementById('gachaResults');
+    if (resultContainer && resultContainer.parentNode) {
+      const historyContainer = document.createElement('div');
+      historyContainer.id = 'gachaHistory';
+      historyContainer.className = 'gacha-history-container';
+      resultContainer.parentNode.insertBefore(historyContainer, resultContainer.nextSibling);
+      
+      // 更新歷史記錄顯示
+      updateGachaHistory(historyContainer);
+    }
+  }
+  
+  // 添加導入功能
+  const gachaSimulator = document.querySelector('.gacha-simulator');
+  if (gachaSimulator) {
+    const importContainer = document.createElement('div');
+    importContainer.className = 'import-container';
+    importContainer.innerHTML = `
+      <button class="import-history-btn"><i class="fas fa-upload"></i> 導入抽卡記錄</button>
+      <input type="file" id="importFile" accept=".json" style="display: none;">
+    `;
+    
+    const actionButtons = gachaSimulator.querySelector('.action-buttons');
+    if (actionButtons) {
+      actionButtons.appendChild(importContainer);
+      
+      // 添加導入按鈕事件
+      const importBtn = importContainer.querySelector('.import-history-btn');
+      const importFile = importContainer.querySelector('#importFile');
+      
+      importBtn.addEventListener('click', () => {
+        importFile.click();
+      });
+      
+      importFile.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          
+          reader.onload = function(event) {
+            try {
+              const importData = JSON.parse(event.target.result);
+              importGachaHistory(importData);
+            } catch (error) {
+              alert('導入失敗：文件格式不正確');
+              console.error('Import error:', error);
+            }
+          };
+          
+          reader.readAsText(file);
+        }
+      });
+    }
+  }
+});
+
+// 導入抽卡歷史
+function importGachaHistory(importData) {
+  if (!importData || !importData.history) {
+    alert('導入失敗：數據格式不正確');
+    return;
+  }
+  
+  // 創建確認對話框
+  const confirmDialog = document.createElement('div');
+  confirmDialog.className = 'gacha-confirm-dialog';
+  confirmDialog.innerHTML = `
+    <div class="confirm-content">
+      <h3>確定要導入抽卡記錄嗎？</h3>
+      <p>將導入 ${importData.totalPulls || 0} 次抽卡記錄，包含 ${importData.sixStarCount || 0} 個6★。</p>
+      <div class="confirm-options">
+        <label>
+          <input type="radio" name="importMode" value="replace" checked> 替換當前記錄
+        </label>
+        <label>
+          <input type="radio" name="importMode" value="merge"> 合併到當前記錄
+        </label>
+      </div>
+      <div class="confirm-buttons">
+        <button class="confirm-yes">確定</button>
+        <button class="confirm-no">取消</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(confirmDialog);
+  
+  // 添加確認和取消事件
+  const yesButton = confirmDialog.querySelector('.confirm-yes');
+  const noButton = confirmDialog.querySelector('.confirm-no');
+  
+  yesButton.addEventListener('click', () => {
+    const importMode = confirmDialog.querySelector('input[name="importMode"]:checked').value;
+    let currentState = getGachaState();
+    
+    if (importMode === 'replace') {
+      // 替換模式：完全使用導入數據
+      currentState = {
+        ...currentState,
+        totalPulls: importData.totalPulls || 0,
+        sixStarCount: importData.sixStarCount || 0,
+        upSixStarCount: importData.upSixStarCount || 0,
+        fiveStarCount: importData.fiveStarCount || 0,
+        history: importData.history || []
+      };
+    } else {
+      // 合併模式：追加歷史記錄
+      currentState.totalPulls += importData.totalPulls || 0;
+      currentState.sixStarCount += importData.sixStarCount || 0;
+      currentState.upSixStarCount += importData.upSixStarCount || 0;
+      currentState.fiveStarCount += importData.fiveStarCount || 0;
+      
+      // 添加歷史記錄
+      if (importData.history && importData.history.length > 0) {
+        currentState.history = [...currentState.history, ...importData.history];
+      }
+    }
+    
+    // 保存更新後的狀態
+    saveGachaState(currentState);
+    
+    // 更新UI
+    updateGachaStats();
+    updateGachaHistory(document.getElementById('gachaHistory'));
+    
+    // 顯示成功訊息
+    const importAnim = document.createElement('div');
+    importAnim.className = 'up-animation';
+    importAnim.innerHTML = '✨ 導入成功 ✨<br/><small>已' + 
+      (importMode === 'replace' ? '替換' : '合併') + '抽卡記錄</small>';
+    importAnim.style.fontSize = '1.8rem';
+    document.body.appendChild(importAnim);
+    
+    // 移除確認對話框和動畫
+    setTimeout(() => {
+      document.body.removeChild(confirmDialog);
+      setTimeout(() => {
+        importAnim.remove();
+      }, 1000);
+    }, 500);
+  });
+  
+  noButton.addEventListener('click', () => {
+    document.body.removeChild(confirmDialog);
+  });
+}
+// ─── 新增：處理 checkbox 點擊的事件 ───
+function handleCheckboxClick(e, pkgName) {
+  e.stopPropagation();            // 免得 row click 也執行一次
+  if (e.target.checked) {
+    selectedPackages.add(pkgName);
+  } else {
+    selectedPackages.delete(pkgName);
+  }
+  updateTable();
+  updateCardView();
+  updateTotals();
+}
+
+// ─── 新增：全選 / 取消全選 ───
+document.getElementById('selectAll').addEventListener('change', e => {
+  if (e.target.checked) {
+    packages.forEach(pkg => selectedPackages.add(pkg.name));
+  } else {
+    selectedPackages.clear();
+  }
+  updateTable();
+  updateCardView();
+  updateTotals();
+});// 在 updateTotals() 最後，加上這段：
+const matSummary = document.getElementById('materialSummary');
+const matList    = document.getElementById('materialList');
+matList.innerHTML = '';
+
+// 把 finalItems 裡除了「獨一律」以外、有數量的素材都列出來
+Object.entries(finalItems).forEach(([name, qty]) => {
+  if (name !== '獨一律' && qty > 0) {
+    const li = document.createElement('li');
+    li.textContent = `${name} × ${qty}`;
+    matList.appendChild(li);
+  }
+});
+
+// 若真的有任何素材，就顯示那個區塊，否則隱藏
+if (matList.children.length) {
+  matSummary.style.display = 'block';
+} else {
+  matSummary.style.display = 'none';
+}
+// 禮包計算器主要初始化功能
+function initPackageCalc() {
+  // 創建卡片視圖容器（如果不存在）
+  if (!document.getElementById('cardView')) {
+    const tableContainer = document.querySelector('.table-container');
+    const cardView = document.createElement('div');
+    cardView.id = 'cardView';
+    cardView.className = 'card-view';
+    cardView.style.display = 'none'; // 默認隱藏
+    tableContainer.parentNode.insertBefore(cardView, tableContainer.nextSibling);
+  }
+
+  // 更新表格和卡片視圖
+  updateTable();
+  updateCardView();
+  
+  // 篩選與排序變更
+  const filterSelect = document.getElementById('filter');
+  const sortSelect = document.getElementById('sort');
+  
+  if (filterSelect) {
+    filterSelect.addEventListener('change', () => {
+      updateTable();
+      updateCardView();
+    });
+  }
+  
+  if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+      updateTable();
+      updateCardView();
+    });
+  }
+  
+  // 清除選擇按鈕
+  const clearBtn = document.getElementById('clearBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      selectedPackages.clear();
+      updateTable();
+      updateCardView();
+      updateTotals();
+    });
+  }
+  
+  // 視圖模式切換
+  const tableViewBtn = document.getElementById('tableViewBtn');
+  const cardViewBtn = document.getElementById('cardViewBtn');
+  const tableContainer = document.querySelector('.table-container');
+  const cardView = document.getElementById('cardView');
+  
+  if (tableViewBtn && cardViewBtn && tableContainer && cardView) {
+    tableViewBtn.addEventListener('click', () => {
+      tableViewBtn.classList.add('active');
+      cardViewBtn.classList.remove('active');
+      tableContainer.style.display = 'block';
+      cardView.style.display = 'none';
+    });
+    
+    cardViewBtn.addEventListener('click', () => {
+      cardViewBtn.classList.add('active');
+      tableViewBtn.classList.remove('active');
+      tableContainer.style.display = 'none';
+      cardView.style.display = 'grid';
+    });
+  }
+  
+  // 全選/取消全選功能
+  const selectAll = document.getElementById('selectAll');
+  if (selectAll) {
+    selectAll.addEventListener('change', e => {
+      if (e.target.checked) {
+        // 獲取當前篩選的包，而不是所有包
+        const filterValue = document.getElementById('filter').value;
+        let visiblePackages = filterValue === 'all' ?
+          packages :
+          packages.filter(pkg => pkg.category.includes(filterValue));
+        
+        visiblePackages.forEach(pkg => selectedPackages.add(pkg.name));
+      } else {
+        selectedPackages.clear();
+      }
+      updateTable();
+      updateCardView();
+      updateTotals();
+    });
+  }
+}
+
+// 處理 checkbox 點擊的事件
+function handleCheckboxClick(e, pkgName) {
+  e.stopPropagation();
+  if (e.target.checked) {
+    selectedPackages.add(pkgName);
+  } else {
+    selectedPackages.delete(pkgName);
+  }
+  updateTable();
+  updateCardView();
+  updateTotals();
+}
+
+// 更新總計函數 - 包含素材摘要顯示
+function updateTotals() {
+  let totalPrice = 0;
+  let totalUsdPrice = 0;
+  let totalUnique = 0;
+  let totalDrops = 0;
+  let totalMatDrops = 0;
+  let finalItems = { "獨一律": 0 };
+  
+  selectedPackages.forEach(name => {
+    const pkg = packages.find(p => p.name === name);
+    if (pkg) {
+      const count = pkg.quantity || 1;
+      
+      totalPrice += pkg.price * count;
+      totalUsdPrice += pkg.usdPrice * count;
+      totalUnique += (pkg.unique || 0) * count;
+      totalDrops += (pkg.drops || 0) * count;
+      
+      // 計算素材折算雨滴
+      const { totalDrops: matDrops, items } = parseMaterials(pkg.materials || '');
+      totalMatDrops += matDrops * count;
+      
+      finalItems["獨一律"] += (pkg.unique || 0) * count;
+      
+      // 添加素材到最終列表
+      if (pkg.materials) {
+        const lines = pkg.materials.split(/\n/);
+        lines.forEach(line => {
+          const match = line.match(/(.+)\s*×\s*(\d+)/);
+          if (match) {
+            const itemName = match[1].trim();
+            const itemQty = parseInt(match[2], 10);
+            finalItems[itemName] = (finalItems[itemName] || 0) + (itemQty * count);
+          }
+        });
+      }
+    }
+  });
+  
+  // 總兔子數 = 獨一律 + [(雨滴) / 180]
+  const totalUniquePlusDrops = totalUnique + (totalDrops) / 180;
+  let totalRabbitPrice = "N/A";
+  
+  if (totalUniquePlusDrops > 0) {
+    totalRabbitPrice = (totalPrice / totalUniquePlusDrops).toFixed(2);
+  }
+  
+  // 更新總計顯示
+  document.getElementById('totalPrice').textContent = totalPrice.toString();
+  document.getElementById('totalUnique').textContent = totalUnique.toString();
+  document.getElementById('totalDrops').textContent = totalDrops.toString();
+  document.getElementById('totalMatDrops').textContent = totalMatDrops.toFixed(2);
+  document.getElementById('totalRabbitPrice').textContent = totalRabbitPrice;
+  
+  // 更新素材摘要
+  const matSummary = document.getElementById('materialSummary');
+  const matList = document.getElementById('materialList');
+  if (matSummary && matList) {
+    matList.innerHTML = '';
+    
+    // 把 finalItems 裡除了「獨一律」以外、有數量的素材都列出來
+    const sortedItems = Object.entries(finalItems)
+      .filter(([name, qty]) => name !== '獨一律' && qty > 0)
+      .sort((a, b) => b[1] - a[1]); // 按數量從多到少排序
+    
+    sortedItems.forEach(([name, qty]) => {
+      const li = document.createElement('li');
+      li.textContent = `${name} × ${qty}`;
+      matList.appendChild(li);
+    });
+    
+    // 若真的有任何素材，就顯示那個區塊，否則隱藏
+    if (matList.children.length) {
+      matSummary.style.display = 'block';
+    } else {
+      matSummary.style.display = 'none';
+    }
+  }
+}
+
+// 分析素材函數 - 確保正確處理所有素材
+function parseMaterials(str) {
+  if (!str) return { totalDrops: 0, items: {} };
+  
+  let totalDrops = 0;
+  let items = {};
+  const lines = str.split(/\n/);
+  
+  lines.forEach(line => {
+    const match = line.match(/(.+)\s*×\s*(\d+)/);
+    if (match) {
+      const itemName = match[1].trim();
+      const itemQty = parseInt(match[2], 10);
+      items[itemName] = (items[itemName] || 0) + itemQty;
+      
+      // 若有對應的轉換率，計算折算雨滴
+      if (MATERIAL_CONVERSION[itemName]) {
+        totalDrops += MATERIAL_CONVERSION[itemName] * itemQty;
+      }
+    }
+  });
+  
+  return { totalDrops, items };
+}
+
+// 當DOM加載完成時初始化功能
+document.addEventListener('DOMContentLoaded', function() {
+  // 初始化禮包計算器
+  initPackageCalc();
+  
+  // 初始化傷害計算器函數
+  window.calculateDamage = calculateDamage;
+  window.saveParameters = saveParameters;
+  window.loadParameters = loadParameters;
+  
+  // 初始化徵集模擬器
+  const eventSelect = document.getElementById('eventSelect');
+  if (eventSelect) {
+    eventSelect.addEventListener('change', updateEventInfo);
+    updateEventInfo();
+  }
+  
+  const singleDrawBtn = document.getElementById('singleDrawBtn');
+  const tenDrawBtn = document.getElementById('tenDrawBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  
+  if (singleDrawBtn) {
+    singleDrawBtn.addEventListener('click', () => simulatePull(1));
+  }
+  
+  if (tenDrawBtn) {
+    tenDrawBtn.addEventListener('click', () => simulatePull(10));
+  }
+  
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetGacha);
+  }
+});
+  </script>
+</body>
+</html>
