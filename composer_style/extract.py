@@ -74,7 +74,7 @@ def build_song_table():
         rows.append({
             "music_id": m["id"], "title": m["title"], "composer": m["composer"],
             "arranger": m["arranger"], "lyricist": m["lyricist"],
-            "unit": "/".join(unit_of.get(m["id"], [])),
+            "unit": "|".join(unit_of.get(m["id"], [])),
             "newly_written": m.get("isNewlyWrittenMusic", False),
             "published": pd.to_datetime(m["publishedAt"], unit="ms").date().isoformat(),
             "vocal_type": v["musicVocalType"], "vocal_asset": v["assetbundleName"],

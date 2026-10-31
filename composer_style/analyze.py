@@ -27,7 +27,7 @@ TRAITS = {
     "beat_strength":       ("拍點清晰度",   "拍點鮮明",       "律動柔和",          "{:.2f}"),
     "percussive_ratio":    ("打擊樂比重",   "鼓組厚重",       "鼓組輕",            "{:.0%}"),
     "brightness":          ("音色亮度",     "音色明亮",       "音色溫暖偏暗",      "{:.0f} Hz"),
-    "flatness":            ("噪音／失真感", "失真、噪音質感強", "音色乾淨",         "{:.3f}"),
+    "flatness":            ("噪音／失真感", "失真噪音質感強", "音色乾淨",         "{:.3f}"),
     "bass_ratio":          ("低音比重",     "低音厚重",       "低音輕薄",          "{:.0%}"),
     "high_ratio":          ("高頻比重",     "高頻閃亮",       "高頻收斂",          "{:.1%}"),
     "dynamic_range_db":    ("動態範圍",     "動態起伏大",     "壓縮感強、音量平均", "{:.1f} dB"),
@@ -185,7 +185,7 @@ def main():
         rep = sub.iloc[np.argsort(-sims)[:3]]["title"].tolist()
         # 最相近的作曲家
         near = sorted(((float(cn[c] @ cn[o]), o) for o in composers if o != c), reverse=True)[:3]
-        units = Counter(u for us in sub["unit"].fillna("") for u in us.split("/") if u)
+        units = Counter(u for us in sub["unit"].fillna("") for u in us.split("|") if u)
         keys = Counter(f"{k} {'小調' if s == 'minor' else '大調'}" for k, s in zip(sub["key"], sub["scale"]))
         self_arr = np.mean([c in str(ar) for ar in sub["arranger"]])
 
