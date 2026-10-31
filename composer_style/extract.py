@@ -57,20 +57,19 @@ def build_song_table():
         if t["musicTag"] in UNIT_TAGS:
             unit_of.setdefault(t["musicId"], []).append(UNIT_TAGS[t["musicTag"]])
 
-    best_vocal = {}
+    # 每首歌依優先順序排好所有版本；最佳版本音源不存在時改用下一個
+    by_music = {}
     for v in vocals:
-        if v["musicVocalType"] not in VOCAL_PRIORITY:
-            continue
-        rank = VOCAL_PRIORITY.index(v["musicVocalType"])
-        cur = best_vocal.get(v["musicId"])
-        if cur is None or rank < cur[0] or (rank == cur[0] and v["seq"] < cur[1]["seq"]):
-            best_vocal[v["musicId"]] = (rank, v)
+        if v["musicVocalType"] in VOCAL_PRIORITY:
+            by_music.setdefault(v["musicId"], []).append(v)
+    best_vocal = {mid: sorted(vs, key=lambda v: (VOCAL_PRIORITY.index(v["musicVocalType"]), v["seq"]))
+                  for mid, vs in by_music.items()}
 
     rows = []
     for m in musics:
         if m["publishedAt"] > now or m["id"] not in best_vocal:
             continue
-        v = best_vocal[m["id"]][1]
+        v = best_vocal[m["id"]][0]
         rows.append({
             "music_id": m["id"], "title": m["title"], "composer": m["composer"],
             "arranger": m["arranger"], "lyricist": m["lyricist"],
@@ -78,12 +77,14 @@ def build_song_table():
             "newly_written": m.get("isNewlyWrittenMusic", False),
             "published": pd.to_datetime(m["publishedAt"], unit="ms").date().isoformat(),
             "vocal_type": v["musicVocalType"], "vocal_asset": v["assetbundleName"],
+            "fallbacks": "|".join(f'{x["musicVocalType"]}:{x["assetbundleName"]}' for x in best_vocal[m["id"]][1:]),
         })
     return pd.DataFrame(rows)
 
 
 # ---------- 譜面 BPM ----------
 def chart_bpm(music_id):
+    """回傳 (主 BPM, 變速次數)。主 BPM = 全曲演奏時間最長的 BPM（避免被慢速前奏或漸慢誤導）。"""
     url = f"{ASSET}music_score/{music_id:04d}_01/master.txt"
     try:
         txt = requests.get(url, timeout=30).text
@@ -92,17 +93,23 @@ def chart_bpm(music_id):
     defs = {k: float(v) for k, v in re.findall(r"#BPM(\w\w):\s*([\d.]+)", txt)}
     if not defs:
         return np.nan, np.nan
-    # 小節 08 通道引用 BPM 編號；第一個出現的視為主 BPM，統計實際用到幾種
-    used = []
+    # 小節 08 通道：把 BPM 編號放在小節內的相對位置
+    events = []
     for meas, data in re.findall(r"#(\d{3})08:\s*(\w+)", txt):
-        for i in range(0, len(data) - 1, 2):
-            code = data[i:i + 2]
+        slots = len(data) // 2
+        for i in range(slots):
+            code = data[2 * i:2 * i + 2]
             if code != "00" and code in defs:
-                used.append((int(meas), defs[code]))
-    used.sort()
-    main = used[0][1] if used else list(defs.values())[0]
-    distinct = len({b for _, b in used}) if used else 1
-    return main, distinct - 1
+                events.append((int(meas) + i / slots, defs[code]))
+    if not events:
+        return list(defs.values())[0], 0
+    events.sort()
+    last = max(int(m) for m in re.findall(r"#(\d{3})\d\w", txt)) + 1
+    dur = {}
+    for (pos, bpm), nxt in zip(events, [e[0] for e in events[1:]] + [last]):
+        dur[bpm] = dur.get(bpm, 0) + max(0.0, nxt - pos) * 4 * 60 / bpm  # 以 4/4 估算秒數
+    main = max(dur, key=dur.get)
+    return main, len({b for _, b in events}) - 1
 
 
 # ---------- 每個 worker 載入一次模型 ----------
@@ -136,8 +143,12 @@ def analyse(row, model_dir):
         _init_models(model_dir)
     es = _M["es"]
 
-    url = f"{ASSET}long/{row['vocal_asset']}/{row['vocal_asset']}.mp3"
-    r = requests.get(url, timeout=120)
+    candidates = [f"{row['vocal_type']}:{row['vocal_asset']}"] + [x for x in str(row.get("fallbacks") or "").split("|") if x]
+    for cand in candidates:
+        vtype, asset = cand.split(":", 1)
+        r = requests.get(f"{ASSET}long/{asset}/{asset}.mp3", timeout=120)
+        if r.status_code != 404:
+            break
     r.raise_for_status()
     with tempfile.NamedTemporaryFile(suffix=".mp3") as f:
         f.write(r.content)
@@ -148,7 +159,7 @@ def analyse(row, model_dir):
 
     y, (t0, _) = librosa.effects.trim(y, top_db=50)  # 去掉頭尾靜音（遊戲音源開頭有空白）
     lead = t0 / sr  # 之後 Essentia 的節拍時間要扣掉這段
-    out = {}
+    out = {"used_vocal_type": vtype, "used_vocal_asset": asset}
     # --- 節奏 ---
     bpm, bpm_changes = chart_bpm(row["music_id"])
     out["bpm"], out["bpm_changes"] = bpm, bpm_changes
@@ -236,6 +247,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--refresh-bpm", action="store_true", help="只重新讀譜面 BPM，不重抽音訊特徵")
     a = ap.parse_args()
 
     cache = os.path.join(a.out, "cache")
@@ -261,7 +273,12 @@ def main():
         if not os.path.exists(p):
             continue
         z = np.load(p)
-        feats.append({**r, **json.loads(str(z["feats"]))})
+        f = json.loads(str(z["feats"]))
+        if a.refresh_bpm:
+            bpm, ch = chart_bpm(r["music_id"])
+            if np.isfinite(bpm):
+                f["bpm"], f["bpm_changes"] = bpm, ch
+        feats.append({**r, **f})
         genres.append(z["genre"])
         embs.append(z["emb"])
     pd.DataFrame(feats).to_csv(os.path.join(a.out, "features.csv"), index=False)
