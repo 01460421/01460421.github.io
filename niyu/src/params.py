@@ -16,19 +16,19 @@ FIG = 700          # lining figure height
 SC = 500           # small-cap height
 
 # weights
-STEM = 86          # lowercase vertical stem
-STEM_C = 94        # capital vertical stem
-STEM_SC = 80       # small-cap stem
-HAIR = 24          # lowercase hairline
-HAIR_C = 26        # capital hairline
-ROUND_EXTRA = 4    # rounds are this much heavier than straights
+STEM = 92          # lowercase vertical stem
+STEM_C = 102       # capital vertical stem
+STEM_SC = 86       # small-cap stem
+HAIR = 22          # lowercase hairline
+HAIR_C = 24        # capital hairline
+ROUND_EXTRA = 6    # rounds are this much heavier than straights
 
 # overshoot
 OS = 10            # lowercase
 OS_C = 12          # capitals / figures
 
 # the three signature features
-GAP = 12           # 斷線: slit where a hairline meets a stem
+GAP = 16           # 斷線: slit where a hairline meets a stem
 CUT = 18.0         # shared shear angle of every cut stroke end (half a pentagram tip)
 TAN_CUT = math.tan(math.radians(CUT))
 DROP_BIG = 1.10 * STEM / 2    # 逆雨滴 radius, large
@@ -38,7 +38,7 @@ DIA_A = 50                                    # half width
 DIA_B = DIA_A / math.tan(math.radians(2 * CUT))  # half height (~68.8)
 
 # serifs
-SERIF_T = 24       # slab thickness (never below the 22-unit hairline floor)
+SERIF_T = 22       # slab thickness (never below the 22-unit hairline floor)
 SERIF_E = 46       # lowercase extension beyond the stem
 SERIF_EC = 58      # capital extension
 BRK_W = 30         # bracket width
@@ -53,3 +53,7 @@ SBC_ROUND = 54     # capital round side
 # cut directions (all CUT degrees off an axis)
 CUT_UP = -CUT          # for stroke ends that travel vertically (s, C, G, S, J terminals)
 CUT_SIDE = 90 + CUT    # for stroke ends that travel sideways (c, e, t tails)
+
+# diamond knot on capital crossbars (half width; height follows the 72-degree rule)
+KNOT_A = 27
+KNOT_B = KNOT_A * DIA_B / DIA_A

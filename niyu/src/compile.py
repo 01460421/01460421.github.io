@@ -99,6 +99,35 @@ def clean(shape, add_extrema=True):
         nc = merged
         if nc[-1][-1] == nc[0] and nc[-1][0] == 'L':
             nc = nc[:-1]
+        # remove zero-width spikes: a line that doubles straight back on itself
+        changed = True
+        while changed and len(nc) > 3:
+            changed = False
+            pts = [nc[0]] + [s[-1] for s in nc[1:]]
+            n = len(pts)
+            for i in range(n):
+                prev_i, next_i = (i - 1) % n, (i + 1) % n
+                # the segments arriving at and leaving point i must both be lines
+                arrive = nc[i] if i > 0 else None             # segment ending at pts[i] (i>0)
+                leave = nc[next_i] if next_i > 0 else None    # segment ending at pts[next_i]
+                arrive_line = (i == 0) or arrive[0] == 'L'    # the closing segment is a line
+                leave_line = (next_i == 0) or leave[0] == 'L'
+                if not (arrive_line and leave_line):
+                    continue
+                a, b, cpt = pts[prev_i], pts[i], pts[next_i]
+                cross = (b[0] - a[0]) * (cpt[1] - b[1]) - (b[1] - a[1]) * (cpt[0] - b[0])
+                dot = (b[0] - a[0]) * (cpt[0] - b[0]) + (b[1] - a[1]) * (cpt[1] - b[1])
+                if cross == 0 and dot < 0:
+                    if i == 0:
+                        # drop the start point: the contour now starts at the next point
+                        first = nc[1]
+                        if first[0] != 'L':
+                            continue
+                        nc = [first[1]] + nc[2:]
+                    else:
+                        nc = nc[:i] + nc[i + 1:]
+                    changed = True
+                    break
         if len(nc) >= 3 or (len(nc) >= 2 and any(s[0] == 'C' for s in nc[1:])):
             if abs(_area(nc)) > 4:
                 out.append(nc)
@@ -119,6 +148,7 @@ STYLE = 'Regular'
 VERSION = '1.000'
 REPO = 'https://github.com/01460421/01460421.github.io'
 COPYRIGHT = f'Copyright 2026 The NiYu Project Authors ({REPO})'
+CJK_CREDIT = ' Chinese glyphs are derived from Noto Serif TC, (c) 2017-2024 Adobe (http://www.adobe.com/).'
 LICENSE = ('This Font Software is licensed under the SIL Open Font License, Version 1.1. '
            'This license is available with a FAQ at: https://openfontlicense.org')
 DESCRIPTION = ('NiYu (逆雨, "reverse rain") is a display serif built on a transitional skeleton. '
@@ -147,11 +177,13 @@ def _names():
     }
 
 
-def build(drawn, cmap, fea, out_otf, out_ttf):
+def build(drawn, cmap, fea, out_otf, out_ttf, has_cjk=False):
     """drawn: {glyph name: (Shape, advance)} — shapes already boolean-resolved.
     cmap: {codepoint: glyph name}."""
     order = ['.notdef'] + [g for g in drawn if g != '.notdef']
     names = _names()
+    if has_cjk:
+        names['copyright'] = COPYRIGHT + CJK_CREDIT
     inked = [s.bounds() for s, _ in drawn.values() if s.contours]
     y_max = int(math.ceil(max(b[3] for b in inked)))
     y_min = int(math.floor(min(b[1] for b in inked)))
@@ -179,10 +211,16 @@ def build(drawn, cmap, fea, out_otf, out_ttf):
             fb.setupGlyf(glyphs)
         else:
             fb.setupCFF(names['psName'], {'FullName': names['fullName'], 'FamilyName': FAMILY, 'Weight': 'Regular',
-                                          'Notice': COPYRIGHT, 'version': VERSION}, glyphs, {})
+                                          'Notice': names['copyright'], 'version': VERSION}, glyphs, {})
         fb.setupHorizontalMetrics(metrics)
         fb.setupHorizontalHeader(ascent=ASCENT, descent=DESCENT, lineGap=0)
         fb.setupNameTable(names, mac=False)
+        if has_cjk:
+            # the family also answers to its Chinese name on Traditional-Chinese systems
+            nt = fb.font['name']
+            nt.setName('逆雨', 1, 3, 1, 0x0404)
+            nt.setName('Regular', 2, 3, 1, 0x0404)
+            nt.setName('逆雨 Regular', 4, 3, 1, 0x0404)
         fb.setupOS2(
             version=4,
             sTypoAscender=ASCENT, sTypoDescender=DESCENT, sTypoLineGap=0,
@@ -223,6 +261,26 @@ def build(drawn, cmap, fea, out_otf, out_ttf):
 def save_woff2(src, dst):
     from fontTools.ttLib import TTFont
     f = TTFont(src)
+    f.flavor = 'woff2'
+    f.save(dst)
+
+
+def save_latin_subset(src, dst, han_names):
+    """Latin-only web font: everything except the Chinese set (workflow §10.2)."""
+    from fontTools import subset
+    from fontTools.ttLib import TTFont
+    f = TTFont(src)
+    keep = [g for g in f.getGlyphOrder() if g not in han_names]
+    opts = subset.Options()
+    opts.layout_features = ['*']
+    opts.name_IDs = ['*']
+    opts.name_languages = ['*']
+    opts.notdef_outline = True
+    opts.glyph_names = True
+    opts.flavor = 'woff2'
+    s = subset.Subsetter(opts)
+    s.populate(glyphs=keep)
+    s.subset(f)
     f.flavor = 'woff2'
     f.save(dst)
 

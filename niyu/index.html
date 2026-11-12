@@ -44,7 +44,9 @@ a { color: var(--brass) }
 /* ---------- opening ---------- */
 .hero { position: relative; border-top: 0; padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px); overflow: hidden }
 .hero .wrap { position: relative; z-index: 1 }
-.hero h1 { font-size: clamp(64px, 17.5vw, 232px); letter-spacing: -.012em; margin: .18em 0 .1em; white-space: nowrap }
+.hero h1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .32em; margin: .1em 0 .12em; line-height: 1.05 }
+.hero h1 .zh { font-size: clamp(96px, 22vw, 290px); letter-spacing: .02em; white-space: nowrap }
+.hero h1 .en { font-size: clamp(44px, 9.4vw, 124px); white-space: nowrap; padding-bottom: .1em }
 .hero .years { font-size: clamp(26px, 5.2vw, 64px); color: var(--soft); display: flex; flex-wrap: wrap; gap: .1em .7em }
 .hero .years b { font-weight: 400; color: var(--ink) }
 .hero .say { margin-top: clamp(20px, 3vw, 36px); max-width: 30em; font-size: clamp(16px, 1.5vw, 18px) }
@@ -56,7 +58,12 @@ a { color: var(--brass) }
 /* ---------- three rules ---------- */
 .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(24px, 4vw, 48px); margin-top: clamp(28px, 4vw, 48px) }
 .rule .big { font-size: clamp(60px, 6.6vw, 90px); line-height: 1; white-space: nowrap; padding-block: .08em .22em; border-bottom: 1px solid var(--rule) }
+.rule .zh { font-size: clamp(44px, 4.7vw, 62px); line-height: 1.15; letter-spacing: .16em; padding-block: .12em .2em; border-bottom: 1px solid var(--rule); white-space: nowrap }
+.rule .big, .rule dd, td.g { font-feature-settings: "calt" 0 }
 .rule h3 { font: 600 19px/1.4 var(--text); margin-top: 16px }
+.rainrow { margin-top: clamp(28px, 4vw, 48px); padding: clamp(18px, 3vw, 32px); background: var(--wash); border: 1px solid var(--rule); display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px }
+.rainrow .ny { font-size: clamp(44px, 8.6vw, 116px); line-height: 1.15; letter-spacing: .06em; overflow-wrap: anywhere }
+.rainrow p:last-child { max-width: 36em }
 .rule p { margin-top: 6px }
 .rule dl { margin: 12px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 14px; color: var(--soft) }
 .rule dt { font: 400 12px/2 var(--mono); letter-spacing: .08em }
@@ -91,7 +98,9 @@ button.pre:hover { border-color: var(--brass); color: var(--brass) }
 .cells span { min-width: 58px; height: 74px; padding: 0 9px; display: grid; place-items: center; border: 1px solid var(--rule); margin: 0 -1px -1px 0; white-space: nowrap }
 .cells.wide span { min-width: 96px; padding: 0 16px }
 .cells.orn { font-size: 34px }
-@media (max-width: 640px) { .set { grid-template-columns: minmax(0, 1fr) } .set .label { padding-top: 0 } .cells { font-size: 32px } .cells span { min-width: 46px; height: 62px } }
+.cells.han span { min-width: 68px; height: 78px; padding: 0 6px }
+.cells:not(.wide):not(.han) { font-feature-settings: "calt" 0 }
+@media (max-width: 640px) { .set { grid-template-columns: minmax(0, 1fr) } .set .label { padding-top: 0 } .cells { font-size: 32px } .cells span { min-width: 46px; height: 62px } .cells.han span { min-width: 52px; height: 62px } }
 
 /* ---------- geometry + parameters ---------- */
 .geo { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: start; margin-top: clamp(24px, 3vw, 36px) }
@@ -106,7 +115,7 @@ button.pre:hover { border-color: var(--brass); color: var(--brass) }
 /* ---------- checks ---------- */
 .checks { display: grid; gap: 0; margin-top: clamp(24px, 3vw, 36px); border-top: 1px solid var(--rule) }
 .check { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 6px 24px; padding-block: 18px; border-bottom: 1px solid var(--rule); align-items: center }
-.check .s { font-family: var(--display); font-size: clamp(40px, 6.4vw, 76px); line-height: 1.1; overflow-wrap: anywhere }
+.check .s { font-family: var(--display); font-size: clamp(40px, 6.4vw, 76px); line-height: 1.15; overflow-wrap: anywhere }
 .check .t { font-size: 14px; color: var(--soft) }
 .sizes p { font-family: var(--display); line-height: 1.3; overflow-wrap: anywhere }
 #blurline { transition: filter .15s }
@@ -135,10 +144,10 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
 <section class="hero">
   <div class="rain" id="rain" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="label">逆雨 NiYu · 展示用襯線字型 · 第 1.000 版</p>
-    <h1 class="ny">Rain, rising.</h1>
+    <p class="label">逆雨 NiYu · 觀賞型襯線字型 · 拉丁字母與中文</p>
+    <h1 class="ny"><span class="zh">逆雨</span><span class="en">Rain, rising.</span></h1>
     <p class="ny years"><span>1929</span><span>1966</span><span>1987</span><b>1999</b></p>
-    <p class="say">骨架保守，細節放肆。雨滴一律朝天，細筆在碰到粗筆之前留一道縫，所有的點都是菱形。三條規則寫進程式，整套字由程式畫出。</p>
+    <p class="say">骨架保守，細節放肆。雨滴一律朝天，細筆在碰到粗筆之前留一道縫，所有的點都是菱形。同樣三條規則，從拉丁字母一路套到五千多個中文字。</p>
   </div>
 </section>
 
@@ -146,39 +155,52 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
   <div class="wrap">
     <p class="label">特徵系統</p>
     <h2>只有三條規則，每一條都寫死</h2>
-    <p class="lede">規則再多就變雜訊。每個特徵至少出現在八個字符上，每個字符最多背兩個。</p>
+    <p class="lede">規則再多就變雜訊。每個字符最多背兩個特徵；中文是逐筆套用，不是整個字硬改。</p>
     <div class="rules">
       <div class="rule">
         <p class="ny big">a c f r y</p>
+        <p class="ny zh">永心九風</p>
         <h3>逆雨滴</h3>
-        <p>水滴形終端的尖端永遠朝上。頂部的雨滴懸在髮絲線下，底部的雨滴從筆畫末端升起。只准兩種尺寸。</p>
-        <dl><dt>套用</dt><dd>a c f j r y 2 3 5 6 9</dd><dt>不套用</dt><dd>A B C</dd></dl>
+        <p>水滴形終端的尖端永遠朝上。頂部的雨滴懸在髮絲線下，底部的雨滴從筆畫末端升起。中文裡，朝上的鉤收在一滴雨上。</p>
+        <dl><dt>拉丁</dt><dd>a c f g j r s y C G J S 2 3 5 6 9</dd><dt>中文</dt><dd>豎鉤 豎彎鉤 斜鉤 臥鉤</dd></dl>
       </div>
       <div class="rule">
-        <p class="ny big">n h B R</p>
+        <p class="ny big">n b H E</p>
+        <p class="ny zh">日可書國</p>
         <h3>斷線</h3>
-        <p>細筆接上粗筆的地方留一道 12 單位的縫。每一道縫都用同一個數值，不目測。</p>
-        <dl><dt>套用</dt><dd>n m h r u B P R D</dd><dt>不套用</dt><dd>a e s</dd></dl>
+        <p>細筆接上粗筆的地方留一道縫，每一道都用同一個數值。中文的橫畫在碰到粗筆的地方停住；整條穿過去的不切。</p>
+        <dl><dt>拉丁</dt><dd>n m h r u a b d p q k A B D E F H K P R</dd><dt>中文</dt><dd>橫與粗筆的交接</dd></dl>
       </div>
       <div class="rule">
-        <p class="ny big">i j ; ? !</p>
+        <p class="ny big">i j ; ? A</p>
+        <p class="ny zh">字點江逆</p>
         <h3>菱形點</h3>
-        <p>所有的「點」都換成 72° 的菱形，連分音符和除號也是。逗號與引號保留逗號形。</p>
-        <dl><dt>套用</dt><dd>i j . : ; ! ? … ä ÷</dd><dt>不套用</dt><dd>, ‘ ’ “ ”</dd></dl>
+        <p>所有的「點」都換成 72° 的菱形，連分音符和除號也是。大寫 A E F H 的橫畫上多一顆菱形結。</p>
+        <dl><dt>拉丁</dt><dd>i j . : ; ! ? … ä ÷ A E F H</dd><dt>中文</dt><dd>所有的點</dd></dl>
       </div>
+    </div>
+    <div class="rainrow">
+      <p class="label">唯一的例外：雨字頭</p>
+      <p class="ny">雨雪雲電霧露霜靈</p>
+      <p>雨字頭底下的點不是菱形，是往上升的雨滴。整套字的名字從這裡來。</p>
     </div>
     <div class="scroll">
       <table>
         <thead><tr><th>字符</th><th class="c">逆雨滴</th><th class="c">斷線</th><th class="c">菱形點</th></tr></thead>
         <tbody>
-          <tr><td class="g">a c f y</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
-          <tr><td class="g">r</td><td class="c">◆</td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">c f g s y</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
+          <tr><td class="g">a r</td><td class="c">◆</td><td class="c">◆</td><td class="c"></td></tr>
           <tr><td class="g">j</td><td class="c">◆</td><td class="c"></td><td class="c">◆</td></tr>
-          <tr><td class="g">n m h u</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">n m h u b d p q k</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
           <tr><td class="g">i</td><td class="c"></td><td class="c"></td><td class="c">◆</td></tr>
-          <tr><td class="g">B P R D</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">A E F H</td><td class="c"></td><td class="c">◆</td><td class="c">◆</td></tr>
+          <tr><td class="g">B D K P R</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">C G J S</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
           <tr><td class="g">2 3 5 6 9</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
           <tr><td class="g">. : ; ! ? …</td><td class="c"></td><td class="c"></td><td class="c">◆</td></tr>
+          <tr><td class="g">永 小 心 九</td><td class="c">◆</td><td class="c"></td><td class="c">◆</td></tr>
+          <tr><td class="g">日 目 書 可</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">雨 雪 雲 電</td><td class="c">◆</td><td class="c">◆</td><td class="c"></td></tr>
         </tbody>
       </table>
     </div>
@@ -189,11 +211,11 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
   <div class="wrap">
     <p class="label">試排</p>
     <h2>直接打字</h2>
-    <p class="lede">第一層守住閱讀；花飾大寫與長尾放在第二層，要用才開。</p>
+    <p class="lede">花飾預設開啟：字首的 A M N、長尾的 K L Q R、字尾的 y。它只在有空間時出現；想安靜一點就關掉。</p>
     <div class="bench">
       <div class="ctl">
         <label for="size">字級 <input id="size" type="range" min="18" max="220" value="96"> <output id="sizeout" for="size">96 px</output></label>
-        <label for="f-ss01"><input id="f-ss01" type="checkbox" data-feat="ss01"> 花飾大寫</label>
+        <label for="f-calt"><input id="f-calt" type="checkbox" data-feat="calt" checked> 花飾</label>
         <label for="f-onum"><input id="f-onum" type="checkbox" data-feat="onum"> 舊式數字</label>
         <label for="f-tnum"><input id="f-tnum" type="checkbox" data-feat="tnum"> 等寬數字</label>
         <label for="f-smcp"><input id="f-smcp" type="checkbox" data-feat="smcp"> 小型大寫</label>
@@ -201,16 +223,17 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
         <label for="f-liga"><input id="f-liga" type="checkbox" data-feat="liga" checked> 連字</label>
         <label for="f-case"><input id="f-case" type="checkbox" data-feat="case"> 全大寫標點</label>
       </div>
-      <div id="sheet" class="ny" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="試排文字">Quay of Rising Rain, 1999</div>
+      <div id="sheet" class="ny" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="試排文字">風起時，雨向天空落下 Rain, 1999</div>
       <div class="presets" id="presets">
-        <button class="pre" type="button" data-t="nnnonnn ooonooo nnoonn">nnnonnn</button>
-        <button class="pre" type="button" data-t="HHHOHHH OOOHOOO">HHHOHHH</button>
-        <button class="pre" type="button" data-t="adhesion HAMBURGEFONTS">adhesion</button>
-        <button class="pre" type="button" data-t="Il1 O0 rn m">Il1 O0 rn m</button>
+        <button class="pre" type="button" data-t="風起時，雨向天空落下。">雨向天空落下</button>
+        <button class="pre" type="button" data-t="永字八法　一點一橫一豎一鉤">永字八法</button>
+        <button class="pre" type="button" data-t="雨雪雲電霧露霜靈">雨字頭</button>
+        <button class="pre" type="button" data-t="天地玄黃　宇宙洪荒　日月星辰">天地玄黃</button>
+        <button class="pre" type="button" data-t="A Storm Rises: Arcana, Night &amp; Moon">花飾</button>
+        <button class="pre" type="button" data-t="HAMBURGEFONTS adhesion">adhesion</button>
+        <button class="pre" type="button" data-t="Il1 O0 rn m　未末 土士 己已巳">易混字</button>
         <button class="pre" type="button" data-t="0123456789  1999 1987 1966 1929">數字</button>
         <button class="pre" type="button" data-t="The quick brown fox jumps over the lazy dog">quick brown fox</button>
-        <button class="pre" type="button" data-t="Arcana Queen Rain Knew Not Moon Yes Lost" data-on="ss01">花飾層</button>
-        <button class="pre" type="button" data-t="fine flow office (A–Z) «naïve» fjord">連字與標點</button>
       </div>
     </div>
   </div>
@@ -219,15 +242,17 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
 <section>
   <div class="wrap">
     <p class="label">字符集</p>
-    <h2>335 個字符，211 個碼位</h2>
-    <p class="lede">拉丁字母、數字、標點、重音字，加上第二層的花飾字形與一組細線幾何符號。</p>
+    <h2>5,745 個字符，5,621 個碼位</h2>
+    <p class="lede">拉丁字母、數字、標點、重音字、花飾字形、細線幾何符號，以及 5,383 個常用中文字（Big5 第一字面）。</p>
     <div class="sets">
+      <div class="set"><p class="label">中文（節選）</p><div class="cells han" data-g="逆雨永字八法天地玄黃宇宙洪荒日月星辰風雲雷電雪霜露霧春夏秋冬東西南北山川河海金木水火土心小少可元也成我國書畫觀賞型體包含中文再多一點龍鳳靈夢時光未來重返"></div></div>
+      <div class="set"><p class="label">全形標點</p><div class="cells han" data-g="，。、！？：；「」『』（）《》〈〉【】‧"></div></div>
       <div class="set"><p class="label">大寫</p><div class="cells" data-g="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></div></div>
       <div class="set"><p class="label">小寫</p><div class="cells" data-g="abcdefghijklmnopqrstuvwxyz"></div></div>
       <div class="set"><p class="label">等高數字</p><div class="cells" data-g="0123456789"></div></div>
       <div class="set"><p class="label">舊式數字 onum</p><div class="cells" data-g="0123456789" style="font-feature-settings:'onum' 1"></div></div>
       <div class="set"><p class="label">小型大寫 smcp</p><div class="cells" data-g="abcdefghijklmnopqrstuvwxyz" style="font-feature-settings:'smcp' 1"></div></div>
-      <div class="set"><p class="label">花飾層 ss01</p><div class="cells wide" data-g="AKLMNQRYy" style="font-feature-settings:'ss01' 1"></div></div>
+      <div class="set"><p class="label">花飾 calt</p><div class="cells wide" data-g="AKLMNQRYy"></div></div>
       <div class="set"><p class="label">連字 liga</p><div class="cells wide" data-l="fi fl ff"></div></div>
       <div class="set"><p class="label">標點與符號</p><div class="cells" data-g=".,:;!?…·•‘’“”‚„'&quot;-–—_()[]{}/\|&amp;@#%$£€*+−=×÷&lt;&gt;^~°¡¿«»‹›"></div></div>
       <div class="set"><p class="label">重音字</p><div class="cells" data-g="ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝŸŠŽàáâãäåçèéêëìíîïñòóôõöùúûüýÿšžāēīōū"></div></div>
@@ -259,12 +284,12 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
           <tbody>
             <tr><td>大寫高 · x 高</td><td class="num">700 · 470</td></tr>
             <tr><td>升部 · 降部</td><td class="num">740 · −230</td></tr>
-            <tr><td>直筆粗（小寫 · 大寫）</td><td class="num">86 · 94</td></tr>
-            <tr><td>髮絲粗（小寫 · 大寫）</td><td class="num">24 · 26</td></tr>
+            <tr><td>直筆粗（小寫 · 大寫 · 中文）</td><td class="num">92 · 102 · 94</td></tr>
+            <tr><td>髮絲粗（小寫 · 大寫 · 中文）</td><td class="num">22 · 24 · 29</td></tr>
             <tr><td>圓弧超出量</td><td class="num">10 · 12</td></tr>
-            <tr><td>斷線縫寬</td><td class="num">12</td></tr>
+            <tr><td>斷線縫寬（拉丁 · 中文）</td><td class="num">16 · 14</td></tr>
             <tr><td>共用斜切角</td><td class="num">18°</td></tr>
-            <tr><td>雨滴直徑（大 · 小）</td><td class="num">94.6 · 73.1 ＝ 直筆 × 1.1 · × 0.85</td></tr>
+            <tr><td>雨滴直徑（大 · 小 · 中文鉤）</td><td class="num">101 · 78 · 66</td></tr>
             <tr><td>菱形點（寬 × 高）</td><td class="num">100 × 137.6，頂角 72°</td></tr>
             <tr><td>最小使用字級</td><td class="num">18 pt</td></tr>
           </tbody>
@@ -283,9 +308,10 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
       <div class="check"><p class="t">O 與 0 一眼分得開</p><p class="s">O0 OO 00 2000</p></div>
       <div class="check"><p class="t">rn 不會被讀成 m：r 的雨滴隔在中間</p><p class="s">rn m corn modern</p></div>
       <div class="check"><p class="t">a c e s 的開口夠大</p><p class="s">aces scenes cascade</p></div>
+      <div class="check"><p class="t">中文的易混字仍然分得開</p><p class="s">未末 土士 己已巳 日曰</p></div>
       <div class="check">
         <p class="t"><label for="blur">模糊測試 <input id="blur" type="range" min="0" max="8" step="0.5" value="4" style="accent-color:var(--brass);vertical-align:middle;width:110px"></label></p>
-        <p class="s" id="blurline" style="filter:blur(4px)">Rain rises over the quay</p>
+        <p class="s" id="blurline" style="filter:blur(4px)">雨向天空落下 Rain rises</p>
       </div>
       <div class="check sizes"><p class="t">18 · 24 · 36 px</p><div>
         <p style="font-size:18px">The quick brown fox jumps over the lazy dog, 0123456789.</p>
@@ -295,7 +321,7 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
     </div>
     <div class="inv">
       <p class="label">深底淺字：髮絲在深底會顯得更細</p>
-      <p class="ny">Night rain, 1987 &amp; 1999</p>
+      <p class="ny">夜雨 Night rain, 1987 &amp; 1999</p>
     </div>
   </div>
 </section>
@@ -307,15 +333,22 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
     <div class="use">
       <div>
         <p class="label">網頁</p>
-<pre>@font-face {
+<pre>/* 拉丁子集先載入，用到中文才抓完整檔 */
+@font-face {
   font-family: "NiYu";
-  src: url("/fonts/NiYu-Regular.woff2") format("woff2");
+  src: url("/fonts/NiYu-Regular-Latin.woff2") format("woff2");
+  unicode-range: U+0000-024F, U+2000-22FF, U+25A0-27BF;
   font-display: swap;
 }
-h1 {
-  font-family: "NiYu", serif;
-  font-feature-settings: "ss01" 1, "onum" 1;
-}</pre>
+@font-face {
+  font-family: "NiYu";
+  src: url("/fonts/NiYu-Regular.woff2") format("woff2");
+  unicode-range: U+3000-303F, U+4E00-9FFF, U+FF00-FFEF;
+  font-display: swap;
+}
+h1 { font-family: "NiYu", serif; }
+/* 關掉花飾 */
+.quiet { font-feature-settings: "calt" 0; }</pre>
       </div>
       <div>
         <p class="label">XeLaTeX</p>
@@ -331,14 +364,15 @@ h1 {
         <p class="label">檔案</p>
         <!--FILES-->
         <ul class="files">
-          <li><a href="../fonts/NiYu-Regular.otf">fonts/NiYu-Regular.otf</a> <span>· 排版軟體</span></li>
-          <li><a href="../fonts/NiYu-Regular.ttf">fonts/NiYu-Regular.ttf</a> <span>· 一般安裝</span></li>
-          <li><a href="../fonts/NiYu-Regular.woff2">fonts/NiYu-Regular.woff2</a> <span>· 網頁，22 KB</span></li>
-          <li><a href="sources/">niyu/sources/NiYu-Regular.ufo</a> <span>· 可在 Fontra、FontForge、Glyphs 續修</span></li>
+          <li><a href="../fonts/NiYu-Regular.otf">fonts/NiYu-Regular.otf</a> <span>· 排版軟體，含中文</span></li>
+          <li><a href="../fonts/NiYu-Regular.ttf">fonts/NiYu-Regular.ttf</a> <span>· 一般安裝，含中文</span></li>
+          <li><a href="../fonts/NiYu-Regular.woff2">fonts/NiYu-Regular.woff2</a> <span>· 網頁，含中文，1.4 MB</span></li>
+          <li><a href="../fonts/NiYu-Regular-Latin.woff2">fonts/NiYu-Regular-Latin.woff2</a> <span>· 網頁，只含拉丁，22 KB</span></li>
+          <li><a href="sources/">niyu/sources/NiYu-Regular.ufo</a> <span>· 拉丁部分的可編輯原始檔</span></li>
           <li><a href="README.md">niyu/README.md</a> <span>· 製作流程與重建方法</span></li>
         </ul>
         <!--/FILES-->
-        <p style="margin-top:14px;font-size:14px;color:var(--soft)">授權：SIL Open Font License 1.1。OpenType 功能：liga、smcp、c2sc、onum、lnum、tnum、pnum、zero、case、ss01、kern。</p>
+        <p style="margin-top:14px;font-size:14px;color:var(--soft)">授權：SIL Open Font License 1.1。OpenType 功能：calt、ss01、liga、smcp、c2sc、onum、lnum、tnum、pnum、zero、case、kern。</p>
       </div>
     </div>
   </div>
@@ -347,7 +381,7 @@ h1 {
 <footer>
   <div class="wrap">
     <p class="ny" aria-hidden="true">◇❧◇</p>
-    <p>逆雨 NiYu 是原創字型，只取復古英倫與神秘學的氛圍，沒有描摹任何現成字型或標誌的輪廓。中文擴充（標題字集）列為第二階段。</p>
+    <p>拉丁字母、數字與符號由程式從零畫成，只取復古英倫與神秘學的氛圍，沒有描摹任何現成字型或標誌的輪廓。中文以 Noto Serif TC（思源宋體，OFL 授權）為底逐筆改作，衍生字型已改名並維持 OFL。</p>
   </div>
 </footer>
 

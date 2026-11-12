@@ -143,7 +143,7 @@ def c():
         N(cx + 14, XH + OS - 14, 28, d=180, ti=0.58),
         N(sb + TH / 2, XH / 2 - 2, TH, d=270),
         N(cx + 26, -OS + 15, 30, d=0, to=0.6),
-        N(sb + 420, 104, HAIR - 2, d=52, ti=0.5),
+        N(sb + 420, 104, HAIR, d=52, ti=0.5),
     ]
     body = stroke(nodes, end_cut=CUT_SIDE)
     return G([body, drop(xa, ya + 2, DROP_BIG)], sb + 392 + DROP_BIG + 20)
@@ -161,23 +161,24 @@ def e():
         N(cx + 2, XH + OS - 12, HAIR, d=180),
         N(sb + TH / 2, XH / 2 - 4, TH, d=270),
         N(cx + 28, -OS + 15, 30, d=0, to=0.6),
-        N(sb + 428, 108, HAIR - 2, d=52, ti=0.5),
+        N(sb + 428, 108, HAIR, d=52, ti=0.5),
     ]
     body = stroke(nodes, end_cut=CUT_SIDE)
     bar = rect(sb + TH / 2, ybar, sb + w - 6, ybar + HAIR)
     return G([body, bar], sb + w + RR - 4)
 
 
-def bowl(x1, bw=304, top=XH, bot=0, join=100):
-    """Bowl hanging on the right edge (x1) of a stem; both joins are thin.
-    Used by b and p; mirrored for d and q."""
+def bowl(x1, bw=304, top=XH, bot=0, join=100, gap=GAP):
+    """Bowl hanging off the right edge (x1) of a stem. Both joins are thin
+    and both stop `gap` short of the stem (斷線). Used by b and p; mirrored
+    for d and q."""
     cy = (top + bot) / 2
     nodes = [
-        N(x1 - 4, top - join, HAIR + 4, d=56, to=0.5),
+        N(x1 + gap, top - join, HAIR + 4, d=56, to=0.5),
         N(x1 + bw * 0.50, top + OS - 15, 30, d=0, ti=0.62),
         N(x1 + bw - TH / 2, cy, TH, d=-90),
         N(x1 + bw * 0.50, bot - OS + 15, 30, d=180, to=0.62),
-        N(x1 - 4, bot + join, HAIR + 4, d=124, ti=0.5),
+        N(x1 + gap, bot + join, HAIR + 4, d=124, ti=0.5),
     ]
     return stroke(nodes, start_cut=90, end_cut=90)
 
@@ -331,6 +332,8 @@ def k():
     # thin arm rising to the right; the thick leg grows out of it
     arm = poly([(x1 - 2, 168), (x1 - 2, 168 + 44), (xt + WH + 2, XH), (xt, XH)])
     leg = poly([(x1 + 30, XH * 0.74), (x1 + 30 + WT + 8, XH * 0.74), (xb, 0), (xb - WT - 8, 0)]) & below(x1 - 2, 168, xt, XH)
+    room = rect(x1 + GAP, -50, x1 + 900, ASC)          # 斷線: nothing touches the stem
+    arm, leg = arm & room, leg & room
     parts = stem_flag(x0, 0, ASC) + [
         slab(x0, x1, 0), arm, leg,
         dserif(xt, xt + WH + 2, XH, el=44, er=44),
@@ -356,10 +359,10 @@ def a():
         N(xa, ya, HAIR, d=270, ti=0.58),
     ])
     bw = stroke([
-        N(xs0 + 6, 262, HAIR + 2, d=176, to=0.62),
-        N(sb + 41, 130, 82, d=270, ti=0.6),
-        N(sb + 148, -OS + 14, 28, d=0, to=0.6),
-        N(xs0 + 6, 84, HAIR + 4, d=50, ti=0.5),
+        N(xs0 - GAP, 262, HAIR + 2, d=176, to=0.62),
+        N(sb + 41, 130, 86, d=270, ti=0.6),
+        N(sb + 144, -OS + 14, 28, d=0, to=0.6),
+        N(xs0 - GAP, 88, HAIR + 4, d=50, ti=0.5),
     ], start_cut=90, end_cut=90)
     parts = [main, bw, drop(xa, ya + 2, DROP_SMALL), slab(xs0, xs1, 0, el=0, er=40)]
     return G(parts, xs1 + R0 - 8)
@@ -368,17 +371,19 @@ def a():
 @glyph('s', 0x73)
 def s():
     sb = 48
+    xa, ya = sb + 300, XH - 92            # top terminal: a drop hangs here
+    xe, ye = sb + 26, 104                 # bottom terminal: a drop rises here
     nodes = [
-        N(sb + 292, XH - 116, 38, d=96, to=0.6),
-        N(sb + 170, XH + OS - 13, 26, d=180, ti=0.58),
-        N(sb + 46, XH - 126, 76, d=270, to=0.6),
-        N(sb + 168, XH / 2 + 2, 88, d=-24, ti=0.66, to=0.66),
-        N(sb + 304, 126, 80, d=270, ti=0.6),
-        N(sb + 160, -OS + 13, 26, d=180, to=0.58),
-        N(sb + 30, 116, 38, d=84, ti=0.6),
+        N(xa, ya, HAIR, d=90, to=0.6),
+        N(sb + 174, XH + OS - 13, 26, d=180, ti=0.58),
+        N(sb + 48, XH - 126, 80, d=270, to=0.6),
+        N(sb + 168, XH / 2 + 2, 92, d=-24, ti=0.66, to=0.66),
+        N(sb + 304, 126, 84, d=270, ti=0.6),
+        N(sb + 158, -OS + 13, 26, d=180, to=0.58),
+        N(xe, ye, HAIR, d=92, ti=0.6),
     ]
-    body = stroke(nodes, start_cut=CUT_UP, end_cut=CUT_UP)
-    return G([body], sb + 344 + 46)
+    body = stroke(nodes)
+    return G([body, hang(xa, ya, DROP_SMALL), rise(xe, ye, DROP_SMALL)], sb + 344 + 46)
 
 
 @glyph('f', 0x66)
@@ -437,10 +442,12 @@ def g():
     bw_, bh_ = 296, 336
     cx, cy = sb + 16 + bw_ / 2, XH + OS - bh_ / 2
     upper = ring(cx, cy, bw_, bh_, th=80)
+    ex, ey = cx + 232, XH - 30
     ear = stroke([
-        N(cx + 96, XH - 62, HAIR + 2, d=42, to=0.55),
-        N(cx + 216, XH - 12, 38, d=4, ti=0.6),
-    ], start_cut=90, end_cut=CUT_SIDE)
+        N(cx + 96, XH - 70, HAIR + 2, d=50, to=0.55),
+        N(cx + 172, XH + OS - 14, 26, d=0, ti=0.6, to=0.6),
+        N(ex, ey, HAIR, d=270, ti=0.6),
+    ], start_cut=90)
     loop = stroke([
         N(cx - 60, cy - bh_ / 2 + 22, HAIR + 2, d=232, to=0.6),
         N(sb + 60, 78, 30, d=270, ti=0.6, to=0.62),
@@ -450,4 +457,4 @@ def g():
         N(sb + 40, -122, 56, d=90, ti=0.6, to=0.6),
         N(sb + 150, 6, HAIR, d=24, ti=0.6),
     ], start_cut=0, end_cut=90)
-    return G([upper, ear, loop], sb + 16 + bw_ + 110)
+    return G([upper, ear, loop, hang(ex, ey, DROP_SMALL)], ex + DROP_SMALL + 26)

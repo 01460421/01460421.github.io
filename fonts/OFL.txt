@@ -1,4 +1,6 @@
 Copyright 2026 The NiYu Project Authors (https://github.com/01460421/01460421.github.io)
+Chinese glyphs are derived from Noto Serif TC:
+(c) 2017-2024 Adobe (http://www.adobe.com/).
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

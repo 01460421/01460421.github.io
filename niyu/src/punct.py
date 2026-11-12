@@ -4,7 +4,7 @@ import math
 
 from .geom import N, Outline, poly, rect, stroke
 from .params import *  # noqa: F401,F403
-from .parts import G, bracket, cut_bar, diamond, drop, slab
+from .parts import G, bracket, cut_bar, diamond, drop, hang, rise, slab
 from .registry import glyph
 
 T = STEM_C
@@ -73,13 +73,13 @@ def exclam():
 def question():
     sb = 52
     hook = stroke([
-        N(sb + 26, CAP - 172, HR + 16, d=95, to=0.6),
+        N(sb + 30, CAP - 126, HR, d=90, to=0.6),
         N(sb + 168, CAP + OS_C - 14, 30, d=0, ti=0.6),
         N(sb + 330 - 47, CAP - 168, T, d=270, to=0.62),
         N(sb + 176, 300, HR + 6, d=262, ti=0.5),
         N(sb + 172, 214, HR + 4, d=270),
-    ], start_cut=CUT_UP)
-    return G([hook, diamond(sb + 172, DOT_Y)], sb + 330 + 48)
+    ])
+    return G([hook, diamond(sb + 172, DOT_Y), hang(sb + 30, CAP - 126, DROP_BIG)], sb + 330 + 48)
 
 
 def wedge(cx, ytop, length, wtop=58, wbot=18):
@@ -352,16 +352,17 @@ def dollar():
     h = CAP - 30
     y0 = 15
     nodes = [
-        N(sb + w * 0.91, y0 + h - 172, HR + 16, d=96, to=0.6),
+        N(sb + w * 0.93, y0 + h - 124, HR, d=90, to=0.6),
         N(sb + w * 0.50, y0 + h + 10 - HR / 2, HR + 2, d=180, ti=0.58),
         N(sb + T * 0.42, y0 + h - 176, T * 0.84, d=270, to=0.62),
         N(sb + w * 0.50, y0 + h * 0.515, T, d=-27, ti=0.7, to=0.7),
         N(sb + w - T * 0.44, y0 + 180, T * 0.9, d=270, ti=0.62),
         N(sb + w * 0.48, y0 - 10 + HR / 2, HR + 2, d=180, to=0.58),
-        N(sb + w * 0.04, y0 + 166, HR + 16, d=84, ti=0.6),
+        N(sb + w * 0.035, y0 + 132, HR, d=92, ti=0.6),
     ]
     cx = sb + w / 2
-    parts = [stroke(nodes, start_cut=CUT_UP, end_cut=CUT_UP), rect(cx - 14, -84, cx + 14, CAP + 84)]
+    parts = [stroke(nodes), rect(cx - 14, -84, cx + 14, CAP + 84),
+             hang(sb + w * 0.93, y0 + h - 124, DROP_SMALL), rise(sb + w * 0.035, y0 + 132, DROP_SMALL)]
     return G(parts, sb + w + 60)
 
 
@@ -379,7 +380,7 @@ def ampersand():
         N(sb + 372, 300, 106, d=-52, ti=0.42, to=0.4),
         N(sb + 606, 0, 100, d=-50, ti=0.4),
     ], start_cut=0, end_cut=0)
-    parts = [s1, rect(sb + 566, 392 - 4, sb + 730, 392 - 4 + HR), rect(sb + 540, 0, sb + 722, HR)]
+    parts = [s1, rise(sb + 640, 392, DROP_SMALL), rect(sb + 540, 0, sb + 722, HR)]
     return G(parts, sb + 730 + 40)
 
 
@@ -408,12 +409,12 @@ def sterling():
     sb = 56
     xs = sb + 150                      # centre of the stem
     hook = stroke([
-        N(sb + 408, CAP - 168, HR + 16, d=98, to=0.6),
+        N(sb + 404, CAP - 118, HR, d=90, to=0.6),
         N(sb + 290, CAP + OS_C - 14, 30, d=180, ti=0.6, to=0.6),
         N(xs, CAP - 210, T, d=270, ti=0.62),
         N(xs, 150, T, d=270, to=0.5),
         N(xs - 60, 26, 44, d=220, ti=0.5),
-    ], start_cut=CUT_UP, end_cut=0)
+    ], end_cut=0)
     base = stroke([
         N(sb + 6, 30, 30, d=-12, to=0.5),
         N(sb + 150, 26, 54, d=0, ti=0.5, to=0.55),
@@ -421,7 +422,7 @@ def sterling():
         N(sb + 448, 74, HR, d=50, ti=0.5),
     ], start_cut=90, end_cut=CUT_SIDE)
     bar = cut_bar(sb + 20, sb + 340, 352, 352 + HR)
-    return G([hook, base, bar], sb + 448 + 50)
+    return G([hook, base, bar, hang(sb + 404, CAP - 118, DROP_BIG)], sb + 448 + 50)
 
 
 @glyph('Euro', 0x20AC)
@@ -430,11 +431,11 @@ def euro():
     w = 500
     cx = sb + w / 2 + 6
     body = stroke([
-        N(sb + w - 20, CAP - 190, HR + 16, d=94, to=0.6),
+        N(sb + w - 30, CAP - 124, HR, d=90, to=0.6),
         N(cx + 20, CAP + OS_C - 14, HR + 2, d=180, ti=0.58),
         N(sb + (T + 4) / 2, CAP / 2, T + 4, d=270),
         N(cx + 30, -OS_C + 15, HR + 4, d=0, to=0.6),
-        N(sb + w, 144, HR - 2, d=58, ti=0.5),
-    ], start_cut=CUT_UP, end_cut=CUT_SIDE)
+        N(sb + w, 144, HR, d=58, ti=0.5),
+    ], end_cut=CUT_SIDE)
     bars = [cut_bar(sb - 70, sb + 330, 400, 400 + HR), cut_bar(sb - 70, sb + 300, 290, 290 + HR)]
-    return G([body] + bars, sb + w + 50)
+    return G([body] + bars + [hang(sb + w - 30, CAP - 124, DROP_BIG)], sb + w + 50)

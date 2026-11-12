@@ -2,9 +2,9 @@
 code also produces the small caps (smcp) at their own height and weight."""
 import math
 
-from .geom import N, Outline, ellipse, poly, rect, stroke
+from .geom import N, Outline, ellipse, poly, rect, stroke, union_all
 from .params import *  # noqa: F401,F403
-from .parts import G, below, bracket, cut_bar, diag, diamond, drop, halfplane, slab
+from .parts import G, below, bracket, cut_bar, diag, diamond, drop, halfplane, hang, rise, slab
 from .registry import glyph
 
 CUTV = 90 - CUT
@@ -67,6 +67,17 @@ def beak(m, xe, y, dirn, length, side=1, br=True):
     return [p, bracket(xi, y + dirn * m.hair, -side, dirn, 46 * m.ws, 70 * m.k, k=0.6)]
 
 
+def cdrop(m):
+    """Drop size for this alphabet: big on capitals, small on small caps."""
+    return DROP_BIG if m.h >= CAP else DROP_SMALL
+
+
+def knot(m, cx, cy):
+    """菱形結: the small diamond that sits on a capital's crossbar."""
+    k = 1.0 if m.h >= CAP else 0.8
+    return diamond(cx, cy, KNOT_A * k, KNOT_B * k)
+
+
 def dslab(m, xl, xr, y, up=1, el=None, er=None):
     el = m.se * 0.8 if el is None else el
     er = m.se * 0.8 if er is None else er
@@ -85,7 +96,9 @@ def H(m):
     x0 = m.sb
     x2 = x0 + m.w(580) - m.s
     by = m.h * 0.515
-    parts = cstem(m, x0) + cstem(m, x2) + [rect(x0, by - m.hair / 2, x2 + m.s, by + m.hair / 2)]
+    x1 = x0 + m.s
+    parts = cstem(m, x0) + cstem(m, x2) + [rect(x1 + GAP, by - m.hair / 2, x2 - GAP, by + m.hair / 2),
+                                           knot(m, (x1 + x2) / 2, by)]
     return G(parts, x2 + m.s + m.sb)
 
 
@@ -99,14 +112,14 @@ def I(m):
 def E(m):
     x0 = m.sb
     x1 = x0 + m.s
-    xt, xm, xb = x1 + m.w(332), x1 + m.w(236), x1 + m.w(356)
+    xt, xm, xb = x1 + m.w(332), x1 + m.w(214), x1 + m.w(356)
     by = m.h * 0.525
+    g = x1 + GAP                       # 斷線: every arm stops short of the stem
     parts = cstem(m, x0, head='l', foot='l') + [
-        rect(x1 - 2, m.h - m.hair, xt, m.h), rect(x1 - 2, 0, xb, m.hair),
-        rect(x1 - 2, by - m.hair / 2, xm, by + m.hair / 2),
+        rect(g, m.h - m.hair, xt, m.h), rect(g, 0, xb, m.hair),
+        rect(g, by - m.hair / 2, xm, by + m.hair / 2), knot(m, xm, by),
     ]
     parts += beak(m, xt, m.h, -1, 172 * m.k) + beak(m, xb, 0, 1, 196 * m.k)
-    parts += beak(m, xm, by - m.hair / 2, 1, 66 * m.k, br=False) + beak(m, xm, by + m.hair / 2, -1, 66 * m.k, br=False)
     return G(parts, xb + m.sbr + 6)
 
 
@@ -114,14 +127,14 @@ def E(m):
 def F(m):
     x0 = m.sb
     x1 = x0 + m.s
-    xt, xm = x1 + m.w(326), x1 + m.w(228)
+    xt, xm = x1 + m.w(326), x1 + m.w(208)
     by = m.h * 0.5
+    g = x1 + GAP
     parts = cstem(m, x0, head='l', foot='lr') + [
-        rect(x1 - 2, m.h - m.hair, xt, m.h),
-        rect(x1 - 2, by - m.hair / 2, xm, by + m.hair / 2),
+        rect(g, m.h - m.hair, xt, m.h),
+        rect(g, by - m.hair / 2, xm, by + m.hair / 2), knot(m, xm, by),
     ]
     parts += beak(m, xt, m.h, -1, 172 * m.k)
-    parts += beak(m, xm, by - m.hair / 2, 1, 66 * m.k, br=False) + beak(m, xm, by + m.hair / 2, -1, 66 * m.k, br=False)
     return G(parts, xt + m.sbr - 4)
 
 
@@ -184,14 +197,15 @@ def C(m):
     sb = m.sbr
     w = m.w(640)
     cx = sb + w / 2 + m.w(10)
+    xa, ya = sb + w - m.w(34), m.h - 124 * m.k
     nodes = [
-        N(sb + w - m.w(26), m.h - 196 * m.k, m.hair + 18, d=94, to=0.6),
+        N(xa, ya, m.hair, d=90, to=0.6),
         N(cx + m.w(24), m.h + m.os - m.hair / 2 - 1, m.hair + 2, d=180, ti=0.58),
         N(sb + m.th / 2, m.h / 2, m.th, d=270),
         N(cx + m.w(36), -m.os + m.hair / 2 + 2, m.hair + 4, d=0, to=0.6),
-        N(sb + w, 148 * m.k, m.hair - 2, d=58, ti=0.5),
+        N(sb + w, 148 * m.k, m.hair, d=58, ti=0.5),
     ]
-    return G([stroke(nodes, start_cut=CUT_UP, end_cut=CUT_SIDE)], sb + w + m.sbr - 6)
+    return G([stroke(nodes, end_cut=CUT_SIDE), hang(xa, ya, cdrop(m))], sb + w + m.sbr - 6)
 
 
 @cap('G', 0x47)
@@ -201,15 +215,16 @@ def G_(m):
     cx = sb + w / 2 + m.w(4)
     xg = sb + w - m.s - m.w(8)
     yg = m.h * 0.43
+    xa, ya = sb + w - m.w(52), m.h - 118 * m.k
     nodes = [
-        N(sb + w - m.w(42), m.h - 196 * m.k, m.hair + 18, d=94, to=0.6),
+        N(xa, ya, m.hair, d=90, to=0.6),
         N(cx + m.w(20), m.h + m.os - m.hair / 2 - 1, m.hair + 2, d=180, ti=0.58),
         N(sb + m.th / 2, m.h / 2, m.th, d=270),
         N(cx + m.w(30), -m.os + m.hair / 2 + 2, m.hair + 4, d=0, to=0.62),
         N(xg + m.s / 2, 150 * m.k, m.s, d=90, ti=0.62),
         N(xg + m.s / 2, yg - 4, m.s, d=90),
     ]
-    parts = [stroke(nodes, start_cut=CUT_UP), slab(xg, xg + m.s, yg, el=m.se * 0.8, er=m.se * 0.8, up=-1)]
+    parts = [stroke(nodes), slab(xg, xg + m.s, yg, el=m.se * 0.8, er=m.se * 0.8, up=-1), hang(xa, ya, cdrop(m))]
     return G(parts, xg + m.s + m.sb - 10)
 
 
@@ -295,7 +310,7 @@ def A(m):
     f = by / top
     xbl = fl + wn + (xa - ap / 2 - fl) * f
     xbr = (fr - wt) + (xa + ap / 2 - wt * 0.94 - (fr - wt)) * f
-    bar = rect(xbl - 4, by - m.hair / 2, xbr + 4, by + m.hair / 2)
+    bar = union_all([rect(xbl + GAP, by - m.hair / 2, xbr - GAP, by + m.hair / 2), knot(m, (xbl + xbr) / 2, by)])
     parts = [thin, thick, bar, dslab(m, fl, fl + wn, 0), dslab(m, fr - wt, fr, 0)]
     return G(parts, xr + m.sbr - 6)
 
@@ -387,6 +402,8 @@ def K(m):
     arm = poly([(x1 - 2, ya), (x1 - 2, ya + wn * 1.2), (xt, m.h), (xt - wn, m.h)])
     # the leg grows out of the arm: clip it along the arm's lower edge
     leg = quad(x1 + m.w(40), x1 + m.w(40) + wt, m.h * 0.72, xb - wt, xb, 0) & below(x1 - 2, ya, xt - wn, m.h)
+    room = rect(x1 + GAP, -50, x1 + 2000, m.h + 50)       # 斷線
+    arm, leg = arm & room, leg & room
     parts = cstem(m, x0) + [arm, leg, dslab(m, xt - wn, xt, m.h, up=-1), dslab(m, xb - wt, xb, 0)]
     return G(parts, xb + m.sbr + 2)
 
@@ -447,29 +464,32 @@ def S(m):
     sb = m.sbr + 10
     w = m.w(470)
     ky = m.k
+    xa, ya = sb + w * 0.93, m.h - 132 * ky
+    xe, ye = sb + w * 0.035, 142 * ky
     nodes = [
-        N(sb + w * 0.91, m.h - 180 * ky, m.hair + 18, d=96, to=0.6),
+        N(xa, ya, m.hair, d=90, to=0.6),
         N(sb + w * 0.50, m.h + m.os - m.hair / 2 - 1, m.hair + 2, d=180, ti=0.58),
         N(sb + m.s * 0.43, m.h - 190 * ky, m.s * 0.86, d=270, to=0.62),
         N(sb + w * 0.50, m.h * 0.515, m.s * 1.02, d=-27, ti=0.7, to=0.7),
         N(sb + w - m.s * 0.45, 192 * ky, m.s * 0.92, d=270, ti=0.62),
         N(sb + w * 0.48, -m.os + m.hair / 2 + 1, m.hair + 2, d=180, to=0.58),
-        N(sb + w * 0.04, 176 * ky, m.hair + 18, d=84, ti=0.6),
+        N(xe, ye, m.hair, d=92, ti=0.6),
     ]
-    return G([stroke(nodes, start_cut=CUT_UP, end_cut=CUT_UP)], sb + w + m.sbr + 10)
+    return G([stroke(nodes), hang(xa, ya, cdrop(m)), rise(xe, ye, cdrop(m))], sb + w + m.sbr + 10)
 
 
 @cap('J', 0x4A)
 def J(m):
     x0 = m.sbr + m.w(236)
     xc = x0 + m.s / 2
+    xe, ye = x0 - m.w(206), 112 * m.k
     hook = stroke([
         N(xc, m.h - 10, m.s, d=270),
         N(xc, 168 * m.k, m.s, d=270, to=0.62),
         N(xc - m.w(128), -m.os + m.hair / 2 + 3, m.hair + 6, d=180, ti=0.62, to=0.6),
-        N(x0 - m.w(214), 126 * m.k, m.hair + 18, d=84, ti=0.6),
-    ], end_cut=CUT_UP)
-    parts = [hook, slab(x0, x0 + m.s, m.h, el=m.se, er=m.se, up=-1)]
+        N(xe, ye, m.hair, d=94, ti=0.6),
+    ])
+    parts = [hook, slab(x0, x0 + m.s, m.h, el=m.se, er=m.se, up=-1), rise(xe, ye, cdrop(m))]
     return G(parts, x0 + m.s + m.sb)
 
 

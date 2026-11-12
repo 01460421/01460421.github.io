@@ -115,8 +115,10 @@ MARK_NAMES = {'grave', 'acute', 'circumflex', 'tilde', 'dieresis', 'ring', 'caro
               'sterling', 'dotlessi'}
 
 
-def build_fea(drawn, log=None):
+def build_fea(drawn, log=None, skip=()):
+    """skip: glyphs (the Chinese set) that take no part in kerning or swash context."""
     names = set(drawn)
+    latin = {n: v for n, v in drawn.items() if n not in skip}
     fea = ['languagesystem DFLT dflt;', 'languagesystem latn dflt;', '']
 
     # small caps first: otherwise "WAFFLES" in small caps would pick up a lowercase ligature
@@ -156,32 +158,39 @@ def build_fea(drawn, log=None):
                         'bracketright', 'braceleft', 'braceright', 'slash', 'backslash', 'bar', 'underscore',
                         'three.onum', 'four.onum', 'five.onum', 'seven.onum', 'nine.onum', 'q.sc', 'j.sc',
                         'Y.ss01', 'y.ss01') if n in names]
-    everything = [n for n in drawn if n != '.notdef']
+    everything = [n for n in latin if n != '.notdef']
 
     def swash_lookup(tag, glyphs, ignores):
         have = [g for g in glyphs if g + '.ss01' in names]
         if not have:
             return ''
-        rows = [f'        ignore sub {r};' for r in ignores(' '.join(have))]
-        rows += [f"        sub {g}' by {g}.ss01;" for g in have]
-        return f'    lookup ss01_{tag} {{\n' + '\n'.join(rows) + f'\n    }} ss01_{tag};\n'
+        rows = [f'    ignore sub {r};' for r in ignores(' '.join(have))]
+        rows += [f"    sub {g}' by {g}.ss01;" for g in have]
+        return f'lookup swash_{tag} {{\n' + '\n'.join(rows) + f'\n}} swash_{tag};\n'
 
     tails = [n for n in ('K.ss01', 'L.ss01', 'Q.ss01', 'R.ss01') if n in names]
     fea.append(f'@sw_letter = [{" ".join(letters)}];\n@sw_desc = [{" ".join(desc)}];\n'
                f'@sw_low = [{" ".join(desc + tails)}];\n@sw_any = [{" ".join(everything)}];\n')
     fea.append(
-        'feature ss01 {\n'
-        '    featureNames {\n        name "Swash capitals and long tails";\n'
-        '        name 3 1 0x0404 "\\82b1\\98fe\\5927\\5beb\\8207\\9577\\5c3e";\n    };\n'
-        + swash_lookup('left', ['A', 'M', 'N'], lambda g: [f"@sw_letter [{g}]'"])
+        swash_lookup('left', ['A', 'M', 'N'], lambda g: [f"@sw_letter [{g}]'"])
         + swash_lookup('right', ['K', 'L', 'Q', 'R'], lambda g: [
             f"[{g}]' @sw_desc", f"[{g}]' @sw_any @sw_desc", f"[{g}]' @sw_any @sw_any @sw_desc"])
         # tails that already swashed to the right count as descenders for what follows
+        # the long-tailed y only closes a word; Y may swash anywhere there is room
         + swash_lookup('under', ['Y', 'y'], lambda g: [
-            f"@sw_low [{g}]'", f"@sw_low @sw_any [{g}]'", f"@sw_low @sw_any @sw_any [{g}]'"])
-        + '} ss01;\n')
+            f"@sw_low [{g}]'", f"@sw_low @sw_any [{g}]'", f"@sw_low @sw_any @sw_any [{g}]'",
+            "y' @sw_letter"]))
+    use = '    lookup swash_left;\n    lookup swash_right;\n    lookup swash_under;\n'
+    # The swashes are ON by default (calt): this is an ornamental face. Set
+    # "calt" 0 for a quieter line; ss01 asks for them where calt is unavailable.
+    fea.append('feature calt {\n' + use + '} calt;\n')
+    fea.append(
+        'feature ss01 {\n'
+        '    featureNames {\n        name "Swash capitals and long tails";\n'
+        '        name 3 1 0x0404 "\\82b1\\98fe\\5927\\5beb\\8207\\9577\\5c3e";\n    };\n'
+        + use + '} ss01;\n')
 
-    kern_fea, table = kerning(drawn, log)
+    kern_fea, table = kerning(latin, log)
     fea.append(kern_fea)
 
     # GDEF: glyph classes and a caret between the two letters of each ligature
