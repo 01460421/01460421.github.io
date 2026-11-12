@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--PAGE-HEAD-->
+<title>逆雨 NiYu 字型樣張</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&display=swap">
+<style>
+/* layout: one measured column on overcast paper; display lines run the full
+   width; rain rises behind the opening line and nowhere else */
+:root {
+  --paper: #E8EDED; --wash: #DAE3E3; --ink: #0F252D; --soft: #4A636C; --rule: #B4C4C6; --brass: #8A5C14;
+  --display: "NiYu", "Noto Serif TC", "Songti TC", serif;
+  --text: "Noto Serif TC", "Songti TC", "PMingLiU", Georgia, serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --col: 1080px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0C1B21; --wash: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; color-scheme: dark }
+}
+:root[data-theme="dark"] { --paper: #0C1B21; --wash: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; color-scheme: dark }
+
+@font-face {
+  font-family: "NiYu";
+  src: url("../fonts/NiYu-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+* { box-sizing: border-box }
+html { -webkit-text-size-adjust: 100% }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.75 var(--text); overflow-x: hidden }
+.wrap { max-width: var(--col); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+section { padding-block: clamp(48px, 8vw, 96px); border-top: 1px solid var(--rule) }
+h1, h2, h3, p { margin: 0 }
+h2 { font: 600 clamp(22px, 2.6vw, 28px)/1.3 var(--text); text-wrap: balance }
+.lede { color: var(--soft); max-width: 34em; margin-top: 10px }
+.label { font: 400 12px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--soft) }
+.ny { font-family: var(--display); font-weight: 400; line-height: 1.08; font-kerning: normal }
+a { color: var(--brass) }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px }
+
+/* ---------- opening ---------- */
+.hero { position: relative; border-top: 0; padding-block: clamp(40px, 7vw, 88px) clamp(40px, 6vw, 72px); overflow: hidden }
+.hero .wrap { position: relative; z-index: 1 }
+.hero h1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .32em; margin: .1em 0 .12em; line-height: 1.05 }
+.hero h1 .zh { font-size: clamp(96px, 22vw, 290px); letter-spacing: .02em; white-space: nowrap }
+.hero h1 .en { font-size: clamp(44px, 9.4vw, 124px); white-space: nowrap; padding-bottom: .1em }
+.hero .years { font-size: clamp(26px, 5.2vw, 64px); color: var(--soft); display: flex; flex-wrap: wrap; gap: .1em .7em }
+.hero .years b { font-weight: 400; color: var(--ink) }
+.hero .say { margin-top: clamp(20px, 3vw, 36px); max-width: 30em; font-size: clamp(16px, 1.5vw, 18px) }
+.get { margin-top: clamp(22px, 3vw, 34px); display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; font-size: 14px; color: var(--soft) }
+.dl { display: inline-flex; align-items: baseline; gap: 12px; padding: 14px 24px; background: var(--ink); color: var(--paper); text-decoration: none; font: 600 17px/1 var(--text); border-radius: 2px }
+.dl span { font: 400 12px/1 var(--mono); letter-spacing: .06em; opacity: .78 }
+.dl:hover { background: var(--brass) }
+.get .alt a { margin: 0 2px }
+.rain { position: absolute; inset: 0; z-index: 0; pointer-events: none }
+.rain svg { position: absolute; bottom: -12%; fill: var(--rule); animation: rise linear infinite }
+@keyframes rise { from { transform: translateY(0); opacity: 0 } 12% { opacity: 1 } 80% { opacity: 1 } to { transform: translateY(-125vh); opacity: 0 } }
+@media (prefers-reduced-motion: reduce) { .rain svg { animation: none; bottom: auto } }
+
+/* ---------- three rules ---------- */
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: clamp(24px, 4vw, 48px); margin-top: clamp(28px, 4vw, 48px) }
+.rule .big { font-size: clamp(60px, 6.6vw, 90px); line-height: 1; white-space: nowrap; padding-block: .08em .22em; border-bottom: 1px solid var(--rule) }
+.rule .zh { font-size: clamp(44px, 4.7vw, 62px); line-height: 1.15; letter-spacing: .16em; padding-block: .12em .2em; border-bottom: 1px solid var(--rule); white-space: nowrap }
+.rule .big, .rule dd, td.g { font-feature-settings: "calt" 0 }
+.rule h3 { font: 600 19px/1.4 var(--text); margin-top: 16px }
+.rainrow { margin-top: clamp(28px, 4vw, 48px); padding: clamp(18px, 3vw, 32px); background: var(--wash); border: 1px solid var(--rule); display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px }
+.rainrow .ny { font-size: clamp(44px, 8.6vw, 116px); line-height: 1.15; letter-spacing: .06em; overflow-wrap: anywhere }
+.rainrow p:last-child { max-width: 36em }
+.rule p { margin-top: 6px }
+.rule dl { margin: 12px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 14px; color: var(--soft) }
+.rule dt { font: 400 12px/2 var(--mono); letter-spacing: .08em }
+.rule dd { margin: 0; font-family: var(--display); font-size: 22px; line-height: 1.3; color: var(--ink); letter-spacing: .04em }
+.scroll { overflow-x: auto; margin-top: clamp(28px, 4vw, 44px) }
+table { border-collapse: collapse; width: 100%; font-size: 15px }
+th, td { text-align: left; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: baseline }
+th { font: 400 12px/1.4 var(--mono); letter-spacing: .1em; color: var(--soft); white-space: nowrap }
+td.g { font-family: var(--display); font-size: 26px; line-height: 1.1; white-space: nowrap; letter-spacing: .06em }
+td.c { text-align: center; color: var(--brass); font-family: var(--display); font-size: 20px; width: 5.5em }
+th.c { text-align: center }
+.num { font-family: var(--mono); font-size: 13.5px; white-space: nowrap }
+
+/* ---------- tester ---------- */
+.bench { margin-top: clamp(24px, 3vw, 36px); background: var(--wash); border: 1px solid var(--rule) }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--rule); font-size: 14px }
+.ctl label { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; white-space: nowrap }
+.ctl input[type=range] { width: min(200px, 40vw); accent-color: var(--brass) }
+.ctl input[type=checkbox] { accent-color: var(--brass); width: 16px; height: 16px; margin: 0 }
+.ctl output { font: 13px var(--mono); min-width: 4.5em }
+#sheet { display: block; width: 100%; min-height: 2.2em; padding: clamp(16px, 3vw, 36px); font-size: 96px; outline: none; overflow-wrap: anywhere; white-space: pre-wrap; color: var(--ink) }
+#sheet:focus-visible { box-shadow: inset 0 0 0 2px var(--brass) }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--rule) }
+button.pre { font: 13px/1 var(--mono); padding: 9px 12px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule); border-radius: 2px; cursor: pointer }
+button.pre:hover { border-color: var(--brass); color: var(--brass) }
+
+/* ---------- glyph sheets ---------- */
+.sets { display: grid; gap: clamp(26px, 4vw, 40px); margin-top: clamp(24px, 3vw, 36px) }
+.set { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 8px 24px; align-items: start }
+.set .label { padding-top: 14px }
+.cells { display: flex; flex-wrap: wrap; font-family: var(--display); font-size: 40px; line-height: 1; padding: 0 1px 1px 0 }
+.cells span { min-width: 58px; height: 74px; padding: 0 9px; display: grid; place-items: center; border: 1px solid var(--rule); margin: 0 -1px -1px 0; white-space: nowrap }
+.cells.wide span { min-width: 96px; padding: 0 16px }
+.cells.orn { font-size: 34px }
+.cells.han span { min-width: 68px; height: 78px; padding: 0 6px }
+.cells:not(.wide):not(.han) { font-feature-settings: "calt" 0 }
+@media (max-width: 640px) { .set { grid-template-columns: minmax(0, 1fr) } .set .label { padding-top: 0 } .cells { font-size: 32px } .cells span { min-width: 46px; height: 62px } .cells.han span { min-width: 52px; height: 62px } }
+
+/* ---------- geometry + parameters ---------- */
+.geo { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: start; margin-top: clamp(24px, 3vw, 36px) }
+.geo svg { width: 100%; max-width: 340px; height: auto; display: block }
+.geo svg .l { stroke: var(--ink); fill: none; stroke-width: 1.4 }
+.geo svg .a { stroke: var(--brass); fill: none; stroke-width: 1.4 }
+.geo svg .f { fill: var(--ink) }
+.geo svg text { fill: var(--soft); font: 11px var(--mono) }
+.geo svg text.b { fill: var(--brass) }
+@media (max-width: 760px) { .geo { grid-template-columns: minmax(0, 1fr) } }
+
+/* ---------- checks ---------- */
+.checks { display: grid; gap: 0; margin-top: clamp(24px, 3vw, 36px); border-top: 1px solid var(--rule) }
+.check { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 6px 24px; padding-block: 18px; border-bottom: 1px solid var(--rule); align-items: center }
+.check .s { font-family: var(--display); font-size: clamp(40px, 6.4vw, 76px); line-height: 1.15; overflow-wrap: anywhere }
+.check .t { font-size: 14px; color: var(--soft) }
+.sizes p { font-family: var(--display); line-height: 1.3; overflow-wrap: anywhere }
+#blurline { transition: filter .15s }
+.inv { background: var(--ink); color: var(--paper); padding: clamp(18px, 3vw, 32px); margin-top: clamp(24px, 3vw, 36px) }
+.inv .label { color: var(--rule) }
+.inv p.ny { font-size: clamp(34px, 6vw, 72px); margin-top: 8px; overflow-wrap: anywhere }
+@media (max-width: 640px) { .check { grid-template-columns: minmax(0, 1fr) } }
+
+/* ---------- use ---------- */
+.use { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 20px; margin-top: clamp(24px, 3vw, 36px) }
+.use > div { min-width: 0 }
+pre { margin: 8px 0 0; padding: 16px; background: var(--wash); border: 1px solid var(--rule); overflow-x: auto; font: 13px/1.6 var(--mono); color: var(--ink) }
+.files { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; font: 14px/1.5 var(--mono) }
+.files span { color: var(--soft) }
+footer { border-top: 1px solid var(--rule); padding-block: 28px 56px; color: var(--soft); font-size: 14px }
+footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
+</style>
+<!--/PAGE-HEAD-->
+</head>
+<body>
+<!--PAGE-BODY-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="drop" viewBox="-56 -2 112 170"><path d="M1.5 0C1.5 37.6 30.4 60.3 45.7 94.7C55 115.6 48.9 140.3 30.8 154.4C12.7 168.5-12.7 168.5-30.8 154.4C-48.9 140.3-55 115.6-45.7 94.7C-30.4 60.3-1.5 37.6-1.5 0Z"/></symbol>
+</defs></svg>
+
+<section class="hero">
+  <div class="rain" id="rain" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="label">逆雨 NiYu · 觀賞型襯線字型 · 拉丁字母與中文</p>
+    <h1 class="ny"><span class="zh">逆雨</span><span class="en">Rain, rising.</span></h1>
+    <p class="ny years"><span>1929</span><span>1966</span><span>1987</span><b>1999</b></p>
+    <p class="say">骨架保守，細節放肆。雨滴一律朝天，細筆在碰到粗筆之前留一道縫，所有的點都是菱形。同樣三條規則，從拉丁字母一路套到五千多個中文字。</p>
+    <p class="get">
+      <a class="dl" href="../fonts/NiYu-fonts.zip" download>下載字型 <span>ZIP · 3.9 MB</span></a>
+      <span class="alt">單一檔案：<a href="../fonts/NiYu-Regular.otf" download>OTF</a> · <a href="../fonts/NiYu-Regular.ttf" download>TTF</a> · <a href="../fonts/NiYu-Regular.woff2" download>WOFF2</a> · 免費，可商用（SIL OFL 1.1）</span>
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="label">特徵系統</p>
+    <h2>只有三條規則，每一條都寫死</h2>
+    <p class="lede">規則再多就變雜訊。每個字符最多背兩個特徵；中文是逐筆套用，不是整個字硬改。</p>
+    <div class="rules">
+      <div class="rule">
+        <p class="ny big">a c f r y</p>
+        <p class="ny zh">永心九風</p>
+        <h3>逆雨滴</h3>
+        <p>水滴形終端的尖端永遠朝上。頂部的雨滴懸在髮絲線下，底部的雨滴從筆畫末端升起。中文裡，朝上的鉤收在一滴雨上。</p>
+        <dl><dt>拉丁</dt><dd>a c f g j r s y C G J S 2 3 5 6 9</dd><dt>中文</dt><dd>豎鉤 豎彎鉤 斜鉤 臥鉤</dd></dl>
+      </div>
+      <div class="rule">
+        <p class="ny big">n b H E</p>
+        <p class="ny zh">日可書國</p>
+        <h3>斷線</h3>
+        <p>細筆接上粗筆的地方留一道縫，每一道都用同一個數值。中文的橫畫在碰到粗筆的地方停住；整條穿過去的不切。</p>
+        <dl><dt>拉丁</dt><dd>n m h r u a b d p q k A B D E F H K P R</dd><dt>中文</dt><dd>橫與粗筆的交接</dd></dl>
+      </div>
+      <div class="rule">
+        <p class="ny big">i j ; ? A</p>
+        <p class="ny zh">字點江逆</p>
+        <h3>菱形點</h3>
+        <p>所有的「點」都換成 72° 的菱形，連分音符和除號也是。大寫 A E F H 的橫畫上多一顆菱形結。</p>
+        <dl><dt>拉丁</dt><dd>i j . : ; ! ? … ä ÷ A E F H</dd><dt>中文</dt><dd>所有的點</dd></dl>
+      </div>
+    </div>
+    <div class="rainrow">
+      <p class="label">唯一的例外：雨字頭</p>
+      <p class="ny">雨雪雲電霧露霜靈</p>
+      <p>雨字頭底下的點不是菱形，是往上升的雨滴。整套字的名字從這裡來。</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>字符</th><th class="c">逆雨滴</th><th class="c">斷線</th><th class="c">菱形點</th></tr></thead>
+        <tbody>
+          <tr><td class="g">c f g s y</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
+          <tr><td class="g">a r</td><td class="c">◆</td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">j</td><td class="c">◆</td><td class="c"></td><td class="c">◆</td></tr>
+          <tr><td class="g">n m h u b d p q k</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">i</td><td class="c"></td><td class="c"></td><td class="c">◆</td></tr>
+          <tr><td class="g">A E F H</td><td class="c"></td><td class="c">◆</td><td class="c">◆</td></tr>
+          <tr><td class="g">B D K P R</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">C G J S</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
+          <tr><td class="g">2 3 5 6 9</td><td class="c">◆</td><td class="c"></td><td class="c"></td></tr>
+          <tr><td class="g">. : ; ! ? …</td><td class="c"></td><td class="c"></td><td class="c">◆</td></tr>
+          <tr><td class="g">永 小 心 九</td><td class="c">◆</td><td class="c"></td><td class="c">◆</td></tr>
+          <tr><td class="g">日 目 書 可</td><td class="c"></td><td class="c">◆</td><td class="c"></td></tr>
+          <tr><td class="g">雨 雪 雲 電</td><td class="c">◆</td><td class="c">◆</td><td class="c"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="label">試排</p>
+    <h2>直接打字</h2>
+    <p class="lede">花飾預設開啟：字首的 A M N、長尾的 K L Q R、字尾的 y。它只在有空間時出現；想安靜一點就關掉。</p>
+    <div class="bench">
+      <div class="ctl">
+        <label for="size">字級 <input id="size" type="range" min="18" max="220" value="96"> <output id="sizeout" for="size">96 px</output></label>
+        <label for="f-calt"><input id="f-calt" type="checkbox" data-feat="calt" checked> 花飾</label>
+        <label for="f-onum"><input id="f-onum" type="checkbox" data-feat="onum"> 舊式數字</label>
+        <label for="f-tnum"><input id="f-tnum" type="checkbox" data-feat="tnum"> 等寬數字</label>
+        <label for="f-smcp"><input id="f-smcp" type="checkbox" data-feat="smcp"> 小型大寫</label>
+        <label for="f-zero"><input id="f-zero" type="checkbox" data-feat="zero"> 菱形零</label>
+        <label for="f-liga"><input id="f-liga" type="checkbox" data-feat="liga" checked> 連字</label>
+        <label for="f-case"><input id="f-case" type="checkbox" data-feat="case"> 全大寫標點</label>
+      </div>
+      <div id="sheet" class="ny" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="試排文字">風起時，雨向天空落下 Rain, 1999</div>
+      <div class="presets" id="presets">
+        <button class="pre" type="button" data-t="風起時，雨向天空落下。">雨向天空落下</button>
+        <button class="pre" type="button" data-t="永字八法　一點一橫一豎一鉤">永字八法</button>
+        <button class="pre" type="button" data-t="雨雪雲電霧露霜靈">雨字頭</button>
+        <button class="pre" type="button" data-t="天地玄黃　宇宙洪荒　日月星辰">天地玄黃</button>
+        <button class="pre" type="button" data-t="A Storm Rises: Arcana, Night &amp; Moon">花飾</button>
+        <button class="pre" type="button" data-t="HAMBURGEFONTS adhesion">adhesion</button>
+        <button class="pre" type="button" data-t="Il1 O0 rn m　未末 土士 己已巳">易混字</button>
+        <button class="pre" type="button" data-t="0123456789  1999 1987 1966 1929">數字</button>
+        <button class="pre" type="button" data-t="The quick brown fox jumps over the lazy dog">quick brown fox</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="label">字符集</p>
+    <h2>5,745 個字符，5,621 個碼位</h2>
+    <p class="lede">拉丁字母、數字、標點、重音字、花飾字形、細線幾何符號，以及 5,383 個常用中文字（Big5 第一字面）。</p>
+    <div class="sets">
+      <div class="set"><p class="label">中文（節選）</p><div class="cells han" data-g="逆雨永字八法天地玄黃宇宙洪荒日月星辰風雲雷電雪霜露霧春夏秋冬東西南北山川河海金木水火土心小少可元也成我國書畫觀賞型體包含中文再多一點龍鳳靈夢時光未來重返"></div></div>
+      <div class="set"><p class="label">全形標點</p><div class="cells han" data-g="，。、！？：；「」『』（）《》〈〉【】‧"></div></div>
+      <div class="set"><p class="label">大寫</p><div class="cells" data-g="ABCDEFGHIJKLMNOPQRSTUVWXYZ"></div></div>
+      <div class="set"><p class="label">小寫</p><div class="cells" data-g="abcdefghijklmnopqrstuvwxyz"></div></div>
+      <div class="set"><p class="label">等高數字</p><div class="cells" data-g="0123456789"></div></div>
+      <div class="set"><p class="label">舊式數字 onum</p><div class="cells" data-g="0123456789" style="font-feature-settings:'onum' 1"></div></div>
+      <div class="set"><p class="label">小型大寫 smcp</p><div class="cells" data-g="abcdefghijklmnopqrstuvwxyz" style="font-feature-settings:'smcp' 1"></div></div>
+      <div class="set"><p class="label">花飾 calt</p><div class="cells wide" data-g="AKLMNQRYy"></div></div>
+      <div class="set"><p class="label">連字 liga</p><div class="cells wide" data-l="fi fl ff"></div></div>
+      <div class="set"><p class="label">標點與符號</p><div class="cells" data-g=".,:;!?…·•‘’“”‚„'&quot;-–—_()[]{}/\|&amp;@#%$£€*+−=×÷&lt;&gt;^~°¡¿«»‹›"></div></div>
+      <div class="set"><p class="label">重音字</p><div class="cells" data-g="ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝŸŠŽàáâãäåçèéêëìíîïñòóôõöùúûüýÿšžāēīōū"></div></div>
+      <div class="set"><p class="label">幾何符號</p><div class="cells wide orn" data-g="◆◇○◎△▽☆⛤✦✧†‡❧"></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="label">幾何與參數</p>
+    <h2>18° 從五芒星來</h2>
+    <p class="lede">五芒星的尖角是 36°，取一半就是全套字共用的斜切角 18°；取兩倍就是菱形點的 72°。所有斜切的筆端都用這個角度，所以整套字看起來是一家人。</p>
+    <div class="geo">
+      <svg viewBox="0 0 340 300" role="img" aria-label="五芒星：尖角 36 度，一半 18 度是斜切角，兩倍 72 度是菱形點的頂角">
+        <polygon class="l" points="130,30 59.5,247.1 244.1,112.9 15.9,112.9 200.5,247.1"/>
+        <path class="a" d="M130 30V104"/>
+        <path class="a" d="M116.4 71.8A44 44 0 0 0 143.6 71.8"/>
+        <text class="b" x="150" y="66">尖角 36°</text>
+        <text class="b" x="66" y="66">一半 18°</text>
+        <polygon class="l" points="290,173.7 320,215 290,256.3 260,215"/>
+        <path class="a" d="M279.4 188.3A18 18 0 0 0 300.6 188.3"/>
+        <text class="b" x="262" y="162">兩倍 72°</text>
+        <text x="16" y="286">18° 斜切角 · 36° 星尖 · 72° 菱形點</text>
+      </svg>
+      <div class="scroll" style="margin-top:0">
+        <table>
+          <thead><tr><th>項目</th><th>數值（UPM 1000）</th></tr></thead>
+          <tbody>
+            <tr><td>大寫高 · x 高</td><td class="num">700 · 470</td></tr>
+            <tr><td>升部 · 降部</td><td class="num">740 · −230</td></tr>
+            <tr><td>直筆粗（小寫 · 大寫 · 中文）</td><td class="num">92 · 102 · 94</td></tr>
+            <tr><td>髮絲粗（小寫 · 大寫 · 中文）</td><td class="num">22 · 24 · 29</td></tr>
+            <tr><td>圓弧超出量</td><td class="num">10 · 12</td></tr>
+            <tr><td>斷線縫寬（拉丁 · 中文）</td><td class="num">16 · 14</td></tr>
+            <tr><td>共用斜切角</td><td class="num">18°</td></tr>
+            <tr><td>雨滴直徑（大 · 小 · 中文鉤）</td><td class="num">101 · 78 · 66</td></tr>
+            <tr><td>菱形點（寬 × 高）</td><td class="num">100 × 137.6，頂角 72°</td></tr>
+            <tr><td>最小使用字級</td><td class="num">18 pt</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="label">可辨識的底線</p>
+    <h2>藝術歸藝術，字還是要讀得出來</h2>
+    <div class="checks">
+      <div class="check"><p class="t">I、l、1 三者一眼分得開</p><p class="s">Il1 Illinois 1911</p></div>
+      <div class="check"><p class="t">O 與 0 一眼分得開</p><p class="s">O0 OO 00 2000</p></div>
+      <div class="check"><p class="t">rn 不會被讀成 m：r 的雨滴隔在中間</p><p class="s">rn m corn modern</p></div>
+      <div class="check"><p class="t">a c e s 的開口夠大</p><p class="s">aces scenes cascade</p></div>
+      <div class="check"><p class="t">中文的易混字仍然分得開</p><p class="s">未末 土士 己已巳 日曰</p></div>
+      <div class="check">
+        <p class="t"><label for="blur">模糊測試 <input id="blur" type="range" min="0" max="8" step="0.5" value="4" style="accent-color:var(--brass);vertical-align:middle;width:110px"></label></p>
+        <p class="s" id="blurline" style="filter:blur(4px)">雨向天空落下 Rain rises</p>
+      </div>
+      <div class="check sizes"><p class="t">18 · 24 · 36 px</p><div>
+        <p style="font-size:18px">The quick brown fox jumps over the lazy dog, 0123456789.</p>
+        <p style="font-size:24px">The quick brown fox jumps over the lazy dog.</p>
+        <p style="font-size:36px">The quick brown fox jumps over.</p>
+      </div></div>
+    </div>
+    <div class="inv">
+      <p class="label">深底淺字：髮絲在深底會顯得更細</p>
+      <p class="ny">夜雨 Night rain, 1987 &amp; 1999</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="label">使用</p>
+    <h2>檔案與語法</h2>
+    <div class="use">
+      <div>
+        <p class="label">網頁</p>
+<pre>/* 拉丁子集先載入，用到中文才抓完整檔 */
+@font-face {
+  font-family: "NiYu";
+  src: url("/fonts/NiYu-Regular-Latin.woff2") format("woff2");
+  unicode-range: U+0000-024F, U+2000-22FF, U+25A0-27BF;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NiYu";
+  src: url("/fonts/NiYu-Regular.woff2") format("woff2");
+  unicode-range: U+3000-303F, U+4E00-9FFF, U+FF00-FFEF;
+  font-display: swap;
+}
+h1 { font-family: "NiYu", serif; }
+/* 關掉花飾 */
+.quiet { font-feature-settings: "calt" 0; }</pre>
+      </div>
+      <div>
+        <p class="label">XeLaTeX</p>
+<pre>\usepackage{fontspec}
+\newfontfamily\niyu{NiYu-Regular.otf}[
+  Path = ./fonts/,
+  Numbers = OldStyle,
+  StylisticSet = 1
+]
+{\niyu Rain rises, 1999}</pre>
+      </div>
+      <div>
+        <p class="label">檔案</p>
+        <!--FILES-->
+        <ul class="files">
+          <li><a href="../fonts/NiYu-fonts.zip">fonts/NiYu-fonts.zip</a> <span>· OTF＋TTF＋授權，3.9 MB</span></li>
+          <li><a href="../fonts/NiYu-Regular.otf">fonts/NiYu-Regular.otf</a> <span>· 排版軟體，含中文</span></li>
+          <li><a href="../fonts/NiYu-Regular.ttf">fonts/NiYu-Regular.ttf</a> <span>· 一般安裝，含中文</span></li>
+          <li><a href="../fonts/NiYu-Regular.woff2">fonts/NiYu-Regular.woff2</a> <span>· 網頁，含中文，1.4 MB</span></li>
+          <li><a href="../fonts/NiYu-Regular-Latin.woff2">fonts/NiYu-Regular-Latin.woff2</a> <span>· 網頁，只含拉丁，22 KB</span></li>
+          <li><a href="https://github.com/01460421/01460421.github.io/tree/main/niyu/sources">niyu/sources/NiYu-Regular.ufo</a> <span>· 拉丁部分的可編輯原始檔</span></li>
+          <li><a href="https://github.com/01460421/01460421.github.io/tree/main/niyu">GitHub 上的原始碼與說明</a> <span>· 製作流程與重建方法</span></li>
+        </ul>
+        <!--/FILES-->
+        <p style="margin-top:14px;font-size:14px;color:var(--soft)">授權：SIL Open Font License 1.1。OpenType 功能：calt、ss01、liga、smcp、c2sc、onum、lnum、tnum、pnum、zero、case、kern。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="ny" aria-hidden="true">◇❧◇</p>
+    <p>拉丁字母、數字與符號由程式從零畫成，只取復古英倫與神秘學的氛圍，沒有描摹任何現成字型或標誌的輪廓。中文以 Noto Serif TC（思源宋體，OFL 授權）為底逐筆改作，衍生字型已改名並維持 OFL。</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // rain that rises behind the opening line
+  var rain = document.getElementById('rain');
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var seeds = [[6, 26, 19, 0], [17, 14, 27, 6], [29, 34, 23, 11], [41, 18, 31, 3], [54, 24, 21, 14], [66, 12, 29, 8], [77, 30, 25, 1], [88, 16, 33, 17], [95, 22, 22, 9]];
+  seeds.forEach(function (s, i) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 112 170');
+    svg.setAttribute('width', s[1]);
+    svg.setAttribute('height', Math.round(s[1] * 1.52));
+    svg.style.left = s[0] + '%';
+    if (still) { svg.style.top = (12 + (i * 37) % 70) + '%'; }
+    else { svg.style.animationDuration = s[2] + 's'; svg.style.animationDelay = (-s[3]) + 's'; }
+    var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#drop');
+    svg.appendChild(use);
+    rain.appendChild(svg);
+  });
+
+  // glyph sheets
+  document.querySelectorAll('.cells').forEach(function (box) {
+    var items = box.dataset.l ? box.dataset.l.split(' ') : Array.from(box.dataset.g || '');
+    items.forEach(function (ch) {
+      var s = document.createElement('span');
+      s.textContent = ch;
+      box.appendChild(s);
+    });
+  });
+
+  // tester
+  var sheet = document.getElementById('sheet');
+  var size = document.getElementById('size');
+  var sizeout = document.getElementById('sizeout');
+  var boxes = Array.from(document.querySelectorAll('[data-feat]'));
+  function applySize() {
+    var max = Math.max(18, Math.min(+size.value, Math.round(window.innerWidth / 4.2)));
+    sheet.style.fontSize = (window.innerWidth < 700 ? Math.min(+size.value, max * 1.6) : +size.value) + 'px';
+    sizeout.textContent = size.value + ' px';
+  }
+  function applyFeat() {
+    sheet.style.fontFeatureSettings = boxes.map(function (b) { return '"' + b.dataset.feat + '" ' + (b.checked ? 1 : 0); }).join(', ');
+  }
+  size.addEventListener('input', applySize);
+  window.addEventListener('resize', applySize);
+  boxes.forEach(function (b) { b.addEventListener('change', applyFeat); });
+  document.getElementById('presets').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    sheet.textContent = b.dataset.t;
+    if (b.dataset.on) { document.getElementById('f-' + b.dataset.on).checked = true; applyFeat(); }
+  });
+  sheet.addEventListener('paste', function (e) {
+    e.preventDefault();
+    var t = (e.clipboardData || window.clipboardData).getData('text/plain');
+    var sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    sel.deleteFromDocument();
+    sel.getRangeAt(0).insertNode(document.createTextNode(t));
+    sel.collapseToEnd();
+  });
+  if (window.innerWidth < 700) { size.value = 56; }
+  applySize(); applyFeat();
+
+  // blur test
+  var blur = document.getElementById('blur');
+  blur.addEventListener('input', function () { document.getElementById('blurline').style.filter = 'blur(' + blur.value + 'px)'; });
+})();
+</script>
+<!--/PAGE-BODY-->
+</body>
+</html>
