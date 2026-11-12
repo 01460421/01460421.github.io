@@ -50,6 +50,11 @@ a { color: var(--brass) }
 .hero .years { font-size: clamp(26px, 5.2vw, 64px); color: var(--soft); display: flex; flex-wrap: wrap; gap: .1em .7em }
 .hero .years b { font-weight: 400; color: var(--ink) }
 .hero .say { margin-top: clamp(20px, 3vw, 36px); max-width: 30em; font-size: clamp(16px, 1.5vw, 18px) }
+.get { margin-top: clamp(22px, 3vw, 34px); display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; font-size: 14px; color: var(--soft) }
+.dl { display: inline-flex; align-items: baseline; gap: 12px; padding: 14px 24px; background: var(--ink); color: var(--paper); text-decoration: none; font: 600 17px/1 var(--text); border-radius: 2px }
+.dl span { font: 400 12px/1 var(--mono); letter-spacing: .06em; opacity: .78 }
+.dl:hover { background: var(--brass) }
+.get .alt a { margin: 0 2px }
 .rain { position: absolute; inset: 0; z-index: 0; pointer-events: none }
 .rain svg { position: absolute; bottom: -12%; fill: var(--rule); animation: rise linear infinite }
 @keyframes rise { from { transform: translateY(0); opacity: 0 } 12% { opacity: 1 } 80% { opacity: 1 } to { transform: translateY(-125vh); opacity: 0 } }
@@ -148,6 +153,10 @@ footer .ny { font-size: 34px; color: var(--ink); letter-spacing: .3em }
     <h1 class="ny"><span class="zh">逆雨</span><span class="en">Rain, rising.</span></h1>
     <p class="ny years"><span>1929</span><span>1966</span><span>1987</span><b>1999</b></p>
     <p class="say">骨架保守，細節放肆。雨滴一律朝天，細筆在碰到粗筆之前留一道縫，所有的點都是菱形。同樣三條規則，從拉丁字母一路套到五千多個中文字。</p>
+    <p class="get">
+      <a class="dl" href="../fonts/NiYu-fonts.zip" download>下載字型 <span>ZIP · 3.9 MB</span></a>
+      <span class="alt">單一檔案：<a href="../fonts/NiYu-Regular.otf" download>OTF</a> · <a href="../fonts/NiYu-Regular.ttf" download>TTF</a> · <a href="../fonts/NiYu-Regular.woff2" download>WOFF2</a> · 免費，可商用（SIL OFL 1.1）</span>
+    </p>
   </div>
 </section>
 
@@ -364,12 +373,13 @@ h1 { font-family: "NiYu", serif; }
         <p class="label">檔案</p>
         <!--FILES-->
         <ul class="files">
+          <li><a href="../fonts/NiYu-fonts.zip">fonts/NiYu-fonts.zip</a> <span>· OTF＋TTF＋授權，3.9 MB</span></li>
           <li><a href="../fonts/NiYu-Regular.otf">fonts/NiYu-Regular.otf</a> <span>· 排版軟體，含中文</span></li>
           <li><a href="../fonts/NiYu-Regular.ttf">fonts/NiYu-Regular.ttf</a> <span>· 一般安裝，含中文</span></li>
           <li><a href="../fonts/NiYu-Regular.woff2">fonts/NiYu-Regular.woff2</a> <span>· 網頁，含中文，1.4 MB</span></li>
           <li><a href="../fonts/NiYu-Regular-Latin.woff2">fonts/NiYu-Regular-Latin.woff2</a> <span>· 網頁，只含拉丁，22 KB</span></li>
-          <li><a href="sources/">niyu/sources/NiYu-Regular.ufo</a> <span>· 拉丁部分的可編輯原始檔</span></li>
-          <li><a href="README.md">niyu/README.md</a> <span>· 製作流程與重建方法</span></li>
+          <li><a href="https://github.com/01460421/01460421.github.io/tree/main/niyu/sources">niyu/sources/NiYu-Regular.ufo</a> <span>· 拉丁部分的可編輯原始檔</span></li>
+          <li><a href="https://github.com/01460421/01460421.github.io/tree/main/niyu">GitHub 上的原始碼與說明</a> <span>· 製作流程與重建方法</span></li>
         </ul>
         <!--/FILES-->
         <p style="margin-top:14px;font-size:14px;color:var(--soft)">授權：SIL Open Font License 1.1。OpenType 功能：calt、ss01、liga、smcp、c2sc、onum、lnum、tnum、pnum、zero、case、kern。</p>

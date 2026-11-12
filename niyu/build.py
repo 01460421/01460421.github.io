@@ -14,10 +14,57 @@ from src.geom import Shape, rect, union_all  # noqa: E402
 from src.registry import GLYPHS  # noqa: E402
 
 
+ZIP_NAME = 'NiYu-fonts.zip'
+ZIP_NOTE = """逆雨 NiYu  —  觀賞型襯線字型（拉丁字母＋中文）
+====================================================
+
+安裝
+  Windows：對 NiYu-Regular.ttf 按右鍵 →「安裝」
+  macOS：  點兩下 NiYu-Regular.otf →「安裝字體」
+  Linux：  複製到 ~/.fonts/ 後執行 fc-cache
+
+兩個檔案內容相同，裝其中一個即可。字型選單裡的名稱是 NiYu（繁體中文系統顯示為「逆雨」）。
+
+使用
+  建議字級 18 pt 以上。花飾預設開啟；若軟體支援 OpenType，
+  可關閉「上下文替代字（calt）」讓版面安靜一點。
+  其他功能：小型大寫、舊式數字、等寬數字、連字。
+
+授權
+  SIL Open Font License 1.1，可免費用於個人與商業用途、可改作，
+  詳見 OFL.txt。中文字以 Noto Serif TC 為底改作。
+
+樣張與原始碼
+  https://01460421.github.io/niyu/
+  https://github.com/01460421/01460421.github.io
+"""
+
+
+def package(out_dir):
+    """One-click download: the two desktop fonts, the licence and a short note."""
+    import zipfile
+    path = os.path.join(out_dir, ZIP_NAME)
+    with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+        for name in ('NiYu-Regular.otf', 'NiYu-Regular.ttf', 'OFL.txt'):
+            info = zipfile.ZipInfo('NiYu/' + name, date_time=(2026, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            with open(os.path.join(out_dir, name), 'rb') as f:
+                z.writestr(info, f.read())
+        info = zipfile.ZipInfo('NiYu/說明.txt', date_time=(2026, 1, 1, 0, 0, 0))
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o644 << 16
+        z.writestr(info, ZIP_NOTE.encode('utf-8'))
+    return path
+
+
 def main():
     t0 = time.time()
     out_dir = os.path.join(HERE, '..', 'fonts')
     os.makedirs(out_dir, exist_ok=True)
+    if '--zip-only' in sys.argv:
+        print(package(out_dir))
+        return
     drawn = {'.notdef': ((rect(60, 0, 440, 700) - rect(84, 24, 416, 676)), 500),
              'space': (Shape(), 250), 'uni00A0': (Shape(), 250)}
     cmap = {0x20: 'space', 0xA0: 'uni00A0'}
@@ -86,6 +133,7 @@ def main():
         latin = {n: v for n, v in drawn.items() if n not in han_names}
         save_ufo(latin, {cp: n for cp, n in cmap.items() if n not in han_names}, fea,
                  os.path.join(HERE, 'sources', 'NiYu-Regular.ufo'))
+    package(out_dir)
     for line in log:
         print(line)
     print(f'{len(drawn)} glyphs, {len(cmap)} code points in {time.time() - t0:.1f}s')

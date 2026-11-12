@@ -3,12 +3,20 @@
 一套原創的觀賞型（展示用）襯線字型，含拉丁字母、數字、標點、重音字與 **5,383 個常用中文字**，
 共 5,745 個字符、5,621 個碼位。依照「逆雨」字型製作流程從零做出。
 
-- 線上樣張：<https://01460421.github.io/niyu/>（分支合併後生效）
-- 字型檔：[`../fonts/`](../fonts/)
-  - `NiYu-Regular.otf` / `.ttf` / `.woff2`：完整字集（含中文）
-  - `NiYu-Regular-Latin.woff2`：只含拉丁字母的網頁子集（22 KB）
+## 下載
+
+**[下載字型（ZIP，3.9 MB）](https://github.com/01460421/01460421.github.io/raw/main/fonts/NiYu-fonts.zip)**：內含 OTF、TTF、授權條款與安裝說明。
+
+| 檔案 | 用途 |
+|---|---|
+| [NiYu-Regular.otf](https://github.com/01460421/01460421.github.io/raw/main/fonts/NiYu-Regular.otf) | 排版軟體（含中文） |
+| [NiYu-Regular.ttf](https://github.com/01460421/01460421.github.io/raw/main/fonts/NiYu-Regular.ttf) | 一般安裝（含中文） |
+| [NiYu-Regular.woff2](https://github.com/01460421/01460421.github.io/raw/main/fonts/NiYu-Regular.woff2) | 網頁，含中文，1.4 MB |
+| [NiYu-Regular-Latin.woff2](https://github.com/01460421/01460421.github.io/raw/main/fonts/NiYu-Regular-Latin.woff2) | 網頁，只含拉丁字母，22 KB |
+
+- 線上樣張（可直接試排）：<https://01460421.github.io/niyu/>
 - 拉丁部分可續修的原始檔：[`sources/NiYu-Regular.ufo`](sources/)
-- 授權：SIL Open Font License 1.1（[`../fonts/OFL.txt`](../fonts/OFL.txt)）
+- 授權：SIL Open Font License 1.1（[`OFL.txt`](../fonts/OFL.txt)），可免費用於個人與商業用途，也可以改作
 
 拉丁字母、數字與符號全部由 `src/` 裡的程式以參數畫成，沒有描摹任何現成字型或標誌的輪廓。
 中文字以 Noto Serif TC（思源宋體的 Google 版，OFL 授權）為底，逐筆套用同樣的三條規則改作；
