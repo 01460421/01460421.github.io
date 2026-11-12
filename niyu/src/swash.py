@@ -24,6 +24,12 @@ def left_curl(xc, y0, w, d0=270, reach=250, lift=104):
     return [s, rise(ex, ey, DROP_BIG)]
 
 
+def shifted(g, dx):
+    """Give a swash that reaches out to the left some room of its own, so it
+    does not run into the word before it."""
+    return G([p.translate(dx, 0) for p in g.parts], g.adv + dx)
+
+
 def right_tail(pts, r=DROP_BIG):
     """Long tail to the right that ends in a rising drop. pts: stroke nodes."""
     s = stroke(pts)
@@ -42,8 +48,8 @@ def A_sw():
     import math
     lx = xl + m.w(26) + wn / 2
     ang = math.degrees(math.atan2(-(m.h + 6), (xl + m.w(26)) - (xa - 8)))
-    parts += left_curl(lx + 20, 62, m.thin, d0=ang, reach=270, lift=110)
-    return G(parts, g.adv)
+    parts += left_curl(lx + 20, 62, m.thin, d0=ang, reach=250, lift=110)
+    return shifted(G(parts, g.adv), 84)
 
 
 @glyph('M.ss01')
@@ -52,8 +58,8 @@ def M_sw():
     x0 = m.sb - 6
     tn = m.thin + 2
     parts = [p for i, p in enumerate(g.parts) if i != 1]     # drop the left foot serif
-    parts += left_curl(x0 + tn / 2, 190, tn, reach=250, lift=110)
-    return G(parts, g.adv)
+    parts += left_curl(x0 + tn / 2, 190, tn, reach=230, lift=110)
+    return shifted(G(parts, g.adv), 70)
 
 
 @glyph('N.ss01')
@@ -62,8 +68,8 @@ def N_sw():
     x0 = m.sb - 4
     tn = m.thin + 2
     parts = [p for i, p in enumerate(g.parts) if i != 1]
-    parts += left_curl(x0 + tn / 2, 190, tn, reach=250, lift=110)
-    return G(parts, g.adv)
+    parts += left_curl(x0 + tn / 2, 190, tn, reach=230, lift=110)
+    return shifted(G(parts, g.adv), 70)
 
 
 @glyph('Q.ss01')

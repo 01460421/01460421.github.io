@@ -143,8 +143,43 @@ def build_fea(drawn, log=None):
 
     fea.append(_sub_block('case', [(n, n + '.case') for n in CASE if n + '.case' in names]))
 
-    ss01 = [(n[:-5], n) for n in sorted(names) if n.endswith('.ss01')]
-    fea.append(_sub_block('ss01', ss01, '    featureNames {\n        name "Swash capitals and long tails";\n        name 3 1 0x0404 "\\82b1\\98fe\\5927\\5beb\\8207\\9577\\5c3e";\n    };\n'))
+    # ss01 is contextual: a swash only appears where it has room.
+    #  - A M N reach out to the left, so they only swash at the start of a word
+    #  - K L Q R send a tail under what follows, so they stand down before a descender
+    #  - Y y send a tail under what precedes, so they stand down after a descender
+    import string as _s
+    from .accents import COMPOSE
+    letters = [c for c in _s.ascii_letters if c in names] + [n for n, *_ in COMPOSE if n in names]
+    letters += [n for n in sorted(names) if n.endswith('.sc') or n.endswith('.ss01')] + ['f_f', 'f_i', 'f_l', 'dotlessi']
+    desc = [n for n in ('g', 'j', 'p', 'q', 'y', 'Q', 'J', 'comma', 'semicolon', 'quotesinglbase', 'quotedblbase',
+                        'ccedilla', 'Ccedilla', 'yacute', 'ydieresis', 'parenleft', 'parenright', 'bracketleft',
+                        'bracketright', 'braceleft', 'braceright', 'slash', 'backslash', 'bar', 'underscore',
+                        'three.onum', 'four.onum', 'five.onum', 'seven.onum', 'nine.onum', 'q.sc', 'j.sc',
+                        'Y.ss01', 'y.ss01') if n in names]
+    everything = [n for n in drawn if n != '.notdef']
+
+    def swash_lookup(tag, glyphs, ignores):
+        have = [g for g in glyphs if g + '.ss01' in names]
+        if not have:
+            return ''
+        rows = [f'        ignore sub {r};' for r in ignores(' '.join(have))]
+        rows += [f"        sub {g}' by {g}.ss01;" for g in have]
+        return f'    lookup ss01_{tag} {{\n' + '\n'.join(rows) + f'\n    }} ss01_{tag};\n'
+
+    tails = [n for n in ('K.ss01', 'L.ss01', 'Q.ss01', 'R.ss01') if n in names]
+    fea.append(f'@sw_letter = [{" ".join(letters)}];\n@sw_desc = [{" ".join(desc)}];\n'
+               f'@sw_low = [{" ".join(desc + tails)}];\n@sw_any = [{" ".join(everything)}];\n')
+    fea.append(
+        'feature ss01 {\n'
+        '    featureNames {\n        name "Swash capitals and long tails";\n'
+        '        name 3 1 0x0404 "\\82b1\\98fe\\5927\\5beb\\8207\\9577\\5c3e";\n    };\n'
+        + swash_lookup('left', ['A', 'M', 'N'], lambda g: [f"@sw_letter [{g}]'"])
+        + swash_lookup('right', ['K', 'L', 'Q', 'R'], lambda g: [
+            f"[{g}]' @sw_desc", f"[{g}]' @sw_any @sw_desc", f"[{g}]' @sw_any @sw_any @sw_desc"])
+        # tails that already swashed to the right count as descenders for what follows
+        + swash_lookup('under', ['Y', 'y'], lambda g: [
+            f"@sw_low [{g}]'", f"@sw_low @sw_any [{g}]'", f"@sw_low @sw_any @sw_any [{g}]'"])
+        + '} ss01;\n')
 
     kern_fea, table = kerning(drawn, log)
     fea.append(kern_fea)

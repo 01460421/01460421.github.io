@@ -241,22 +241,39 @@ feature case {
 } case;
 
 
+@sw_letter = [a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z agrave aacute acircumflex atilde adieresis aring ccedilla egrave eacute ecircumflex edieresis igrave iacute icircumflex idieresis ntilde ograve oacute ocircumflex otilde odieresis ugrave uacute ucircumflex udieresis yacute ydieresis scaron zcaron amacron emacron imacron omacron umacron Agrave Aacute Acircumflex Atilde Adieresis Aring Ccedilla Egrave Eacute Ecircumflex Edieresis Igrave Iacute Icircumflex Idieresis Ntilde Ograve Oacute Ocircumflex Otilde Odieresis Ugrave Uacute Ucircumflex Udieresis Yacute Ydieresis Scaron Zcaron Amacron Emacron Imacron Omacron Umacron A.ss01 K.ss01 L.ss01 M.ss01 N.ss01 Q.ss01 R.ss01 Y.ss01 a.sc aacute.sc acircumflex.sc adieresis.sc agrave.sc amacron.sc aring.sc atilde.sc b.sc c.sc ccedilla.sc d.sc e.sc eacute.sc ecircumflex.sc edieresis.sc egrave.sc emacron.sc f.sc g.sc h.sc i.sc iacute.sc icircumflex.sc idieresis.sc igrave.sc imacron.sc j.sc k.sc l.sc m.sc n.sc ntilde.sc o.sc oacute.sc ocircumflex.sc odieresis.sc ograve.sc omacron.sc otilde.sc p.sc q.sc r.sc s.sc scaron.sc t.sc u.sc uacute.sc ucircumflex.sc udieresis.sc ugrave.sc umacron.sc v.sc w.sc x.sc y.sc y.ss01 yacute.sc ydieresis.sc z.sc zcaron.sc f_f f_i f_l dotlessi];
+@sw_desc = [g j p q y Q J comma semicolon quotesinglbase quotedblbase ccedilla Ccedilla yacute ydieresis parenleft parenright bracketleft bracketright braceleft braceright slash backslash bar underscore three.onum four.onum five.onum seven.onum nine.onum q.sc j.sc Y.ss01 y.ss01];
+@sw_low = [g j p q y Q J comma semicolon quotesinglbase quotedblbase ccedilla Ccedilla yacute ydieresis parenleft parenright bracketleft bracketright braceleft braceright slash backslash bar underscore three.onum four.onum five.onum seven.onum nine.onum q.sc j.sc Y.ss01 y.ss01 K.ss01 L.ss01 Q.ss01 R.ss01];
+@sw_any = [space uni00A0 n h m u r i dotlessi l o c e b p d q v w x y z k a s f t j g H h.sc I i.sc E e.sc F f.sc L l.sc T t.sc O o.sc Q q.sc C c.sc G g.sc D d.sc B b.sc P p.sc R r.sc A a.sc V v.sc W w.sc X x.sc Y y.sc K k.sc M m.sc N n.sc Z z.sc S s.sc J j.sc U u.sc zero zero.onum zero.tnum zero.onum.tnum one one.onum one.tnum one.onum.tnum two two.onum two.tnum two.onum.tnum three three.onum three.tnum three.onum.tnum four four.onum four.tnum four.onum.tnum five five.onum five.tnum five.onum.tnum six six.onum six.tnum six.onum.tnum seven seven.onum seven.tnum seven.onum.tnum eight eight.onum eight.tnum eight.onum.tnum nine nine.onum nine.tnum nine.onum.tnum zero.zero period comma colon semicolon ellipsis periodcentered bullet exclam question quotesingle quotedbl quoteright quoteleft quotedblright quotedblleft quotesinglbase quotedblbase hyphen endash emdash underscore parenleft parenright bracketleft bracketright braceleft braceright slash backslash bar plus minus equal multiply divide less greater asciicircum asciitilde grave asterisk numbersign percent dollar ampersand at sterling Euro A.ss01 M.ss01 N.ss01 Q.ss01 R.ss01 K.ss01 Y.ss01 L.ss01 y.ss01 f_i f_l f_f uni25C6 uni25C7 uni25CB uni25CE uni25B3 uni25BD uni2606 uni26E4 uni2726 uni2727 uni2020 uni2021 u1F4A7 uni2E3B uni2767 acute circumflex tilde dieresis ring caron macron cedilla agrave aacute acircumflex atilde adieresis aring ccedilla egrave eacute ecircumflex edieresis igrave iacute icircumflex idieresis ntilde ograve oacute ocircumflex otilde odieresis ugrave uacute ucircumflex udieresis yacute ydieresis scaron zcaron amacron emacron imacron omacron umacron Agrave agrave.sc Aacute aacute.sc Acircumflex acircumflex.sc Atilde atilde.sc Adieresis adieresis.sc Aring aring.sc Ccedilla ccedilla.sc Egrave egrave.sc Eacute eacute.sc Ecircumflex ecircumflex.sc Edieresis edieresis.sc Igrave igrave.sc Iacute iacute.sc Icircumflex icircumflex.sc Idieresis idieresis.sc Ntilde ntilde.sc Ograve ograve.sc Oacute oacute.sc Ocircumflex ocircumflex.sc Otilde otilde.sc Odieresis odieresis.sc Ugrave ugrave.sc Uacute uacute.sc Ucircumflex ucircumflex.sc Udieresis udieresis.sc Yacute yacute.sc Ydieresis ydieresis.sc Scaron scaron.sc Zcaron zcaron.sc Amacron amacron.sc Emacron emacron.sc Imacron imacron.sc Omacron omacron.sc Umacron umacron.sc exclamdown questiondown guilsinglleft guilsinglright guillemotleft guillemotright degree hyphen.case endash.case emdash.case parenleft.case parenright.case bracketleft.case bracketright.case braceleft.case braceright.case guilsinglleft.case guilsinglright.case guillemotleft.case guillemotright.case exclamdown.case questiondown.case periodcentered.case bullet.case slash.case backslash.case bar.case];
+
 feature ss01 {
     featureNames {
         name "Swash capitals and long tails";
         name 3 1 0x0404 "\82b1\98fe\5927\5beb\8207\9577\5c3e";
     };
-    sub A by A.ss01;
-    sub K by K.ss01;
-    sub L by L.ss01;
-    sub M by M.ss01;
-    sub N by N.ss01;
-    sub Q by Q.ss01;
-    sub R by R.ss01;
-    sub Y by Y.ss01;
-    sub y by y.ss01;
+    lookup ss01_left {
+        ignore sub @sw_letter [A M N]';
+        sub A' by A.ss01;
+        sub M' by M.ss01;
+        sub N' by N.ss01;
+    } ss01_left;
+    lookup ss01_right {
+        ignore sub [K L Q R]' @sw_desc;
+        ignore sub [K L Q R]' @sw_any @sw_desc;
+        ignore sub [K L Q R]' @sw_any @sw_any @sw_desc;
+        sub K' by K.ss01;
+        sub L' by L.ss01;
+        sub Q' by Q.ss01;
+        sub R' by R.ss01;
+    } ss01_right;
+    lookup ss01_under {
+        ignore sub @sw_low [Y y]';
+        ignore sub @sw_low @sw_any [Y y]';
+        ignore sub @sw_low @sw_any @sw_any [Y y]';
+        sub Y' by Y.ss01;
+        sub y' by y.ss01;
+    } ss01_under;
 } ss01;
-
 
 @kL1 = [n h m];
 @kL2 = [u ugrave];
@@ -7235,8 +7252,8 @@ feature kern {
     pos @kL490 @kR536 -30;
     pos @kL490 @kR537 -30;
     pos @kL490 @kR538 -30;
-    pos @kL490 @kR539 70;
-    pos @kL490 @kR540 70;
+    pos @kL490 @kR539 66;
+    pos @kL490 @kR540 64;
     pos @kL490 @kR541 -64;
     pos @kL490 @kR542 70;
     pos @kL491 @kR516 -32;
@@ -7262,8 +7279,8 @@ feature kern {
     pos @kL491 @kR536 -32;
     pos @kL491 @kR537 -32;
     pos @kL491 @kR538 -32;
-    pos @kL491 @kR539 70;
-    pos @kL491 @kR540 70;
+    pos @kL491 @kR539 60;
+    pos @kL491 @kR540 56;
     pos @kL491 @kR541 -56;
     pos @kL491 @kR542 70;
     pos @kL492 @kR516 -10;
@@ -7289,8 +7306,8 @@ feature kern {
     pos @kL492 @kR536 -10;
     pos @kL492 @kR537 -10;
     pos @kL492 @kR538 -10;
-    pos @kL492 @kR539 70;
-    pos @kL492 @kR540 70;
+    pos @kL492 @kR539 66;
+    pos @kL492 @kR540 64;
     pos @kL492 @kR541 -62;
     pos @kL492 @kR542 70;
     pos @kL493 @kR516 -10;
@@ -7316,8 +7333,8 @@ feature kern {
     pos @kL493 @kR536 -10;
     pos @kL493 @kR537 -10;
     pos @kL493 @kR538 -10;
-    pos @kL493 @kR539 70;
-    pos @kL493 @kR540 70;
+    pos @kL493 @kR539 64;
+    pos @kL493 @kR540 60;
     pos @kL493 @kR541 -54;
     pos @kL493 @kR542 70;
     pos @kL494 @kR517 -36;
@@ -7333,8 +7350,8 @@ feature kern {
     pos @kL494 @kR528 -46;
     pos @kL494 @kR529 -16;
     pos @kL494 @kR530 -22;
-    pos @kL494 @kR539 70;
-    pos @kL494 @kR540 70;
+    pos @kL494 @kR539 28;
+    pos @kL494 @kR540 26;
     pos @kL494 @kR541 -38;
     pos @kL494 @kR542 68;
     pos @kL495 @kR517 -14;
@@ -7347,8 +7364,6 @@ feature kern {
     pos @kL495 @kR524 -20;
     pos @kL495 @kR526 -24;
     pos @kL495 @kR528 -68;
-    pos @kL495 @kR539 70;
-    pos @kL495 @kR540 60;
     pos @kL495 @kR541 -20;
     pos @kL495 @kR542 12;
     pos @kL496 @kR516 -26;
@@ -7375,7 +7390,7 @@ feature kern {
     pos @kL496 @kR537 -26;
     pos @kL496 @kR538 -26;
     pos @kL496 @kR539 -98;
-    pos @kL496 @kR540 -24;
+    pos @kL496 @kR540 -54;
     pos @kL496 @kR541 -26;
     pos @kL496 @kR542 -46;
     pos @kL497 @kR516 -22;
@@ -7402,7 +7417,7 @@ feature kern {
     pos @kL497 @kR537 -22;
     pos @kL497 @kR538 -22;
     pos @kL497 @kR539 -98;
-    pos @kL497 @kR540 -20;
+    pos @kL497 @kR540 -52;
     pos @kL497 @kR541 -24;
     pos @kL497 @kR542 -50;
     pos @kL498 @kR516 -18;
@@ -7429,7 +7444,7 @@ feature kern {
     pos @kL498 @kR537 -18;
     pos @kL498 @kR538 -18;
     pos @kL498 @kR539 -98;
-    pos @kL498 @kR540 -16;
+    pos @kL498 @kR540 -48;
     pos @kL498 @kR541 -20;
     pos @kL498 @kR542 -34;
     pos @kL499 @kR516 -48;
@@ -7455,8 +7470,8 @@ feature kern {
     pos @kL499 @kR536 -48;
     pos @kL499 @kR537 -48;
     pos @kL499 @kR538 -48;
-    pos @kL499 @kR539 70;
-    pos @kL499 @kR540 70;
+    pos @kL499 @kR539 46;
+    pos @kL499 @kR540 44;
     pos @kL499 @kR541 -98;
     pos @kL499 @kR542 -62;
     pos @kL500 @kR516 -46;
@@ -7482,8 +7497,8 @@ feature kern {
     pos @kL500 @kR536 -46;
     pos @kL500 @kR537 -46;
     pos @kL500 @kR538 -46;
-    pos @kL500 @kR539 70;
-    pos @kL500 @kR540 70;
+    pos @kL500 @kR539 66;
+    pos @kL500 @kR540 64;
     pos @kL500 @kR541 -98;
     pos @kL500 @kR542 -62;
     pos @kL501 @kR517 -20;
@@ -7499,8 +7514,6 @@ feature kern {
     pos @kL501 @kR528 -56;
     pos @kL501 @kR529 -10;
     pos @kL501 @kR530 -38;
-    pos @kL501 @kR539 70;
-    pos @kL501 @kR540 70;
     pos @kL501 @kR541 -22;
     pos @kL501 @kR542 70;
     pos @kL502 @kR517 -38;
@@ -7511,8 +7524,8 @@ feature kern {
     pos @kL502 @kR524 -54;
     pos @kL502 @kR526 -28;
     pos @kL502 @kR528 -34;
-    pos @kL502 @kR539 70;
-    pos @kL502 @kR540 70;
+    pos @kL502 @kR539 54;
+    pos @kL502 @kR540 52;
     pos @kL502 @kR541 -54;
     pos @kL502 @kR542 70;
     pos @kL503 @kR516 -14;
@@ -7538,8 +7551,6 @@ feature kern {
     pos @kL503 @kR536 -14;
     pos @kL503 @kR537 -14;
     pos @kL503 @kR538 -12;
-    pos @kL503 @kR539 68;
-    pos @kL503 @kR540 52;
     pos @kL503 @kR541 -28;
     pos @kL503 @kR542 70;
     pos @kL504 @kR517 -32;
@@ -7550,8 +7561,8 @@ feature kern {
     pos @kL504 @kR524 -34;
     pos @kL504 @kR526 -26;
     pos @kL504 @kR528 -42;
-    pos @kL504 @kR539 70;
-    pos @kL504 @kR540 70;
+    pos @kL504 @kR539 32;
+    pos @kL504 @kR540 30;
     pos @kL504 @kR541 -34;
     pos @kL504 @kR542 70;
     pos @kL505 @kR517 -24;
@@ -7566,8 +7577,6 @@ feature kern {
     pos @kL505 @kR527 -26;
     pos @kL505 @kR528 -52;
     pos @kL505 @kR530 -26;
-    pos @kL505 @kR539 70;
-    pos @kL505 @kR540 70;
     pos @kL505 @kR541 -26;
     pos @kL505 @kR542 70;
     pos @kL506 @kR516 -14;
@@ -7592,8 +7601,6 @@ feature kern {
     pos @kL506 @kR536 -14;
     pos @kL506 @kR537 -14;
     pos @kL506 @kR538 -14;
-    pos @kL506 @kR539 70;
-    pos @kL506 @kR540 70;
     pos @kL506 @kR541 -54;
     pos @kL506 @kR542 70;
     pos @kL507 @kR517 -8;
@@ -7608,8 +7615,7 @@ feature kern {
     pos @kL507 @kR527 -16;
     pos @kL507 @kR528 -80;
     pos @kL507 @kR530 -18;
-    pos @kL507 @kR539 36;
-    pos @kL507 @kR540 20;
+    pos @kL507 @kR539 -12;
     pos @kL507 @kR541 -10;
     pos @kL507 @kR542 -14;
     pos @kL508 @kR516 -22;
@@ -7635,8 +7641,8 @@ feature kern {
     pos @kL508 @kR536 -22;
     pos @kL508 @kR537 -22;
     pos @kL508 @kR538 -22;
-    pos @kL508 @kR539 70;
-    pos @kL508 @kR540 70;
+    pos @kL508 @kR539 34;
+    pos @kL508 @kR540 32;
     pos @kL508 @kR541 -24;
     pos @kL508 @kR542 70;
     pos @kL509 @kR516 -34;
@@ -7663,7 +7669,7 @@ feature kern {
     pos @kL509 @kR537 -34;
     pos @kL509 @kR538 -34;
     pos @kL509 @kR539 -98;
-    pos @kL509 @kR540 -32;
+    pos @kL509 @kR540 -66;
     pos @kL509 @kR541 -46;
     pos @kL509 @kR542 -38;
     pos @kL510 @kR516 -18;
@@ -7689,8 +7695,8 @@ feature kern {
     pos @kL510 @kR536 -18;
     pos @kL510 @kR537 -18;
     pos @kL510 @kR538 -18;
-    pos @kL510 @kR539 70;
-    pos @kL510 @kR540 70;
+    pos @kL510 @kR539 58;
+    pos @kL510 @kR540 56;
     pos @kL510 @kR541 -52;
     pos @kL510 @kR542 70;
     pos @kL511 @kR516 -26;
@@ -7714,8 +7720,8 @@ feature kern {
     pos @kL511 @kR536 -26;
     pos @kL511 @kR537 -26;
     pos @kL511 @kR538 -26;
-    pos @kL511 @kR539 70;
-    pos @kL511 @kR540 70;
+    pos @kL511 @kR539 28;
+    pos @kL511 @kR540 26;
     pos @kL511 @kR541 -80;
     pos @kL511 @kR542 54;
     pos @kL512 @kR517 -42;
@@ -7731,8 +7737,8 @@ feature kern {
     pos @kL512 @kR528 -46;
     pos @kL512 @kR529 -14;
     pos @kL512 @kR530 -20;
-    pos @kL512 @kR539 70;
-    pos @kL512 @kR540 70;
+    pos @kL512 @kR539 24;
+    pos @kL512 @kR540 20;
     pos @kL512 @kR541 -40;
     pos @kL512 @kR542 50;
     pos @kL513 @kR516 -20;
@@ -7785,8 +7791,8 @@ feature kern {
     pos @kL514 @kR536 -26;
     pos @kL514 @kR537 -26;
     pos @kL514 @kR538 -26;
-    pos @kL514 @kR539 70;
-    pos @kL514 @kR540 70;
+    pos @kL514 @kR539 68;
+    pos @kL514 @kR540 66;
     pos @kL514 @kR541 -94;
     pos @kL514 @kR542 -36;
     pos @kL515 @kR516 -34;
@@ -7812,8 +7818,8 @@ feature kern {
     pos @kL515 @kR536 -34;
     pos @kL515 @kR537 -34;
     pos @kL515 @kR538 -34;
-    pos @kL515 @kR539 70;
-    pos @kL515 @kR540 70;
+    pos @kL515 @kR539 30;
+    pos @kL515 @kR540 28;
     pos @kL515 @kR541 -98;
     pos @kL515 @kR542 -56;
   } kern_pn_uc;
