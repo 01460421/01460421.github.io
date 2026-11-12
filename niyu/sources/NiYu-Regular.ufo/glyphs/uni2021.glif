@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<glyph name="uni2021" format="2">
+  <advance width="440"/>
+  <unicode hex="2021"/>
+  <outline>
+    <contour>
+      <point x="234" y="-124" type="line"/>
+      <point x="234" y="60" type="line"/>
+      <point x="370" y="60" type="line"/>
+      <point x="370" y="86" type="line"/>
+      <point x="234" y="86" type="line"/>
+      <point x="234" y="450" type="line"/>
+      <point x="370" y="450" type="line"/>
+      <point x="370" y="476" type="line"/>
+      <point x="234" y="476" type="line"/>
+      <point x="234" y="634" type="line"/>
+      <point x="260" y="670" type="line"/>
+      <point x="220" y="725" type="line"/>
+      <point x="180" y="670" type="line"/>
+      <point x="206" y="634" type="line"/>
+      <point x="206" y="476" type="line"/>
+      <point x="70" y="476" type="line"/>
+      <point x="70" y="450" type="line"/>
+      <point x="206" y="450" type="line"/>
+      <point x="206" y="86" type="line"/>
+      <point x="70" y="86" type="line"/>
+      <point x="70" y="60" type="line"/>
+      <point x="206" y="60" type="line"/>
+      <point x="206" y="-124" type="line"/>
+      <point x="180" y="-160" type="line"/>
+      <point x="220" y="-215" type="line"/>
+      <point x="260" y="-160" type="line"/>
+    </contour>
+  </outline>
+</glyph>

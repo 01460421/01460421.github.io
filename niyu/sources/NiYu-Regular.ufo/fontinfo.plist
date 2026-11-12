@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>ascender</key>
+    <integer>740</integer>
+    <key>capHeight</key>
+    <integer>700</integer>
+    <key>copyright</key>
+    <string>Copyright 2026 The NiYu Project Authors (https://github.com/01460421/01460421.github.io)</string>
+    <key>descender</key>
+    <integer>-230</integer>
+    <key>familyName</key>
+    <string>NiYu</string>
+    <key>openTypeHheaAscender</key>
+    <integer>800</integer>
+    <key>openTypeHheaDescender</key>
+    <integer>-260</integer>
+    <key>openTypeHheaLineGap</key>
+    <integer>0</integer>
+    <key>openTypeNameDescription</key>
+    <string>NiYu (逆雨, "reverse rain") is a display serif built on a transitional skeleton. Three rules give it its character: every drop terminal points to the sky, hairlines stop a slit short of the stems they meet, and every dot is a 72-degree diamond.</string>
+    <key>openTypeNameLicense</key>
+    <string>This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org</string>
+    <key>openTypeNameLicenseURL</key>
+    <string>https://openfontlicense.org</string>
+    <key>openTypeOS2TypoAscender</key>
+    <integer>800</integer>
+    <key>openTypeOS2TypoDescender</key>
+    <integer>-260</integer>
+    <key>openTypeOS2TypoLineGap</key>
+    <integer>0</integer>
+    <key>postscriptFontName</key>
+    <string>NiYu-Regular</string>
+    <key>styleName</key>
+    <string>Regular</string>
+    <key>unitsPerEm</key>
+    <integer>1000</integer>
+    <key>versionMajor</key>
+    <integer>1</integer>
+    <key>versionMinor</key>
+    <integer>0</integer>
+    <key>xHeight</key>
+    <integer>470</integer>
+  </dict>
+</plist>
