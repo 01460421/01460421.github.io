@@ -124,7 +124,7 @@ LICENSE = ('This Font Software is licensed under the SIL Open Font License, Vers
 DESCRIPTION = ('NiYu (逆雨, "reverse rain") is a display serif built on a transitional skeleton. '
                'Three rules give it its character: every drop terminal points to the sky, hairlines '
                'stop a slit short of the stems they meet, and every dot is a 72-degree diamond.')
-ASCENT, DESCENT = 800, -260      # hhea == typo, line gap 0
+ASCENT, DESCENT = 920, -260      # hhea == typo, line gap 0; clears accented capitals
 
 
 def _names():
@@ -182,7 +182,7 @@ def build(drawn, cmap, fea, out_otf, out_ttf):
                                           'Notice': COPYRIGHT, 'version': VERSION}, glyphs, {})
         fb.setupHorizontalMetrics(metrics)
         fb.setupHorizontalHeader(ascent=ASCENT, descent=DESCENT, lineGap=0)
-        fb.setupNameTable(names)
+        fb.setupNameTable(names, mac=False)
         fb.setupOS2(
             version=4,
             sTypoAscender=ASCENT, sTypoDescender=DESCENT, sTypoLineGap=0,
@@ -203,6 +203,8 @@ def build(drawn, cmap, fea, out_otf, out_ttf):
         font['head'].fontRevision = float(VERSION)
         font['OS/2'].recalcUnicodeRanges(font)
         font['OS/2'].recalcCodePageRanges(font)
+        if 'ltag' in font:
+            del font['ltag']
         if is_ttf:
             # unhinted TrueType: smooth at all sizes, smart drop-out control on
             from fontTools.ttLib import newTable

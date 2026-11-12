@@ -13,7 +13,7 @@
     <key>familyName</key>
     <string>NiYu</string>
     <key>openTypeHheaAscender</key>
-    <integer>800</integer>
+    <integer>920</integer>
     <key>openTypeHheaDescender</key>
     <integer>-260</integer>
     <key>openTypeHheaLineGap</key>
@@ -25,7 +25,7 @@
     <key>openTypeNameLicenseURL</key>
     <string>https://openfontlicense.org</string>
     <key>openTypeOS2TypoAscender</key>
-    <integer>800</integer>
+    <integer>920</integer>
     <key>openTypeOS2TypoDescender</key>
     <integer>-260</integer>
     <key>openTypeOS2TypoLineGap</key>

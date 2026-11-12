@@ -3,7 +3,7 @@ import math
 
 from .geom import N, Outline, ellipse, poly, rect, stroke
 from .params import *  # noqa: F401,F403
-from .parts import G, below, bracket, cut_bar, diag, diamond, drop, flag, hang, rise, slab, stem_flag
+from .parts import G, below, bracket, cut_bar, diag, diamond, drop, flag, halfplane, hang, rise, slab, stem_flag
 from .registry import glyph
 
 S = STEM
@@ -219,16 +219,17 @@ def q():
 
 # ---------------------------------------------------------------- diagonals
 
-WT = 100     # horizontal width of a thick diagonal
+WT = 95      # horizontal width of a thick diagonal
 WH = 34      # horizontal width of a thin diagonal
 DSE = 40     # serif extension on diagonals
 
 
-def vee(xl, xr, xa, top=XH, bot=-8, wt=WT, wh=WH, flat=24):
-    """V made of a thick left and a thin right diagonal meeting at xa."""
+def vee(xl, xr, xa, top=XH, bot=-8, wt=WT, wh=WH, flat=22):
+    """V made of a thick left and a thin right diagonal meeting at xa. The
+    thick stroke is trimmed along the outside of the thin one."""
     thick = poly([(xl, top), (xl + wt, top), (xa - flat / 2 + wt, bot), (xa - flat / 2, bot)])
     thin = poly([(xr - wh, top), (xr, top), (xa + flat / 2, bot), (xa + flat / 2 - wh, bot)])
-    return [thick, thin]
+    return [thick & halfplane((xa + flat / 2, bot), (xr, top)), thin]
 
 
 def dserif(xl, xr, y, up=-1, el=DSE, er=DSE):
@@ -248,16 +249,21 @@ def v():
 @glyph('w', 0x77)
 def w():
     xl = 52
-    w1 = 372
-    xa1 = xl + w1 * 0.53
-    x2 = xl + w1 - 44          # the two inner strokes meet in a plain apex
-    xa2 = x2 + xa1 - xl
-    xr = x2 + w1 + 12
-    thick1 = poly([(xl, XH), (xl + WT, XH), (xa1 - 12 + WT, -8), (xa1 - 12, -8)])
-    thin1 = poly([(x2 + 14, XH), (x2 + 14 + WH, XH), (xa1 + 12, -8), (xa1 + 12 - WH, -8)])
-    thick2 = poly([(x2, XH), (x2 + WT, XH), (xa2 - 12 + WT, -8), (xa2 - 12, -8)])
-    thin2 = poly([(xr - WH, XH), (xr, XH), (xa2 + 12, -8), (xa2 + 12 - WH, -8)])
-    parts = [thick1, thin1, thick2, thin2,
+    top, bot, fl = XH, -8, 22
+    run_t, run_n = 196, 172          # horizontal run of the thick / thin strokes
+    xa1 = xl + run_t + fl / 2
+    xm = xa1 + fl / 2 + run_n        # right corner of the middle apex
+    x2 = xm - WT                     # top-left of the second thick stroke
+    xa2 = x2 + run_t + fl / 2
+    xr = xa2 + fl / 2 + run_n
+    thick1 = poly([(xl, top), (xl + WT, top), (xa1 - fl / 2 + WT, bot), (xa1 - fl / 2, bot)])
+    thin1 = poly([(xm - WH, top), (xm, top), (xa1 + fl / 2, bot), (xa1 + fl / 2 - WH, bot)])
+    thick2 = poly([(x2, top), (xm, top), (xa2 - fl / 2 + WT, bot), (xa2 - fl / 2, bot)])
+    thin2 = poly([(xr - WH, top), (xr, top), (xa2 + fl / 2, bot), (xa2 + fl / 2 - WH, bot)])
+    parts = [thick1 & halfplane((xa1 + fl / 2, bot), (xm, top)), thin1,
+             # middle apex: the second thick stroke is trimmed along the first thin one
+             thick2 & halfplane((xa2 + fl / 2, bot), (xr, top)) & halfplane((xm - WH, top), (xa1 + fl / 2 - WH, bot)),
+             thin2,
              dserif(xl, xl + WT, XH), dserif(xr - WH, xr, XH, el=44, er=44)]
     return G(parts, xr + 48)
 
@@ -281,7 +287,7 @@ def y():
     w = 452
     xr = xl + w
     xa = xl + w * 0.515
-    thick = poly([(xl, XH), (xl + WT, XH), (xa - 12 + WT, -8), (xa - 12, -8)])
+    thick = poly([(xl, XH), (xl + WT, XH), (xa - 12 + WT, -8), (xa - 12, -8)]) & halfplane((xa + 12, -8), (xr, XH))
     # the thin diagonal runs on below the baseline and curls into a rising drop
     dx, dy = (xr - WH / 2) - (xa + 12 - WH / 2), XH + 8
     ang = math.degrees(math.atan2(-dy, -dx))          # travelling down-left
@@ -366,7 +372,7 @@ def s():
         N(sb + 292, XH - 116, 38, d=96, to=0.6),
         N(sb + 170, XH + OS - 13, 26, d=180, ti=0.58),
         N(sb + 46, XH - 126, 76, d=270, to=0.6),
-        N(sb + 168, XH / 2 + 2, 92, d=-24, ti=0.66, to=0.66),
+        N(sb + 168, XH / 2 + 2, 88, d=-24, ti=0.66, to=0.66),
         N(sb + 304, 126, 80, d=270, ti=0.6),
         N(sb + 160, -OS + 13, 26, d=180, to=0.58),
         N(sb + 30, 116, 38, d=84, ti=0.6),

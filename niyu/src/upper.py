@@ -4,7 +4,7 @@ import math
 
 from .geom import N, Outline, ellipse, poly, rect, stroke
 from .params import *  # noqa: F401,F403
-from .parts import G, below, bracket, cut_bar, diag, diamond, drop, slab
+from .parts import G, below, bracket, cut_bar, diag, diamond, drop, halfplane, slab
 from .registry import glyph
 
 CUTV = 90 - CUT
@@ -287,17 +287,16 @@ def A(m):
     top = m.h + 6 * m.k
     wt = hw(m, w / 2, m.h, m.s * 1.02)
     wn = hw(m, w / 2, m.h, m.thin)
-    ap = 16
-    thin = quad(xa - ap / 2, xa - ap / 2 + wn, top, xl + m.w(26), xl + m.w(26) + wn, 0)
-    thick = quad(xa - ap / 2, xa - ap / 2 + wt * 0.92, top, xr - m.w(20) - wt, xr - m.w(20), 0)
+    ap = 14
+    fl, fr = xl + m.w(26), xr - m.w(20)          # outer feet
+    thin = quad(xa - ap / 2, xa - ap / 2 + wn, top, fl, fl + wn, 0)
+    thick = quad(xa + ap / 2 - wt * 0.94, xa + ap / 2, top, fr - wt, fr, 0) & halfplane((xa - ap / 2, top), (fl, 0))
     by = m.h * 0.335
-    # crossbar between the inner edges
     f = by / top
-    xbl = xl + m.w(26) + (xa - ap / 2 - xl - m.w(26)) * f
-    xbr = (xr - m.w(20) - wt) + (xa - ap / 2 - (xr - m.w(20) - wt)) * f
-    bar = rect(xbl + 4, by - m.hair / 2, xbr + 8, by + m.hair / 2)
-    parts = [thin, thick, bar,
-             dslab(m, xl + m.w(26), xl + m.w(26) + wn, 0), dslab(m, xr - m.w(20) - wt, xr - m.w(20), 0)]
+    xbl = fl + wn + (xa - ap / 2 - fl) * f
+    xbr = (fr - wt) + (xa + ap / 2 - wt * 0.94 - (fr - wt)) * f
+    bar = rect(xbl - 4, by - m.hair / 2, xbr + 4, by + m.hair / 2)
+    parts = [thin, thick, bar, dslab(m, fl, fl + wn, 0), dslab(m, fr - wt, fr, 0)]
     return G(parts, xr + m.sbr - 6)
 
 
@@ -310,36 +309,35 @@ def V(m):
     bot = -8 * m.k
     wt = hw(m, w / 2, m.h, m.s * 1.02)
     wn = hw(m, w / 2, m.h, m.thin)
-    ap = 18
-    thick = quad(xl + m.w(22), xl + m.w(22) + wt, m.h, xa - ap / 2, xa - ap / 2 + wt * 0.92, bot)
-    thin = quad(xr - m.w(24) - wn, xr - m.w(24), m.h, xa + ap / 2 - wn, xa + ap / 2, bot)
-    parts = [thick, thin,
-             dslab(m, xl + m.w(22), xl + m.w(22) + wt, m.h, up=-1),
-             dslab(m, xr - m.w(24) - wn, xr - m.w(24), m.h, up=-1)]
+    ap = 16
+    a, b = xl + m.w(22), xr - m.w(24)
+    thick = quad(a, a + wt, m.h, xa - ap / 2, xa - ap / 2 + wt * 0.94, bot) & halfplane((xa + ap / 2, bot), (b, m.h))
+    thin = quad(b - wn, b, m.h, xa + ap / 2 - wn, xa + ap / 2, bot)
+    parts = [thick, thin, dslab(m, a, a + wt, m.h, up=-1), dslab(m, b - wn, b, m.h, up=-1)]
     return G(parts, xr + m.sbr - 4)
 
 
 @cap('W', 0x57)
 def W(m):
     xl = m.sbr - 2
-    w1 = m.w(548)
     bot = -8 * m.k
-    wt = hw(m, w1 / 2, m.h, m.s * 1.0)
-    wn = hw(m, w1 / 2, m.h, m.thin)
-    ap = 18
+    run_t, run_n = m.w(262), m.w(232)
+    wt = hw(m, run_t, m.h, m.s * 1.0)
+    wn = hw(m, run_n, m.h, m.thin)
+    ap = 16
     x1 = xl + m.w(22)
-    xa1 = x1 + w1 * 0.5
-    x2 = x1 + w1 - wt * 0.62 - m.w(40)
-    xa2 = x2 + (xa1 - x1)
-    xr = x2 + w1 + m.w(6)
-    parts = [
-        quad(x1, x1 + wt, m.h, xa1 - ap / 2, xa1 - ap / 2 + wt * 0.92, bot),
-        quad(x2 + wt * 0.3, x2 + wt * 0.3 + wn, m.h, xa1 + ap / 2 - wn, xa1 + ap / 2, bot),
-        quad(x2, x2 + wt, m.h, xa2 - ap / 2, xa2 - ap / 2 + wt * 0.92, bot),
-        quad(xr - wn, xr, m.h, xa2 + ap / 2 - wn, xa2 + ap / 2, bot),
-        dslab(m, x1, x1 + wt, m.h, up=-1),
-        dslab(m, xr - wn, xr, m.h, up=-1),
-    ]
+    xa1 = x1 + run_t + ap / 2
+    xm = xa1 + ap / 2 + run_n
+    x2 = xm - wt
+    xa2 = x2 + run_t + ap / 2
+    xr = xa2 + ap / 2 + run_n
+    thick1 = quad(x1, x1 + wt, m.h, xa1 - ap / 2, xa1 - ap / 2 + wt * 0.94, bot) & halfplane((xa1 + ap / 2, bot), (xm, m.h))
+    thin1 = quad(xm - wn, xm, m.h, xa1 + ap / 2 - wn, xa1 + ap / 2, bot)
+    thick2 = (quad(x2, xm, m.h, xa2 - ap / 2, xa2 - ap / 2 + wt * 0.94, bot)
+              & halfplane((xa2 + ap / 2, bot), (xr, m.h)) & halfplane((xm - wn, m.h), (xa1 + ap / 2 - wn, bot)))
+    thin2 = quad(xr - wn, xr, m.h, xa2 + ap / 2 - wn, xa2 + ap / 2, bot)
+    parts = [thick1, thin1, thick2, thin2,
+             dslab(m, x1, x1 + wt, m.h, up=-1), dslab(m, xr - wn, xr, m.h, up=-1)]
     return G(parts, xr + m.sbr + m.w(18))
 
 
@@ -403,10 +401,12 @@ def M_(m):
     wt = m.s * 1.12
     wn = hw(m, w / 2, m.h, m.thin)
     bot = -6 * m.k
+    ap = 16
     left = cstem(m, x0, w=tn)
     right = cstem(m, x3)
-    thick = quad(x0, x0 + wt, m.h, xm - 8, xm - 8 + wt * 0.9, bot)
-    thin = quad(x3 + m.s * 0.2 - wn, x3 + m.s * 0.2, m.h, xm + 8 - wn + wt * 0.2, xm + 8 + wt * 0.2, bot)
+    xtr = x3 + m.s * 0.25         # where the thin diagonal reaches the top
+    thick = quad(x0, x0 + wt, m.h, xm - ap / 2, xm - ap / 2 + wt * 0.92, bot) & halfplane((xm + ap / 2, bot), (xtr, m.h))
+    thin = quad(xtr - wn, xtr, m.h, xm + ap / 2 - wn, xm + ap / 2, bot)
     # the head serifs only run outwards
     left[2] = slab(x0, x0 + tn, m.h, el=m.se, er=0, up=-1)
     right[2] = slab(x3, x3 + m.s, m.h, el=0, er=m.se, up=-1)

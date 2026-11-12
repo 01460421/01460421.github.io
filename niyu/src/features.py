@@ -111,16 +111,15 @@ PUNCT_NAMES = {'period', 'comma', 'colon', 'semicolon', 'ellipsis', 'exclam', 'q
                'guillemotleft', 'guillemotright', 'ampersand', 'at', 'exclamdown', 'questiondown'}
 MARK_NAMES = {'grave', 'acute', 'circumflex', 'tilde', 'dieresis', 'ring', 'caron', 'macron', 'cedilla',
               'underscore', 'bar', 'plus', 'minus', 'equal', 'multiply', 'divide', 'less', 'greater',
-              'asciicircum', 'asciitilde', 'numbersign', 'percent', 'dollar', 'degree', 'periodcentered', 'bullet'}
+              'asciicircum', 'asciitilde', 'numbersign', 'percent', 'dollar', 'degree', 'periodcentered', 'bullet',
+              'sterling', 'dotlessi'}
 
 
 def build_fea(drawn, log=None):
     names = set(drawn)
     fea = ['languagesystem DFLT dflt;', 'languagesystem latn dflt;', '']
 
-    liga = [(' '.join(n.split('_')), n) for n in ('f_f', 'f_i', 'f_l') if n in names]
-    fea.append(_sub_block('liga', liga))
-
+    # small caps first: otherwise "WAFFLES" in small caps would pick up a lowercase ligature
     smcp = [(n[:-3], n) for n in sorted(names) if n.endswith('.sc') and n[:-3] in names]
     fea.append(_sub_block('smcp', smcp))
     c2sc = []
@@ -130,6 +129,9 @@ def build_fea(drawn, log=None):
             if cap in names and cap != n[:-3]:
                 c2sc.append((cap, n))
     fea.append(_sub_block('c2sc', c2sc))
+
+    ligs = [n for n in ('f_f', 'f_i', 'f_l') if n in names]
+    fea.append(_sub_block('liga', [(' '.join(n.split('_')), n) for n in ligs]))
 
     fea.append(_sub_block('zero', [('zero', 'zero.zero')] if 'zero.zero' in names else []))
     fea.append(_sub_block('onum', [(f, f + '.onum') for f in FIGS if f + '.onum' in names]))
@@ -146,4 +148,10 @@ def build_fea(drawn, log=None):
 
     kern_fea, table = kerning(drawn, log)
     fea.append(kern_fea)
+
+    # GDEF: glyph classes and a caret between the two letters of each ligature
+    carets = '\n'.join(f'    LigatureCaretByPos {n} {int(drawn[n][1] * 0.47)};' for n in ligs)
+    bases = ' '.join(n for n in drawn if n not in ligs and n != '.notdef')
+    fea.append(f'@GDEF_base = [{bases}];\n@GDEF_lig = [{" ".join(ligs)}];\n'
+               f'table GDEF {{\n    GlyphClassDef @GDEF_base, @GDEF_lig, , ;\n{carets}\n}} GDEF;\n')
     return '\n'.join(fea), table

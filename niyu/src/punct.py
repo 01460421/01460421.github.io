@@ -140,7 +140,7 @@ def quotedblbase():
 DASH_Y = 204
 
 
-@glyph('hyphen', [0x2D, 0xAD])
+@glyph('hyphen', 0x2D)
 def hyphen():
     return G([cut_bar(50, 290, DASH_Y, DASH_Y + 36)], 340)
 
@@ -282,12 +282,12 @@ def _chevron(x0, x1, flip=False):
 
 @glyph('less', 0x3C)
 def less():
-    return G([_chevron(64, 64 + 420)], 420 + 128)
+    return G([_chevron(70, 70 + 420)], 420 + 140)
 
 
 @glyph('greater', 0x3E)
 def greater():
-    return G([_chevron(64, 64 + 420, flip=True)], 420 + 128)
+    return G([_chevron(70, 70 + 420, flip=True)], 420 + 140)
 
 
 @glyph('asciicircum', 0x5E)
@@ -401,3 +401,40 @@ def at():
         N(cx + 250, cy - 330, HR, d=34, ti=0.5),
     ], end_cut=CUT_SIDE)
     return G([inner, outer], sb + 800 + 50)
+
+
+@glyph('sterling', 0xA3)
+def sterling():
+    sb = 56
+    xs = sb + 150                      # centre of the stem
+    hook = stroke([
+        N(sb + 408, CAP - 168, HR + 16, d=98, to=0.6),
+        N(sb + 290, CAP + OS_C - 14, 30, d=180, ti=0.6, to=0.6),
+        N(xs, CAP - 210, T, d=270, ti=0.62),
+        N(xs, 150, T, d=270, to=0.5),
+        N(xs - 60, 26, 44, d=220, ti=0.5),
+    ], start_cut=CUT_UP, end_cut=0)
+    base = stroke([
+        N(sb + 6, 30, 30, d=-12, to=0.5),
+        N(sb + 150, 26, 54, d=0, ti=0.5, to=0.55),
+        N(sb + 330, 22, 44, d=0, ti=0.55, to=0.5),
+        N(sb + 448, 74, HR, d=50, ti=0.5),
+    ], start_cut=90, end_cut=CUT_SIDE)
+    bar = cut_bar(sb + 20, sb + 340, 352, 352 + HR)
+    return G([hook, base, bar], sb + 448 + 50)
+
+
+@glyph('Euro', 0x20AC)
+def euro():
+    sb = 92
+    w = 500
+    cx = sb + w / 2 + 6
+    body = stroke([
+        N(sb + w - 20, CAP - 190, HR + 16, d=94, to=0.6),
+        N(cx + 20, CAP + OS_C - 14, HR + 2, d=180, ti=0.58),
+        N(sb + (T + 4) / 2, CAP / 2, T + 4, d=270),
+        N(cx + 30, -OS_C + 15, HR + 4, d=0, to=0.6),
+        N(sb + w, 144, HR - 2, d=58, ti=0.5),
+    ], start_cut=CUT_UP, end_cut=CUT_SIDE)
+    bars = [cut_bar(sb - 70, sb + 330, 400, 400 + HR), cut_bar(sb - 70, sb + 300, 290, 290 + HR)]
+    return G([body] + bars, sb + w + 50)

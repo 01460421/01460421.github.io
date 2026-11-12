@@ -47,8 +47,8 @@ BRK_H = 40         # bracket height
 # spacing (side bearings)
 SB_STRAIGHT = 80   # lowercase straight side, measured from the stem
 SB_ROUND = 38      # lowercase round side
-SBC_STRAIGHT = 92  # capital straight side, measured from the stem
-SBC_ROUND = 50     # capital round side
+SBC_STRAIGHT = 98  # capital straight side, measured from the stem
+SBC_ROUND = 54     # capital round side
 
 # cut directions (all CUT degrees off an axis)
 CUT_UP = -CUT          # for stroke ends that travel vertically (s, C, G, S, J terminals)

@@ -89,7 +89,7 @@ def circle_arc(cx, cy, r, a0, a1):
     return segs
 
 
-def drop(tx, ty, r, length=None, lean=0.0, side=1, tipw=HAIR, phi=28, t=0.62, tilt=0.0):
+def drop(tx, ty, r, length=None, lean=0.0, side=1, tipw=HAIR, phi=24, t=0.92, t2=0.34, tilt=0.0):
     """逆雨滴 — the reverse-rain drop. The tip is ALWAYS the top.
 
     (tx, ty)  centre of the tip
@@ -108,10 +108,10 @@ def drop(tx, ty, r, length=None, lean=0.0, side=1, tipw=HAIR, phi=28, t=0.62, ti
     pr = (cx + r * math.cos(math.radians(phi)), cy + r * math.sin(math.radians(phi)))
     pl = (cx - r * math.cos(math.radians(phi)), cy + r * math.sin(math.radians(phi)))
     o = Outline(xr0, ty)
-    o.bez(pr[0], pr[1], -90, phi - 90, t=t)
+    o.bez(pr[0], pr[1], -90, phi - 90, t=t, t2=t2)
     for c1, c2, p in circle_arc(cx, cy, r, phi, -180 - phi):
         o.C(c1, c2, p)
-    o.bez(xl0, ty, 90 - phi, 90, t=t)
+    o.bez(xl0, ty, 90 - phi, 90, t=t2, t2=t)
     s = o.close()
     if tilt:
         s = s.rotate(tilt, tx, ty)
@@ -151,3 +151,16 @@ def rise(x, y, r):
 def below(x0, y0, x1, y1, far=3000):
     """Half-plane polygon below / right of the line (x0,y0)->(x1,y1) (x1 > x0)."""
     return poly([(x0, y0), (x1, y1), (x1 + far, y1), (x1 + far, -far), (x0, -far)])
+
+
+def halfplane(p0, p1, far=4000):
+    """Everything to the LEFT of the directed line p0 -> p1 (used to trim
+    one diagonal along the edge of another so apexes come out clean)."""
+    import math
+    dx, dy = p1[0] - p0[0], p1[1] - p0[1]
+    ln = math.hypot(dx, dy)
+    ux, uy = dx / ln, dy / ln
+    nx, ny = -uy, ux
+    a = (p0[0] - ux * far, p0[1] - uy * far)
+    b = (p1[0] + ux * far, p1[1] + uy * far)
+    return poly([a, b, (b[0] + nx * far, b[1] + ny * far), (a[0] + nx * far, a[1] + ny * far)])
