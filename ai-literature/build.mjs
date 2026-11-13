@@ -24,14 +24,17 @@ const tcy = s => s.replace(/(?<![A-Za-z0-9])([A-Za-z0-9]{1,2})(?![A-Za-z0-9])/g,
 const inline = s => squeeze(esc(tcy(s))).replace(/\uE000(.*?)\uE001/g, '<span class="tcy">$1</span>');
 
 // 封面：往上升的雨。水滴尖端朝上、只有大小兩種，菱形頂角 72°，和逆雨字型的規則一致
-function rain(seed = 20261113) {
+function rain(seed = 20261113, back = false) {
   let a = seed >>> 0;
   const rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
   const f = n => n.toFixed(1);
   const out = ['<svg viewBox="0 0 560 794" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="trail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9A45C"/><stop offset="1" stop-color="#C9A45C" stop-opacity="0"/></linearGradient></defs>'];
-  const clear = (x, y) => (x > 318 && x < 500 && y < 640) || (x > 50 && x < 120 && y > 520);
+  const clear = back
+    ? (x, y) => (x > 215 && x < 480 && y < 610) || (x > 50 && x < 120 && y > 520)
+    : (x, y) => (x > 318 && x < 500 && y < 640) || (x > 50 && x < 120 && y > 520);
+  const count = back ? 58 : 86;
   let made = 0;
-  while (made < 86) {
+  while (made < count) {
     const x = 22 + rnd() * 516, y = 780 - Math.pow(rnd(), 1.7) * 730;
     if (clear(x, y)) continue;
     const r = rnd() < 0.22 ? 3.3 : 1.9, len = 50 + rnd() * 210, o = 0.25 + rnd() * 0.55;
@@ -101,7 +104,7 @@ function parse(text) {
     if (cmd === 'raw') {
       const buf = [];
       while (++i < src.length && src[i].trim() !== '@end') buf.push(src[i]);
-      const html = buf.join('\n').replace('<!--RAIN-->', rain());
+      const html = buf.join('\n').replace('<!--RAIN-->', rain()).replace('<!--RAIN:back-->', rain(19991113, true));
       items.push({ type: 'full', html: `<div class="full ${f[0]}">${html}</div>` });
       display += html.replace(/<svg.*<\/svg>/s, '').replace(/<[^>]+>/g, '');
       piece = null;

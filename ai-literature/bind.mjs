@@ -1,9 +1,10 @@
 // 線裝本：把已經分好頁的 index.html 重新拼成「筒子葉」（A4 橫向、單面印、對摺）
 // 用法：先 node build.mjs，再 node bind.mjs
-// 產生 binding/leaves.pdf（內頁）、binding/cover.pdf（封面、封底、題簽）、binding/guide.pdf（裝訂指南）
+// 產生 binding/kit.pdf：一個檔案，依序是裝訂指南（3 頁）、封面、封底、題簽、內頁五十葉
 // 以及指南用的兩張圖 binding/mock.png、binding/leaf.png
 import { createRequire } from 'node:module';
 import { writeFileSync, mkdtempSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -33,23 +34,21 @@ const book = await tab.evaluate(() => ({
   sheets: [...document.querySelectorAll('#book .sheet')].map(s => ({
     cls: s.className, html: s.innerHTML, part: s.querySelector('.part .no') ? s.querySelector('.part .no').textContent : null,
   })),
-  rain: document.querySelector('.cover svg').outerHTML,
 }));
 
 // ---- 線裝本自己的幾頁 ----
-// 第一頁換成內封（封面另外印）；書末加一葉牌記，留給訂書的人落款
+// 第一頁（封面）換成內封，最後一頁（封底）換成牌記，留給訂書的人落款；封面、封底另外印在厚紙上
 const pages = book.sheets.map(s => ({ ...s }));
 pages[0] = { cls: 'sheet bare odd', part: null, html:
   `<div class="full neifeng"><div class="nf-by">Claude　著</div><h1><span class="tcy">AI</span>文學創作巔峰集</h1><div class="nf-yr">丙午冬月　讀者手訂</div></div>` };
-pages.push({ cls: 'sheet bare odd', part: '跋', html:
+pages[pages.length - 1] = { cls: 'sheet bare even', part: null, html:
   `<div class="full paiji"><div class="pj">
 <p>此書成於丙午冬月，凡一百頁，分八卷。</p>
-<p>撰者無手，不能自訂，茲以散葉五十一付與讀者：對摺，理齊，打四眼，穿一線。</p>
+<p>撰者無手，不能自訂，茲以散葉五十付與讀者：對摺，理齊，打四眼，穿一線。</p>
 <p>線過之日，方是書成之日。</p>
 </div>
 <div class="sign"><span>訂書者</span><i></i><span>時在</span><i class="s"></i><span>年</span><i class="s"></i><span>月</span></div>
-<div class="sign"><span>此為第</span><i class="s"></i><span>冊</span></div></div>` });
-pages.push({ cls: 'sheet bare even', part: null, html: '' });
+<div class="sign"><span>此為第</span><i class="s"></i><span>冊</span></div></div>` };
 
 let juan = '卷首';
 const leaves = [];
@@ -110,7 +109,8 @@ await pg.goto(pathToFileURL(leavesHtml).href, { waitUntil: 'networkidle' });
 await pg.evaluate(() => document.fonts.ready);
 await pg.waitForTimeout(600);
 await pg.emulateMedia({ media: 'print', colorScheme: 'light' });
-await pg.pdf({ path: join(out, 'leaves.pdf'), width: '297mm', height: '210mm', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
+const leavesPdf = join(work, 'leaves.pdf'), coverPdf = join(work, 'cover.pdf'), guidePdf = join(work, 'guide.pdf');
+await pg.pdf({ path: leavesPdf, width: '297mm', height: '210mm', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
 
 // ---- 封面、封底、題簽（A4 直向，附裁切線；裁成 148×210）----
 // 裁切線：對齊成品邊（148×210，置中於 A4），畫在出血之外
@@ -127,8 +127,6 @@ html, body { margin: 0; background: #fff }
 .pp:last-child { break-after: auto }
 .bleed { position: absolute; left: 28mm; top: 40.5mm; width: 154mm; height: 216mm; overflow: hidden }
 .bleed .cover { position: absolute; inset: 0 }
-.bleed.back .cover svg { transform: scaleX(-1) }
-.bleed .dia { position: absolute; left: 0; right: 0; bottom: 13%; text-align: center; color: #C9A45C; font-size: 9px }
 .marks { position: absolute; inset: 0; width: 100%; height: 100% } .marks path { stroke: #000; stroke-width: .12; fill: none }
 .cap { position: absolute; left: 0; right: 0; top: 14mm; text-align: center; font: 400 11px/1.8 "Noto Serif TC", serif; color: #555; letter-spacing: .1em }
 .slips { position: absolute; left: 0; right: 0; top: 52mm; display: flex; justify-content: center; gap: 30mm }
@@ -136,17 +134,18 @@ html, body { margin: 0; background: #fff }
 .slip div { width: 24mm; height: 144mm; border: 1pt solid #111; outline: .4pt solid #111; outline-offset: -1.6mm; display: flex; align-items: center; justify-content: center;
   writing-mode: vertical-rl; font: 400 30px/1 "NiYuBook", "Noto Serif TC", serif; letter-spacing: .14em; color: #111 }
 `;
-const coverInner = book.sheets[0].html;   // 網頁版第一頁就是封面
+const coverInner = book.sheets[0].html;   // 網頁版第一頁是封面，最後一頁是封底
+const backInner = book.sheets[book.sheets.length - 1].html;
 const coverHtml = join(work, 'cover.html');
 writeFileSync(coverHtml, `${head}<style>${coverCss}</style></head><body>
 <div class="pp"><div class="cap">封面　印在兩百磅上下的厚紙，沿裁切線裁成 148 × 210 公釐　書背在右</div><div class="bleed">${coverInner}</div>${marks}</div>
-<div class="pp"><div class="cap">封底　同樣裁成 148 × 210 公釐　書背在左</div><div class="bleed back"><div class="full cover">${book.rain}<div class="dia">◆</div></div></div>${marks}</div>
+<div class="pp"><div class="cap">封底　同樣裁成 148 × 210 公釐　書背在左</div><div class="bleed">${backInner}</div>${marks}</div>
 <div class="pp"><div class="cap">題簽　封面若改用素色的紙或布，把這一條沿虛線裁下，貼在封面左上角（多印一條備用）</div>
 <div class="slips"><div class="slip"><div><span><span class="tcy">AI</span>文學創作巔峰集</span></div></div><div class="slip"><div><span><span class="tcy">AI</span>文學創作巔峰集</span></div></div></div></div>
 </body></html>`);
 await pg.goto(pathToFileURL(coverHtml).href, { waitUntil: 'networkidle' });
 await pg.evaluate(() => document.fonts.ready);
-await pg.pdf({ path: join(out, 'cover.pdf'), width: '210mm', height: '297mm', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
+await pg.pdf({ path: coverPdf, width: '210mm', height: '297mm', printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
 
 // ---- 指南用的圖：訂好的樣子、一張攤開的葉子 ----
 const shot = await browser.newContext({ viewport: { width: 900, height: 1000 }, deviceScaleFactor: 2, colorScheme: 'light' });
@@ -170,11 +169,10 @@ await sp.evaluate(() => document.fonts.ready);
 await sp.emulateMedia({ media: 'print' });
 await sp.locator('.leaf').nth(15).screenshot({ path: join(out, 'leaf.png') });
 
-// ---- 指南 ----
-await pg.goto(pathToFileURL(join(out, 'index.html')).href, { waitUntil: 'networkidle' }).catch(() => null);
-if (await pg.title().catch(() => '')) {
-  await pg.evaluate(() => document.fonts.ready);
-  await pg.pdf({ path: join(out, 'guide.pdf'), format: 'A4', printBackground: true, margin: { top: '14mm', right: '14mm', bottom: '14mm', left: '14mm' } });
-}
+// ---- 指南，然後併成一個檔 ----
+await pg.goto(pathToFileURL(join(out, 'index.html')).href, { waitUntil: 'networkidle' });
+await pg.evaluate(() => document.fonts.ready);
+await pg.pdf({ path: guidePdf, format: 'A4', printBackground: true, margin: { top: '14mm', right: '14mm', bottom: '14mm', left: '14mm' } });
+execFileSync('pdfunite', [guidePdf, coverPdf, leavesPdf, join(out, 'kit.pdf')]);
 await browser.close();
-console.log(`線裝本：${leaves.length} 葉（A4 橫向單面），封面三頁`);
+console.log(`線裝本：${leaves.length} 葉，已併入 binding/kit.pdf`);

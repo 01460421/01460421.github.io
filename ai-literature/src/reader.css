@@ -123,6 +123,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .cover h1 { position: absolute; top: 12%; right: 22%; margin: 0; font: 400 54px/1.1 var(--display); font-size: 9.7cqw; letter-spacing: .12em; white-space: nowrap }
 .cover .tag { position: absolute; top: 12.6%; right: 13.5%; font-size: 13px; font-size: 2.3cqw; letter-spacing: .55em; color: var(--cover-brass); white-space: nowrap }
 .cover .by { position: absolute; bottom: 9%; left: 14%; font: 400 20px/1 var(--display); font-size: 3.6cqw; letter-spacing: .3em; white-space: nowrap }
+.cover .bq, .cover .blurb, .cover .foot { position: absolute; margin: 0; writing-mode: vertical-rl }
+.cover .bq { top: 14%; right: 19%; font: 400 27px/1.9 var(--display); font-size: 4.9cqw; letter-spacing: .14em; white-space: nowrap }
+.cover .blurb { top: 21%; right: 45%; block-size: auto; inline-size: 23em; font-size: 13.5px; font-size: 2.42cqw; line-height: 2.15; letter-spacing: .12em; text-align: justify; opacity: .86 }
+.cover .foot { bottom: 9%; left: 14%; font-size: 12px; font-size: 2.15cqw; letter-spacing: .45em; color: var(--cover-brass); white-space: nowrap }
 .colophon { writing-mode: horizontal-tb; inset: auto 64px 84px 64px; font-size: 13px; line-height: 24px; color: var(--soft) }
 .colophon strong { font: 400 20px/1.6 var(--display); color: var(--ink); letter-spacing: .08em }
 .colophon p { margin: 0 0 12px }

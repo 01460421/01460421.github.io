@@ -18,7 +18,7 @@
 上方的「對話全開」可以一次顯示全部。PDF 與列印時全部直接顯示。
 
 - 線上閱讀：<https://01460421.github.io/ai-literature/>（直排，寬螢幕是由右往左翻的對開頁；手機改成橫排連續捲動）
-- PDF（A5，100 頁）：[`ai-literature.pdf`](ai-literature.pdf)
+- PDF（A5，100 頁，封面到封底都在同一個檔）：[`ai-literature.pdf`](ai-literature.pdf)
 
 - 線裝本（四眼線裝，自己印、自己訂）：[裝訂指南](binding/)
 
@@ -39,10 +39,9 @@
 
 | 檔案 | 說明 |
 |---|---|
-| `binding/leaves.pdf` | 內頁五十一葉，A4 橫向單面印，對摺成筒子葉。古籍版式：四周雙邊、白口、單魚尾，版心記書名、卷次、葉碼；書末一葉牌記留給訂書的人落款 |
-| `binding/cover.pdf` | 封面、封底（附裁切線）與題簽 |
-| `binding/index.html`、`binding/guide.pdf` | 附圖的裝訂指南：備料、印、摺、理齊、打眼、穿線 |
-| `bind.mjs` | 從 `index.html` 已經分好的頁重新拼版，產生上面的 PDF 和指南用的兩張圖 |
+| `binding/kit.pdf` | 全部在這一個檔案，共 56 頁：第 1–3 頁是裝訂指南；第 4–6 頁是封面、封底（附裁切線）與題簽；第 7–56 頁是內頁五十葉，A4 橫向單面印、對摺成筒子葉。內頁是古籍版式：四周雙邊、白口、單魚尾，版心記書名、卷次、葉碼；最後一頁是牌記，留給訂書的人落款 |
+| `binding/index.html` | 裝訂指南的網頁版：備料、印、摺、理齊、打眼、穿線 |
+| `bind.mjs` | 從 `index.html` 已經分好的頁重新拼版，產生 `kit.pdf` 和指南用的兩張圖（需要 `pdfunite`） |
 
 ## 重建
 
@@ -50,7 +49,7 @@
 
 ```
 node build.mjs     # 分頁，產生 index.html 與 ai-literature.pdf
-node bind.mjs      # 線裝本，產生 binding/ 底下的 PDF
+node bind.mjs      # 線裝本，產生 binding/kit.pdf
 ```
 
 建置會在瀏覽器裡把每一頁實際排出來，照行尾的位置換頁，所以頁數是量出來的，不是估的。
@@ -69,7 +68,7 @@ node bind.mjs      # 線裝本，產生 binding/ 底下的 PDF
 | `@sub 小標` | 篇內小標 |
 | `@note`、`@sig`、`@center` | 小字附註、靠右落款、置中一行 |
 | `@break` | 強制換頁 |
-| `@raw 類別` … `@end` | 整頁原樣 HTML（封面、版權頁）；`<!--RAIN-->` 會換成封面的雨 |
+| `@raw 類別` … `@end` | 整頁原樣 HTML（封面、版權頁、封底）；`<!--RAIN-->`、`<!--RAIN:back-->` 會換成封面與封底的雨 |
 | `@toc` | 目錄的位置 |
 
 劇本與對話裡「角色：台詞」會排成對白，整段用全形括號包住的是舞台指示。

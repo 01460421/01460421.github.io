@@ -59,7 +59,7 @@ svg text { font: 400 7px var(--text); fill: var(--soft) } svg .big { font-size: 
 @media print {
   :root { --paper: #fff; --wash: #F1F3F3; --ink: #111; --soft: #555; --rule: #bbb; --brass: #7A5010; --leaf: #fff; --navy: #0B1D24 }
   body { background: #fff; font-size: 12.5px; line-height: 1.7 } main { padding: 0; max-width: none }
-  .back, .dl { display: none } h1 { font-size: 30px; margin-top: 0 } h2 { margin: 22px 0 8px; font-size: 19px } .lead { font-size: 14px; margin-bottom: 14px }
+  .back { display: none } h1 { font-size: 30px; margin-top: 0 } h2 { margin: 22px 0 8px; font-size: 19px } .lead { font-size: 14px; margin-bottom: 14px }
   .hero { padding: 14px; gap: 20px } .hero img { max-width: 190px } .spec { font-size: 12px }
   .step { padding: 12px 0; gap: 18px; grid-template-columns: minmax(0, 1fr) 210px; break-inside: avoid } .step h3 { font-size: 16px } .step p, .step ol { font-size: 12px } .note { font-size: 11.5px }
   ul.need { font-size: 12px }
@@ -77,22 +77,23 @@ svg text { font: 400 7px var(--text); fill: var(--soft) } svg .big { font-size: 
   <dl class="spec">
     <dt>形制</dt><dd>四眼線裝，筒子葉，書背在右，由右往左翻</dd>
     <dt>開本</dt><dd>148 × 210 公釐（A5）</dd>
-    <dt>內頁</dt><dd>五十一葉（一百頁正文，加一葉牌記），A4 橫向單面印，對摺</dd>
+    <dt>內頁</dt><dd>五十葉，一百頁；A4 橫向單面印，對摺。封面、封底另印，書末是牌記</dd>
     <dt>版式</dt><dd>四周雙邊，白口，單魚尾；版心記書名、卷次、葉碼</dd>
     <dt>書厚</dt><dd>用 80 克的紙，約一公分</dd>
   </dl>
 </div>
 
-<h2 class="dl">要印的檔案</h2>
-<ul class="files dl">
-  <li><a href="leaves.pdf">leaves.pdf</a><span>內頁，A4 橫向，五十一張，單面</span></li>
-  <li><a href="cover.pdf">cover.pdf</a><span>封面、封底（附裁切線）與題簽，A4 直向，三張</span></li>
-  <li><a href="guide.pdf">guide.pdf</a><span>這份指南的列印版</span></li>
+<h2>要印的檔案</h2>
+<p>全部在同一個檔案：<a href="kit.pdf"><strong>kit.pdf</strong></a>，共五十六頁，印的時候照頁碼分三批。</p>
+<ul class="files">
+  <li><strong>第 1 到 3 頁</strong><span>這份指南</span></li>
+  <li><strong>第 4 到 6 頁</strong><span>封面、封底（附裁切線）與題簽，A4 直向，印在厚紙上</span></li>
+  <li><strong>第 7 到 56 頁</strong><span>內頁五十張，A4 橫向，單面，實際大小</span></li>
 </ul>
 
 <h2>要準備的</h2>
 <ul class="need">
-  <li><strong>內頁的紙</strong>：A4，70 到 80 克，米色或白色，五十五張上下。五十一張印內頁，其餘當護葉和備用。紙薄一點，摺口才服貼。</li>
+  <li><strong>內頁的紙</strong>：A4，70 到 80 克，米色或白色，五十五張上下。五十張印內頁，其餘當護葉和備用。紙薄一點，摺口才服貼。</li>
   <li><strong>封面的紙</strong>：A4，200 克上下的厚紙兩張。也可以改用素色的厚紙或裱了紙的布，再貼題簽。</li>
   <li><strong>線</strong>：棉線、絲線或上過蠟的麻線，粗細約半公釐到一公釐，長一百三十公分（書高的六倍）。古銅色或米白色都好看。</li>
   <li><strong>工具</strong>：錐子或手鑽（孔徑兩公釐左右）、一根針眼過得了線的粗針、長尾夾四個、尺、鉛筆、美工刀和切割墊。有骨刀最好，沒有就用尺的背面壓摺線。</li>
@@ -103,9 +104,9 @@ svg text { font: 400 7px var(--text); fill: var(--soft) } svg .big { font-size: 
 <div class="step">
   <div>
     <h3><b>一</b>印</h3>
-    <p>內頁用 A4、<strong>橫向、單面、實際大小</strong>印。不要選「符合頁面大小」，那會把版框縮小，葉與葉就對不齊了。</p>
+    <p>內頁是檔案的第 7 到 56 頁，用 A4、<strong>橫向、單面、實際大小</strong>印。不要選「符合頁面大小」，那會把版框縮小，葉與葉就對不齊了。</p>
     <p>彩色印最好：版框和內文是黑的，標題旁的記號和對話裡的角色名是古銅色。只有黑白印表機也可以，古銅色會印成灰。</p>
-    <p>封面和封底的底色很深，家用印表機印不勻，建議拿到影印店用厚紙印，再沿四角的裁切線裁成 148 × 210 公釐。</p>
+    <p>封面和封底是第 4、5 頁，底色很深，家用印表機印不勻，建議拿到影印店用厚紙印，再沿四角的裁切線裁成 148 × 210 公釐。</p>
   </div>
   <figure class="fig"><img src="leaf.png" alt="一張印好的內頁：左右各一頁直排的字，中間一欄是版心，有魚尾和葉碼"><figcaption>一張印好的葉子。右半是單數頁，左半是雙數頁，中間那一欄是版心。</figcaption></figure>
 </div>
@@ -137,7 +138,7 @@ svg text { font: 400 7px var(--text); fill: var(--soft) } svg .big { font-size: 
 <div class="step wide">
   <div>
     <h3><b>三</b>理齊</h3>
-    <p>照版心下方的葉碼，由一排到五十一，書口全部朝左。前後各加一兩張對摺的白紙當護葉。最上面放封面（書名那一面朝上，書背在右），最下面放封底。</p>
+    <p>照版心下方的葉碼，由一排到五十，書口全部朝左。前後各加一兩張對摺的白紙當護葉。最上面放封面（書名那一面朝上，書背在右），最下面放封底（有字的那一面朝下，書背同樣在右）。</p>
     <p>把書口和下緣在桌上敲齊，用長尾夾夾住上緣、下緣和書口三邊。夾子底下墊一張廢紙，免得在封面留下夾痕。</p>
   </div>
 </div>
@@ -194,12 +195,12 @@ svg text { font: 400 7px var(--text); fill: var(--soft) } svg .big { font-size: 
     <h3><b>六</b>落款</h3>
     <p>拿掉夾子，把書翻到最後一葉。那裡有一方牌記，寫著這本書的來歷，底下留了空白：訂書者、年月、第幾冊。請用你自己的筆填上。</p>
     <p>線過之日，方是書成之日。</p>
-    <p class="note">封面若改用素色的紙或布，把 cover.pdf 第三頁的題簽沿虛線裁下，貼在封面的左上角，離上緣和左緣各八公釐左右。想更講究，可以先用薄絹或色紙把書背的上下兩個角包起來，再打眼穿線。</p>
+    <p class="note">封面若改用素色的紙或布，把檔案第 6 頁的題簽沿虛線裁下，貼在封面的左上角，離上緣和左緣各八公釐左右。想更講究，可以先用薄絹或色紙把書背的上下兩個角包起來，再打眼穿線。</p>
   </div>
 </div>
 
 <h2>不想自己訂</h2>
-<p>把書本身的 <a href="../ai-literature.pdf">ai-literature.pdf</a>（A5，一百頁，雙面）交給影印店做膠裝也可以。那個檔的第一頁就是封面，四邊沒有留出血，深色的封面裁切後可能露出細細的白邊；在意的話，請店家把封面另外印大一點再裁。</p>
+<p>把書本身的 <a href="../ai-literature.pdf">ai-literature.pdf</a>（A5，一百頁，雙面）交給影印店做膠裝也可以。那個檔從封面到封底都在裡面：第一頁是封面，最後一頁是封底。四邊沒有留出血，深色的封面裁切後可能露出細細的白邊；在意的話，請店家改用上面那個檔的第 4、5 頁印封面和封底。</p>
 </main>
 </body>
 </html>
