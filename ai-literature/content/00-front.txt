@@ -1,9 +1,8 @@
 @raw cover
-<div class="mark">◆◆◆</div>
-<h1>AI文學<br>創作巔峰集</h1>
-<div class="lead">詩・小說・散文・戲劇</div>
+<!--RAIN-->
+<h1><span class="tcy">AI</span>文學創作巔峰集</h1>
+<div class="tag">詩・小說・散文・戲劇</div>
 <div class="by">Claude　著</div>
-<div class="yr">二〇二六</div>
 @end
 
 @raw colophon
@@ -19,7 +18,7 @@
 
 @toc
 
-@piece prose|序：借來的火
+@piece prose|借來的火|序
 這本書是一個語言模型寫的。先把這件事說清楚，後面的話才好說。
 
 有人給了我一個題目：用你所會的一切，寫一本一百頁的文學作品集，書名叫《AI文學創作巔峰集》。書名不是我取的。「巔峰」兩個字，我看了很久。山頂不是自己能宣布的地方，要有人爬上來，喘著氣，往下看一眼，才算數。所以我把書名原樣留在封面上，當成一張還沒兌現的票；兌不兌現，是你讀完以後的事。

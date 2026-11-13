@@ -19,14 +19,42 @@ const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&
 const squeeze = s => s
   .replace(/([」』）》])(?=[，。、；：？！「『（《」』）》])/g, '<span class="sq-r">$1</span>')
   .replace(/([，。、；：？！])([「『（《])/g, '$1<span class="sq-l">$2</span>');
-const inline = s => squeeze(esc(s)).replace(/\*([^*]+)\*/g, '<em>$1</em>');
+// 縱中橫：直排時，一兩個英數字並排放在一格裡
+const tcy = s => s.replace(/(?<![A-Za-z0-9])([A-Za-z0-9]{1,2})(?![A-Za-z0-9])/g, '\uE000$1\uE001');
+const inline = s => squeeze(esc(tcy(s))).replace(/\uE000(.*?)\uE001/g, '<span class="tcy">$1</span>');
+
+// 封面：往上升的雨。水滴尖端朝上、只有大小兩種，菱形頂角 72°，和逆雨字型的規則一致
+function rain(seed = 20261113) {
+  let a = seed >>> 0;
+  const rnd = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const f = n => n.toFixed(1);
+  const out = ['<svg viewBox="0 0 560 794" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="trail" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9A45C"/><stop offset="1" stop-color="#C9A45C" stop-opacity="0"/></linearGradient></defs>'];
+  const clear = (x, y) => (x > 318 && x < 500 && y < 640) || (x > 50 && x < 120 && y > 520);
+  let made = 0;
+  while (made < 86) {
+    const x = 22 + rnd() * 516, y = 780 - Math.pow(rnd(), 1.7) * 730;
+    if (clear(x, y)) continue;
+    const r = rnd() < 0.22 ? 3.3 : 1.9, len = 50 + rnd() * 210, o = 0.25 + rnd() * 0.55;
+    out.push(`<g opacity="${o.toFixed(2)}"><rect x="${f(x - 0.35)}" y="${f(y)}" width="0.7" height="${f(len)}" fill="url(#trail)"/>` +
+      `<path fill="#C9A45C" d="M${f(x)} ${f(y - 2.5 * r)}C${f(x + 0.45 * r)} ${f(y - 1.3 * r)} ${f(x + r)} ${f(y - 0.6 * r)} ${f(x + r)} ${f(y)}A${r} ${r} 0 1 1 ${f(x - r)} ${f(y)}C${f(x - r)} ${f(y - 0.6 * r)} ${f(x - 0.45 * r)} ${f(y - 1.3 * r)} ${f(x)} ${f(y - 2.5 * r)}Z"/></g>`);
+    made++;
+  }
+  for (let i = 0; i < 12;) {
+    const x = 30 + rnd() * 500, y = 40 + rnd() * 700;
+    if (clear(x, y)) continue;
+    const h = 3.2, w = h * 0.7265;
+    out.push(`<path fill="#E8EDED" opacity="${(0.25 + rnd() * 0.4).toFixed(2)}" d="M${f(x)} ${f(y - h)}L${f(x + w)} ${f(y)}L${f(x)} ${f(y + h)}L${f(x - w)} ${f(y)}Z"/>`);
+    i++;
+  }
+  return out.join('') + '</svg>';
+}
 
 // ---------- 解析 ----------
 // @part 卷次|卷名|文類|題句        整頁的卷首
 // @piece 種類|篇名|副題            新的一篇，另起一頁（種類：prose poem verse play）
 // @raw 類別 … @end                 整頁的原樣 HTML（書名頁、版權頁）
 // @toc                             目錄的位置
-// 篇內：@sec（分隔）@sec 一（小節）@sub（小標）@epi 引文|出處 @note @sig @center @break
+// 篇內：@sec（分隔）@sec 一（小節）@sub（小標）@note @sig @center @break
 function parse(text) {
   const items = [];
   let piece = null, para = [], display = '';
@@ -56,21 +84,21 @@ function parse(text) {
     if (cmd === 'raw') {
       const buf = [];
       while (++i < src.length && src[i].trim() !== '@end') buf.push(src[i]);
-      const html = buf.join('\n');
+      const html = buf.join('\n').replace('<!--RAIN-->', rain());
       items.push({ type: 'full', html: `<div class="full ${f[0]}">${html}</div>` });
-      display += html.replace(/<[^>]+>/g, '');
+      display += html.replace(/<svg.*<\/svg>/s, '').replace(/<[^>]+>/g, '');
       piece = null;
     } else if (cmd === 'toc') {
       items.push({ type: 'toc' }); piece = null;
     } else if (cmd === 'part') {
       const [no, name, genre, motto = ''] = f;
       items.push({ type: 'full', part: { no, name, genre },
-        html: `<div class="full part"><div class="no">${esc(no)}</div><h2>${esc(name)}</h2><div class="genre">${esc(genre)}</div><div class="dia">◆</div><div class="line">${inline(motto)}</div></div>` });
+        html: `<div class="full part"><div class="ph"><span class="no">${esc(no)}</span><h2>${esc(name)}</h2></div><div class="genre">${esc(genre)}</div><div class="line">${inline(motto)}</div></div>` });
       display += no + name; piece = null;
     } else if (cmd === 'piece') {
       const [kind, title, sub = ''] = f;
       piece = { type: 'piece', kind, title, blocks: [{ keep: true,
-        html: `<div class="tb"><h2>${esc(title)}</h2>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>` }] };
+        html: `<div class="tb"><h2>${inline(title)}</h2>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>` }] };
       items.push(piece); display += title;
     } else if (!piece) {
       throw new Error(`第 ${i + 1} 行：@${cmd} 不在任何一篇裡面`);
@@ -79,8 +107,6 @@ function parse(text) {
       else piece.blocks.push({ keep: true, html: '<div class="sec">◆◆◆</div>' });
     } else if (cmd === 'sub') {
       piece.blocks.push({ keep: true, html: `<div class="subh">${esc(rest)}</div>` }); display += rest;
-    } else if (cmd === 'epi') {
-      piece.blocks.push({ keep: true, html: `<div class="epi">${inline(f[0])}${f[1] ? `<cite>——${esc(f[1])}</cite>` : ''}</div>` });
     } else if (cmd === 'note') {
       piece.blocks.push({ html: `<div class="note">${inline(rest)}</div>` });
     } else if (cmd === 'sig') {
@@ -96,6 +122,7 @@ function parse(text) {
 }
 
 // ---------- 分頁（在瀏覽器裡執行）----------
+// 直排：行由右往左排，所以「放不放得下」看的是左緣；橫排則看下緣。
 function paginateInPage({ items, tocSheets, title }) {
   const book = document.getElementById('book');
   book.innerHTML = '';
@@ -104,33 +131,38 @@ function paginateInPage({ items, tocSheets, title }) {
   const newSheet = (cls) => {
     const s = document.createElement('section');
     s.className = 'sheet' + (cls ? ' ' + cls : '');
-    s.innerHTML = '<header class="rh"></header><div class="body"></div><footer class="folio"></footer>';
+    s.innerHTML = '<div class="body"></div><footer class="rf"><span class="n"></span><span class="t"></span></footer>';
     book.appendChild(s); sheets.push(s);
     return s;
   };
-  const fits = (el, body) => el.getBoundingClientRect().bottom <= body.getBoundingClientRect().bottom + 0.6;
+  const probe = newSheet();
+  const V = getComputedStyle(probe).writingMode.startsWith('vertical');
+  probe.remove(); sheets.pop();
+  const start = r => V ? -r.right : r.top;      // 區塊方向的起點與終點，數字愈大愈後面
+  const end = r => V ? -r.left : r.bottom;
+  const fits = (el, body) => end(el.getBoundingClientRect()) <= end(body.getBoundingClientRect()) + 0.6;
+  const han = n => String(n).replace(/\d/g, d => '〇一二三四五六七八九'[d]);
 
   // 把段落照實際的斷行位置拆成兩段；回傳 null 表示整段搬到下一頁
   const split = (el, body) => {
-    const limit = body.getBoundingClientRect().bottom + 0.6;
+    const limit = end(body.getBoundingClientRect()) + 0.6;
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const range = document.createRange();
     const lines = [];
-    let lastTop = -1e9, node;
+    let last = -1e9, node;
     while ((node = walker.nextNode())) {
       for (let i = 0; i < node.length; i++) {
         range.setStart(node, i); range.setEnd(node, i + 1);
         const r = range.getClientRects()[0];
-        if (!r || r.width === 0) continue;
-        if (r.top > lastTop + 6) { lines.push({ node, i, bottom: r.bottom }); lastTop = r.top; }
-        else lines[lines.length - 1].bottom = Math.max(lines[lines.length - 1].bottom, r.bottom);
+        if (!r || r.width === 0 || r.height === 0) continue;
+        if (start(r) > last + 6) { lines.push({ node, i, end: end(r), n: 1 }); last = start(r); }
+        else { const l = lines[lines.length - 1]; l.end = Math.max(l.end, end(r)); l.n++; }
       }
     }
-    let fit = lines.filter(l => l.bottom <= limit).length;
-    const rest = lines.length - fit;
-    if (rest === 1 && fit >= 3) fit -= 1;            // 不讓單獨一行落到下一頁
-    else if (rest === 1) return null;
-    if (fit < 2) return null;                        // 頁尾也不留單獨一行
+    // 中文書的版心要排滿：行尾在哪裡就在哪裡換頁，只避免下一頁開頭是不到五個字的殘行
+    let fit = lines.filter(l => l.end <= limit).length;
+    if (fit === lines.length - 1 && lines[fit].n < 5 && fit >= 2) fit -= 1;
+    if (fit < 1) return null;
     const at = lines[fit];
     range.setStart(at.node, at.i); range.setEndAfter(el.lastChild);
     const tail = el.cloneNode(false);
@@ -140,11 +172,11 @@ function paginateInPage({ items, tocSheets, title }) {
     return tail;
   };
 
-  const flow = (piece, blocks) => {
-    let sheet = newSheet(piece.cls), body = sheet.querySelector('.body');
-    const first = sheet;
+  // next() 給出下一個可以放字的框：一般是新的一頁，目錄則是同一頁的下一欄
+  const flow = (name, blocks, next) => {
+    let body = next();
     for (const b of blocks) {
-      if (b.brk) { sheet = newSheet(piece.cls); body = sheet.querySelector('.body'); continue; }
+      if (b.brk) { body = next(); continue; }
       const holder = document.createElement('div');
       holder.innerHTML = b.html;
       let el = holder.firstElementChild;
@@ -152,7 +184,7 @@ function paginateInPage({ items, tocSheets, title }) {
       body.appendChild(el);
       let guard = 0;
       while (!fits(el, body)) {
-        if (++guard > 40) { warn.push('放不進一頁：' + piece.title); break; }
+        if (++guard > 40) { warn.push('放不進一頁：' + name); break; }
         const tail = b.split ? split(el, body) : null;
         const moving = [];
         if (tail) moving.push(tail);
@@ -160,18 +192,28 @@ function paginateInPage({ items, tocSheets, title }) {
           moving.push(el);
           while (el.previousElementSibling && el.previousElementSibling.dataset.keep) moving.unshift(el.previousElementSibling), moving[0].remove();
           el.remove();
-          if (!body.children.length) {                // 整頁只有它也放不下
+          if (!body.children.length) {                // 整框只有它也放不下
             moving.forEach(m => body.appendChild(m));
-            warn.push('溢出：' + piece.title + '（第 ' + sheets.length + ' 頁）');
+            warn.push('溢出：' + name + '（第 ' + sheets.length + ' 頁）');
             break;
           }
         }
-        sheet = newSheet(piece.cls); body = sheet.querySelector('.body');
+        body = next();
         moving.forEach(m => body.appendChild(m));
         el = moving[moving.length - 1];
       }
     }
-    return first;
+  };
+  const pages = cls => () => newSheet(cls).querySelector('.body');
+  const tiers = () => {
+    let sheet = null, k = 2;
+    return () => {
+      if (k === 2) { sheet = newSheet('toc'); sheet.querySelector('.body').remove(); k = 0; }
+      const t = document.createElement('div');
+      t.className = 'tier t' + (++k);
+      sheet.insertBefore(t, sheet.querySelector('.rf'));
+      return t;
+    };
   };
 
   let tocAt = -1;
@@ -179,31 +221,31 @@ function paginateInPage({ items, tocSheets, title }) {
     if (it.type === 'full') {
       const s = newSheet('bare');
       s.querySelector('.body').remove();
-      s.insertAdjacentHTML('beforeend', it.html);
+      s.insertAdjacentHTML('afterbegin', it.html);
       if (it.part) { part = it.part; entries.push({ part: it.part, sheet: s }); }
     } else if (it.type === 'toc') {
       tocAt = sheets.length;
       for (let i = 0; i < tocSheets; i++) newSheet('toc');
     } else {
-      const start = sheets.length;
-      const first = flow({ title: it.title, cls: it.kind }, it.blocks);
-      for (let i = start; i < sheets.length; i++) { sheets[i].dataset.piece = it.title; sheets[i].dataset.part = part ? part.no + '　' + part.name : title; }
-      first.dataset.first = '1';
-      entries.push({ title: it.title, sheet: first });
+      const from = sheets.length;
+      flow(it.title, it.blocks, pages(it.kind));
+      for (let i = from; i < sheets.length; i++) { sheets[i].dataset.piece = it.title; sheets[i].dataset.part = part ? part.no + '　' + part.name : title; }
+      sheets[from].dataset.first = '1';
+      entries.push({ title: it.title, sheet: sheets[from] });
     }
   }
 
-  // 目錄
+  // 目錄：上下兩欄
   let tocUsed = 0;
   if (tocAt >= 0) {
     const pageOf = s => sheets.indexOf(s) + 1;
     const blocks = [{ keep: true, html: '<div class="tb"><h2>目錄</h2></div>' }];
     for (const e of entries) {
       if (e.part) blocks.push({ keep: true, html: `<div class="tp">${e.part.no}　${e.part.name}</div>` });
-      else blocks.push({ html: `<div class="te"><a href="#p${pageOf(e.sheet)}"><span>${e.title}</span><i></i><b>${pageOf(e.sheet)}</b></a></div>` });
+      else blocks.push({ html: `<div class="te"><a href="#p${pageOf(e.sheet)}"><span>${e.title}</span><i></i><b>${han(pageOf(e.sheet))}</b></a></div>` });
     }
     const before = sheets.length;
-    flow({ title: '目錄', cls: 'toc' }, blocks);
+    flow('目錄', blocks, tiers());
     const made = sheets.splice(before);
     tocUsed = made.length;
     if (tocUsed === tocSheets) {
@@ -215,27 +257,27 @@ function paginateInPage({ items, tocSheets, title }) {
   sheets.forEach((s, i) => {
     const n = i + 1;
     s.id = 'p' + n; s.dataset.n = n;
-    s.classList.add(n % 2 ? 'recto' : 'verso');
-    if (s.classList.contains('bare')) return;
-    s.querySelector('.folio').textContent = n;
-    if (!s.dataset.first) s.querySelector('.rh').textContent = n % 2 ? s.dataset.piece : s.dataset.part;
+    s.classList.add(n % 2 ? 'odd' : 'even');
+    if (s.classList.contains('bare')) { s.querySelector('.rf').remove(); return; }
+    s.querySelector('.rf .n').textContent = n;
+    if (!s.dataset.first) s.querySelector('.rf .t').textContent = n % 2 ? s.dataset.piece : s.dataset.part;
   });
 
   const fill = s => {
     const body = s.querySelector('.body');
     if (!body || !body.lastElementChild) return 1;
-    return (body.lastElementChild.getBoundingClientRect().bottom - body.getBoundingClientRect().top) / body.getBoundingClientRect().height;
+    const b = body.getBoundingClientRect();
+    return (end(body.lastElementChild.getBoundingClientRect()) - start(b)) / (end(b) - start(b));
   };
   const report = [];
-  let lastPart = null;
   entries.forEach((e, i) => {
     const n = sheets.indexOf(e.sheet) + 1;
-    if (e.part) { lastPart = e.part; report.push({ part: e.part.no + '　' + e.part.name, page: n }); return; }
+    if (e.part) { report.push({ part: e.part.no + '　' + e.part.name, page: n }); return; }
     const next = entries[i + 1] ? sheets.indexOf(entries[i + 1].sheet) : sheets.length;
     report.push({ title: e.title, page: n, pages: next - n + 1, lastFill: +fill(sheets[next - 1]).toFixed(2) });
   });
   sheets.forEach(s => { delete s.dataset.piece; delete s.dataset.part; delete s.dataset.first; s.querySelectorAll('[data-keep]').forEach(k => delete k.dataset.keep); });
-  return { html: book.innerHTML, total: sheets.length, tocUsed, report, warn };
+  return { html: book.innerHTML, total: sheets.length, tocUsed, report, warn, vertical: V };
 }
 
 // ---------- 標題字型：把「逆雨」裁成只含用到的字 ----------
@@ -268,8 +310,8 @@ function chrome(report, { pdf }) {
   return `<div class="bar"><div class="bar-in">
 <a class="bar-title" href="#p1">${TITLE}</a>
 <span class="where" id="where" aria-live="off"></span>
-<button class="nav" id="prev" type="button" aria-label="上一頁">←</button>
-<button class="nav" id="next" type="button" aria-label="下一頁">→</button>
+<button class="nav" id="next" type="button">下一頁</button>
+<button class="nav" id="prev" type="button">上一頁</button>
 <button id="open-toc" type="button">目錄</button>
 ${pdf ? '<a class="btn" href="ai-literature.pdf">PDF</a>' : ''}
 </div></div>
@@ -311,7 +353,7 @@ const page = (bookHtml, report, opt) => `${chrome(report, opt)}
 ${js}</script>`;
 
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 900, height: 1000 }, colorScheme: 'light' });
+const ctx = await browser.newContext({ viewport: { width: 900, height: 1000 }, colorScheme: 'light' });   // 寬於 640，量的是直排的紙本版式
 const tab = await ctx.newPage();
 const work = join(mkdtempSync(join(tmpdir(), 'book-')), 'work.html');
 // 先把全文灌進去一次，讓瀏覽器把用得到的字型子集都載完，量出來的行才會準

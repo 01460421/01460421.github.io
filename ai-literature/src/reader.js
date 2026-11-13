@@ -38,8 +38,9 @@
   document.addEventListener('keydown', function (e) {
     if (e.target.closest('input, textarea') || e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === 'Escape' && !panel.hidden) { shut(); return; }
-    if (!panel.hidden) return;
-    if (e.key === 'ArrowRight') step(1); else if (e.key === 'ArrowLeft') step(-1);
+    if (!panel.hidden || narrow.matches) return;
+    // 直排書由右往左翻：左鍵是下一頁
+    if (e.key === 'ArrowLeft') step(1); else if (e.key === 'ArrowRight') step(-1);
   });
   var opener = document.getElementById('open-toc');
   function shut() { panel.hidden = true; opener.focus(); }

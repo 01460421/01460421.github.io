@@ -1,17 +1,19 @@
-/* layout: A5 sheets laid on an overcast desk, in spreads when the window is
-   wide enough, one column otherwise, flowing text on a phone */
+/* layout: a vertically set A5 book, bound on the right, laid on an overcast desk;
+   spreads read right to left when the window is wide, one sheet otherwise,
+   and the text reflows horizontally on a phone */
 :root {
   --desk: #DAE3E3; --paper: #F5F8F7; --ink: #0F252D; --soft: #4A636C; --rule: #B4C4C6; --brass: #8A5C14;
   --shade: rgba(15, 37, 45, .16);
+  --cover: #0B1D24; --cover-ink: #E8EDED; --cover-brass: #C9A45C;
   --display: "NiYuBook", "Noto Serif TC", "Songti TC", "PMingLiU", serif;
   --text: "Noto Serif TC", "Songti TC", "PMingLiU", "Source Han Serif TC", Georgia, serif;
-  --fs: 16px; --lh: 29.6px; --measure: 27em;
-  --sheet-w: 148mm; --sheet-h: 210mm; --body-top: 72px; --body-lines: 22;
+  --fs: 15px; --lh: 26px; --measure: 41em; --block: 442px;
+  --sheet-w: 148mm; --sheet-h: 210mm; --body-top: 80px;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --desk: #0A161B; --paper: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; --shade: rgba(0, 0, 0, .5); color-scheme: dark }
+  :root:not([data-theme="light"]) { --desk: #0A161B; --paper: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; --shade: rgba(0, 0, 0, .5); --cover: #071318; color-scheme: dark }
 }
-:root[data-theme="dark"] { --desk: #0A161B; --paper: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; --shade: rgba(0, 0, 0, .5); color-scheme: dark }
+:root[data-theme="dark"] { --desk: #0A161B; --paper: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; --shade: rgba(0, 0, 0, .5); --cover: #071318; color-scheme: dark }
 
 * { box-sizing: border-box }
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 64px }
@@ -22,13 +24,12 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* ---- bar ---- */
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--desk); border-bottom: 1px solid var(--rule) }
-.bar-in { display: flex; align-items: center; gap: 12px; min-height: 48px; max-width: 1180px; margin: 0 auto;
+.bar-in { display: flex; align-items: center; gap: 10px; min-height: 48px; max-width: 1180px; margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
 .bar-title { font: 400 19px/1.2 var(--display); letter-spacing: .04em; margin-right: auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none }
 .bar button, .bar .btn { font: 400 14px/1 var(--text); color: var(--ink); background: none; border: 1px solid var(--rule); border-radius: 2px; padding: 8px 12px; cursor: pointer; text-decoration: none; white-space: nowrap }
 .bar button:hover, .bar .btn:hover { border-color: var(--brass); color: var(--brass) }
 .bar .where { font: 400 14px/1 var(--text); color: var(--soft); font-variant-numeric: tabular-nums; white-space: nowrap }
-.bar .nav { padding: 8px 10px }
 
 /* ---- contents panel ---- */
 .panel { position: fixed; z-index: 20; inset: 0; background: var(--desk); overflow-y: auto; overscroll-behavior: contain;
@@ -46,107 +47,117 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 /* ---- book ---- */
 .desk { padding-block: 28px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
 .book { display: grid; grid-template-columns: var(--sheet-w); justify-content: center; gap: 28px 0 }
-.sheet { position: relative; width: var(--sheet-w); height: var(--sheet-h); background: var(--paper); box-shadow: 0 1px 2px var(--shade), 0 8px 28px -12px var(--shade); scroll-margin-top: 64px }
+.sheet { position: relative; width: var(--sheet-w); height: var(--sheet-h); background: var(--paper); box-shadow: 0 1px 2px var(--shade), 0 8px 28px -12px var(--shade); scroll-margin-top: 64px;
+  writing-mode: vertical-rl; direction: ltr; line-height: var(--lh) }
+.sheet.poem, .sheet.verse { --lh: 24px }
 @media screen and (min-width: 1200px) {
-  .book { grid-template-columns: var(--sheet-w) var(--sheet-w); gap: 36px 2px }
+  .book { grid-template-columns: var(--sheet-w) var(--sheet-w); gap: 36px 2px; direction: rtl }
   .sheet:first-child { grid-column: 2 }
 }
-.body { position: absolute; top: var(--body-top); left: 50%; width: var(--measure); margin-left: calc(var(--measure) / -2); height: calc(var(--lh) * var(--body-lines)) }
-.rh { position: absolute; top: 34px; left: 50%; width: var(--measure); margin-left: calc(var(--measure) / -2); font: 400 12px/1.4 var(--text); color: var(--soft); letter-spacing: .12em; text-align: right }
-.sheet.verso .rh { text-align: left }
-.folio { position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; font: 400 14px/1 var(--display); color: var(--soft) }
-.sheet.bare .rh, .sheet.bare .folio { display: none }
+.body { position: absolute; top: var(--body-top); left: 50%; width: var(--block); margin-left: calc(var(--block) / -2); height: var(--measure) }
+.rf { position: absolute; bottom: 42px; writing-mode: horizontal-tb; display: flex; align-items: baseline; gap: 14px;
+  font: 400 12px/1 var(--text); color: var(--soft); letter-spacing: .12em; left: calc(50% - var(--block) / 2) }
+.rf .n { font: 400 14px/1 var(--display); letter-spacing: 0 }
+.sheet.even .rf { left: auto; right: calc(50% - var(--block) / 2); flex-direction: row-reverse }
+.sheet.bare .rf { display: none }
 
 /* ---- text ---- */
 .body p { margin: 0; text-indent: 2em; text-align: justify; line-break: strict; overflow-wrap: break-word }
-.body p.cont, .body p.flush { text-indent: 0 }
+.body p.cont { text-indent: 0 }
 .body p.split-head { text-align-last: justify }
-.sq-r { margin-right: -.5em } .sq-l { margin-left: -.25em }
-em { font-style: normal; -webkit-text-emphasis: filled dot; text-emphasis: filled dot; -webkit-text-emphasis-position: under right; text-emphasis-position: under right }
-.tb { padding-top: calc(var(--lh) * 1.5); margin-bottom: calc(var(--lh) * 1.5) }
-.tb h2 { font: 400 27px/calc(var(--lh) * 1.5) var(--display); margin: 0; letter-spacing: .06em; text-wrap: balance }
-.tb .sub { font: 400 14px/var(--lh) var(--text); color: var(--soft); letter-spacing: .08em }
-.tb::after { content: ""; display: block; width: 2em; border-bottom: 1px solid var(--brass); margin-top: calc(var(--lh) * .5 - 1px) }
-.epi { margin: 0 0 var(--lh) 6em; font-size: 14px; color: var(--soft); text-align: justify }
-.epi cite { display: block; font-style: normal; text-align: right }
-.sec { height: var(--lh); margin: calc(var(--lh) * .5) 0; text-align: center; color: var(--brass); font-size: 9px; letter-spacing: 1.2em; text-indent: 1.2em }
-.sech { font: 400 20px/var(--lh) var(--display); text-align: center; margin: var(--lh) 0 calc(var(--lh) * .5); letter-spacing: .2em; text-indent: .2em }
-.sech:first-child, .tb + .sech { margin-top: 0 }
-.subh { font: 400 19px/var(--lh) var(--display); margin: var(--lh) 0 calc(var(--lh) * .5); letter-spacing: .06em }
-.tb + .subh, .subh:first-child { margin-top: 0 }
-.note { margin-top: var(--lh); font-size: 13px; line-height: calc(var(--lh) * .75); color: var(--soft); text-align: justify }
-.body p.sig { text-align: right; text-indent: 0; margin-top: var(--lh); color: var(--soft); font-size: 14px }
-.body p.sig + p.sig { margin-top: 0 }
+.tcy { -webkit-text-combine: horizontal; text-combine-upright: all }
+.sq-r { margin-inline-end: -.5em } .sq-l { margin-inline-start: -.25em }
+.tb { padding-inline-start: 2em; margin-block-end: calc(var(--lh) * 1.5) }
+.tb h2 { font: 400 27px/calc(var(--lh) * 1.5) var(--display); margin: 0; letter-spacing: .1em }
+.tb h2 { position: relative }
+.tb h2::before { content: "◆"; position: absolute; inset-inline-start: -22px; inset-block-start: 0; block-size: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 8px; line-height: 1; letter-spacing: 0; color: var(--brass) }
+.tb .sub { font: 400 13px/var(--lh) var(--text); color: var(--soft); letter-spacing: .2em; padding-inline-start: 2.6em }
+.poem .tb, .verse .tb { margin-block-end: 20px }
+.poem .tb h2, .verse .tb h2 { font-size: 25px; line-height: 36px }
+.sec { block-size: var(--lh); margin-block: calc(var(--lh) * .5); text-align: center; color: var(--brass); font-size: 8px; letter-spacing: 1.4em }
+.sech { font: 400 19px/var(--lh) var(--display); color: var(--brass); margin-block: var(--lh) calc(var(--lh) * .25); padding-inline-start: 1.5em }
+.tb + .sech { margin-block-start: 0 }
+.subh { font: 400 19px/var(--lh) var(--display); margin-block: var(--lh) calc(var(--lh) * .5); letter-spacing: .08em; padding-inline-start: 1em }
+.tb + .subh, .subh:first-child { margin-block-start: 0 }
+.note { margin-block-start: var(--lh); font-size: 13px; line-height: 21px; color: var(--soft); text-align: justify; padding-inline-start: 6em }
+.body p.sig { text-align: end; text-indent: 0; margin-block-start: var(--lh); color: var(--soft); font-size: 14px }
+.body p.center { text-indent: 0; text-align: center; margin-block-start: var(--lh); color: var(--soft); letter-spacing: .6em }
 
-/* poems */
-.st { margin: 0 0 var(--lh) 2em }
-.st .l { display: block; padding-left: 2em; text-indent: -2em }
-.verse .st { margin-left: 0; text-align: center; letter-spacing: .12em }
-.verse .st .l { padding-left: 0; text-indent: 0 }
-.verse .subh { text-align: center }
+/* poems hang from the head of the page */
+.st { margin-block-end: calc(var(--lh) * .6); margin-inline-start: 4em }
+.st .l { display: block; padding-inline-start: 2em; text-indent: -2em }
+.verse .st { margin-inline-start: 6em; letter-spacing: .14em; margin-block-end: var(--lh) }
+.verse .subh { padding-inline-start: 4em; margin-block-end: calc(var(--lh) * .25) }
 
 /* play */
-.body p.center { text-indent: 0; text-align: center; margin-top: var(--lh); color: var(--soft); letter-spacing: .3em }
-.body p.dl { text-indent: -3.5em; padding-left: 3.5em }
+.body p.dl { text-indent: -3.5em; padding-inline-start: 3.5em }
 .body p.dl.cont { text-indent: 0 }
-.dl b { display: inline-block; width: 3.5em; text-indent: 0; font-weight: 600; color: var(--brass) }
-.body p.stage { text-indent: 0; padding-left: 2em; color: var(--soft); font-size: 14.5px }
+.dl b { display: inline-block; inline-size: 3.5em; text-indent: 0; font-weight: 600; color: var(--brass) }
+.body p.stage { text-indent: 0; padding-inline-start: 2em; color: var(--soft); font-size: 14px }
 
-/* bare sheets */
-.full { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 56px }
-.cover { justify-content: center }
-.cover .mark { color: var(--brass); font-size: 10px; letter-spacing: 1.4em; text-indent: 1.4em; margin-bottom: 44px }
-.cover h1 { font: 400 46px/1.35 var(--display); margin: 0; letter-spacing: .08em }
-.cover .lead { margin-top: 26px; color: var(--soft); letter-spacing: .3em; text-indent: .3em; font-size: 15px }
-.cover .by { margin-top: 150px; font: 400 21px/1.4 var(--display); letter-spacing: .2em }
-.cover .yr { margin-top: 10px; color: var(--soft); font-size: 13px; letter-spacing: .2em }
-.colophon { justify-content: flex-end; align-items: flex-start; text-align: left; padding-bottom: 84px; font-size: 13px; line-height: 24px; color: var(--soft) }
+/* ---- whole-sheet pages ---- */
+.full { position: absolute; inset: 0 }
+.cover { writing-mode: horizontal-tb; background: var(--cover); color: var(--cover-ink); overflow: hidden; container-type: size }
+.cover svg { position: absolute; inset: 0; width: 100%; height: 100% }
+.cover h1, .cover .tag, .cover .by { writing-mode: vertical-rl }
+.cover h1 { position: absolute; top: 12%; right: 22%; margin: 0; font: 400 54px/1.1 var(--display); font-size: 9.7cqw; letter-spacing: .12em; white-space: nowrap }
+.cover .tag { position: absolute; top: 12.6%; right: 13.5%; font-size: 13px; font-size: 2.3cqw; letter-spacing: .55em; color: var(--cover-brass); white-space: nowrap }
+.cover .by { position: absolute; bottom: 9%; left: 14%; font: 400 20px/1 var(--display); font-size: 3.6cqw; letter-spacing: .3em; white-space: nowrap }
+.colophon { writing-mode: horizontal-tb; inset: auto 64px 84px 64px; font-size: 13px; line-height: 24px; color: var(--soft) }
 .colophon strong { font: 400 20px/1.6 var(--display); color: var(--ink); letter-spacing: .08em }
 .colophon p { margin: 0 0 12px }
-.motto { justify-content: center; padding: 0 80px }
-.motto p { margin: 0; font-size: 17px; line-height: 2.2; letter-spacing: .1em }
-.motto cite { display: block; margin-top: 22px; font-style: normal; color: var(--soft); font-size: 13px; letter-spacing: .1em }
-.part { justify-content: center }
-.part .no { color: var(--brass); font: 400 19px/1 var(--display); letter-spacing: .5em; text-indent: .5em }
-.part h2 { font: 400 42px/1.35 var(--display); margin: 26px 0 0; letter-spacing: .14em; text-indent: .14em }
-.part .genre { margin-top: 18px; color: var(--soft); font-size: 14px; letter-spacing: .5em; text-indent: .5em }
-.part .dia { margin: 48px 0; color: var(--brass); font-size: 9px }
-.part .line { color: var(--soft); font-size: 14.5px; line-height: 2; max-width: 20em }
-.fin { justify-content: center }
-.fin h2 { font: 400 30px/1.4 var(--display); margin: 0; letter-spacing: .6em; text-indent: .6em }
-.fin p { margin: 26px 0 0; color: var(--soft); font-size: 13px; line-height: 2 }
+.motto, .part { display: flex; flex-direction: column; justify-content: center; align-items: flex-start }
+.motto { padding-inline-start: 190px }
+.motto p { margin: 0; font-size: 17px; line-height: 44px; letter-spacing: .18em }
+.part { padding-inline-start: 150px; padding-block-start: 30px }
+.part .ph { display: flex; align-items: flex-start; gap: 26px }
+.part .no { color: var(--brass); font: 400 18px/60px var(--display); letter-spacing: .4em }
+.part h2 { font: 400 44px/60px var(--display); margin: 0; letter-spacing: .16em }
+.part .genre { margin-inline-start: 86px; margin-block-start: 6px; color: var(--soft); font-size: 13px; letter-spacing: .5em }
+.part .line { margin-block-start: 64px; margin-inline-start: 190px; color: var(--soft); font-size: 14.5px; letter-spacing: .08em }
 
-/* contents inside the book */
-.toc .tp { font: 400 17px/var(--lh) var(--display); color: var(--brass); margin-top: calc(var(--lh) * .5); letter-spacing: .08em }
-.toc .tp:first-child, .toc .tb + .tp { margin-top: 0 }
-.toc .te { font-size: 14px; line-height: calc(var(--lh) * .75) }
-.toc .te a { display: flex; align-items: baseline; gap: 6px; text-decoration: none; padding-left: 1em }
-.toc .te i { flex: 1; border-bottom: 1px dotted var(--rule); transform: translateY(-4px) }
-.toc .te b { font-weight: 400; color: var(--soft); font-variant-numeric: tabular-nums }
+/* contents: two tiers per sheet */
+.tier { position: absolute; left: 50%; width: var(--block); margin-left: calc(var(--block) / -2); height: 19.5em; top: var(--body-top); line-height: 24px }
+.tier.t2 { top: calc(var(--body-top) + 21.5em) }
+.toc .tb { margin-block-end: 24px }
+.toc .tp { font: 400 16px/24px var(--display); color: var(--brass); margin-block-start: 12px; letter-spacing: .08em }
+.toc .tp:first-child, .toc .tb + .tp { margin-block-start: 0 }
+.toc .te { font-size: 13.5px; block-size: 24px }
+.toc .te a { display: flex; align-items: center; gap: 6px; text-decoration: none; padding-inline-start: 1em; block-size: 24px }
+.toc .te i { flex: 1; block-size: 0; border-block-end: 1px dotted var(--rule) }
+.toc .te b { font-weight: 400; color: var(--soft); font-size: 12px; letter-spacing: .05em }
 
-/* ---- phone: text flows, the folio becomes a margin note ---- */
+/* ---- phone: the same text set horizontally, flowing, with the folio as a margin note ---- */
 @media screen and (max-width: 639px) {
   :root { --fs: 17px; --lh: 31px }
   .desk { padding-block: 8px 64px }
   .book { display: block }
-  .sheet { width: auto; height: auto; background: none; box-shadow: none; max-width: 34em; margin: 0 auto }
-  .body { position: static; width: auto; height: auto; margin: 0 }
-  .rh { display: none }
-  .folio { position: static; display: block; text-align: right; font-size: 12px; padding: 6px 0 10px; border-top: 1px solid var(--rule); margin-top: 14px }
-  .sheet.bare .folio { display: none }
+  .sheet { writing-mode: horizontal-tb; width: auto; height: auto; background: none; box-shadow: none; max-width: 34em; margin: 0 auto }
+  .sheet.poem, .sheet.verse { --lh: 31px }
+  .body, .tier, .tier.t2 { position: static; width: auto; height: auto; margin: 0 }
+  .tier { line-height: 31px }
+  .rf, .sheet.even .rf { position: static; display: flex; flex-direction: row; justify-content: flex-end; padding: 6px 0 10px; border-top: 1px solid var(--rule); margin-top: 14px }
+  .rf .t { display: none }
+  .sheet.bare .rf { display: none }
   .body p.split-head { text-align-last: auto }
-  .full { position: static; padding: 72px 8px; min-height: 0 }
-  .sheet.bare { border-bottom: 1px solid var(--rule) }
-  .cover h1 { font-size: 38px } .cover .by { margin-top: 72px }
-  .part h2 { font-size: 34px } .motto { padding: 72px 16px }
-  .epi { margin-left: 3em }
+  .tb { padding-inline-start: 0; padding-block-start: 40px } .tb h2::before { display: none }
+  .st { margin-inline-start: 1em } .verse .st { margin-inline-start: 2em } .verse .subh { padding-inline-start: 1em }
+  .sech, .subh { padding-inline-start: 0 } .note { padding-inline-start: 0 }
+  .full { position: static }
+  .cover { position: relative; aspect-ratio: 148 / 210; margin: 8px 0 }
+  .colophon { padding: 48px 0 }
+  .motto, .part { padding: 72px 8px; border-bottom: 1px solid var(--rule) }
+  .part .ph { flex-direction: column; gap: 8px } .part .no, .part h2 { line-height: 1.4 } .part h2 { font-size: 34px }
+  .part .genre, .part .line { margin-inline-start: 0 } .part .line { margin-block-start: 28px }
+  .toc .te, .toc .te a { block-size: auto } .toc .te a { padding-block: 3px }
   .bar-title { font-size: 16px } .bar .nav { display: none }
 }
 
 /* ---- print: one sheet per page ---- */
 @page { size: 148mm 210mm; margin: 0 }
 @media print {
-  :root { --desk: #fff; --paper: #fff; --ink: #111; --soft: #555; --rule: #bbb; --brass: #7A5010 }
+  :root { --desk: #fff; --paper: #fff; --ink: #111; --soft: #555; --rule: #bbb; --brass: #7A5010; --cover: #0B1D24 }
   html, body { background: #fff }
   .bar, .panel { display: none !important }
   .desk { padding: 0 }
