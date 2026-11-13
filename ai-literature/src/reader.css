@@ -134,7 +134,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .part .no { color: var(--brass); font: 400 18px/60px var(--display); letter-spacing: .4em }
 .part h2 { font: 400 44px/60px var(--display); margin: 0; letter-spacing: .16em }
 .part .genre { margin-inline-start: 86px; margin-block-start: 6px; color: var(--soft); font-size: 13px; letter-spacing: .5em }
-.part .line { margin-block-start: 64px; margin-inline-start: 190px; color: var(--soft); font-size: 14.5px; letter-spacing: .08em }
+.part .line { margin-block-start: 64px; margin-inline-start: 190px; max-inline-size: 23em; line-height: 2; color: var(--soft); font-size: 14.5px; letter-spacing: .08em }
 
 /* contents: two tiers per sheet */
 .tier { position: absolute; left: 50%; width: var(--block); margin-left: calc(var(--block) / -2); height: 19.5em; top: var(--body-top); line-height: 24px }

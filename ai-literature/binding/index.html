@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>線裝本裝訂指南</title>
+<meta name="description" content="《AI文學創作巔峰集》四眼線裝本：要印的檔案、材料，和附圖的裝訂步驟。">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&display=swap">
+<style>
+/* layout: one reading column on overcast paper; each step is a row of text beside its drawing */
+:root {
+  --paper: #E8EDED; --wash: #DAE3E3; --ink: #0F252D; --soft: #4A636C; --rule: #B4C4C6; --brass: #8A5C14; --leaf: #FBF9F2; --navy: #0B1D24;
+  --display: "NiYu", "Noto Serif TC", "Songti TC", serif;
+  --text: "Noto Serif TC", "Songti TC", "PMingLiU", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0C1B21; --wash: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; --leaf: #1A323B; --navy: #050E12; color-scheme: dark }
+}
+:root[data-theme="dark"] { --paper: #0C1B21; --wash: #12272F; --ink: #E4ECEB; --soft: #9AB0B3; --rule: #2A444C; --brass: #D8AC5E; --leaf: #1A323B; --navy: #050E12; color-scheme: dark }
+@font-face { font-family: "NiYu"; src: url("../../fonts/NiYu-Regular.woff2") format("woff2"); font-display: swap }
+* { box-sizing: border-box }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.85 var(--text) }
+a { color: var(--brass) }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px }
+main { max-width: 860px; margin: 0 auto; padding-block: 40px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.back { font-size: 14px; letter-spacing: .08em }
+h1 { font: 400 44px/1.25 var(--display); margin: 20px 0 10px; letter-spacing: .08em; text-wrap: balance }
+.lead { font-size: 18px; max-width: 30em; margin: 0 0 28px }
+h2 { font: 400 26px/1.4 var(--display); margin: 56px 0 14px; letter-spacing: .08em; color: var(--brass) }
+p { margin: 0 0 12px; max-width: 36em }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; background: var(--wash); padding: 24px }
+.hero img { width: 100%; max-width: 330px; height: auto; justify-self: center }
+.spec { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; font-size: 15px }
+.spec dt { color: var(--soft); white-space: nowrap } .spec dd { margin: 0 }
+.files { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px }
+.files li { display: grid; grid-template-columns: 9.5em 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid var(--rule) }
+.files li:last-child { border-bottom: 1px solid var(--rule) }
+.files a { font-weight: 600; text-decoration: none } .files a:hover { text-decoration: underline }
+.files span { color: var(--soft); font-size: 15px }
+ul.need { padding-left: 1.2em; margin: 0; max-width: 38em } ul.need li { margin-bottom: 6px }
+.step { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 28px; padding: 26px 0; border-top: 1px solid var(--rule); align-items: start }
+.step.wide { grid-template-columns: minmax(0, 1fr) }
+.step h3 { font: 400 21px/1.4 var(--display); margin: 0 0 8px; letter-spacing: .06em }
+.step h3 b { font-weight: 400; color: var(--brass); margin-right: .6em }
+.step p, .step ol { font-size: 15.5px; min-width: 0 }
+.step ol { margin: 0; padding-left: 1.5em; max-width: 36em } .step ol li { margin-bottom: 7px }
+.fig { margin: 0; min-width: 0 } .fig svg, .fig img { display: block; width: 100%; height: auto }
+.fig figcaption { font-size: 13px; color: var(--soft); margin-top: 6px; line-height: 1.6 }
+.note { font-size: 14.5px; color: var(--soft); border-left: 2px solid var(--brass); padding-left: 14px; margin: 14px 0 0; max-width: 36em }
+svg text { font: 400 7px var(--text); fill: var(--soft) } svg .big { font-size: 8.5px; fill: var(--ink) }
+.sheet { fill: var(--leaf); stroke: var(--soft); stroke-width: .6 } .dash { stroke: var(--soft); stroke-width: .5; stroke-dasharray: 2.5 2; fill: none }
+.band { fill: var(--wash) } .dim { stroke: var(--soft); stroke-width: .4; fill: none } .arrow { stroke: var(--brass); stroke-width: 1; fill: none }
+.hole { fill: var(--ink) } .board { fill: var(--navy); stroke: var(--soft); stroke-width: .6 } .thread { stroke: #C9A45C; stroke-width: 1.3; fill: none; stroke-linecap: round }
+.light { fill: #C9D3D3 }
+@media (max-width: 680px) {
+  h1 { font-size: 34px } .hero, .step { grid-template-columns: minmax(0, 1fr) } .files li { grid-template-columns: minmax(0, 1fr); gap: 2px }
+  .fig { max-width: 340px }
+}
+@media print {
+  :root { --paper: #fff; --wash: #F1F3F3; --ink: #111; --soft: #555; --rule: #bbb; --brass: #7A5010; --leaf: #fff; --navy: #0B1D24 }
+  body { background: #fff; font-size: 12.5px; line-height: 1.7 } main { padding: 0; max-width: none }
+  .back, .dl { display: none } h1 { font-size: 30px; margin-top: 0 } h2 { margin: 22px 0 8px; font-size: 19px } .lead { font-size: 14px; margin-bottom: 14px }
+  .hero { padding: 14px; gap: 20px } .hero img { max-width: 190px } .spec { font-size: 12px }
+  .step { padding: 12px 0; gap: 18px; grid-template-columns: minmax(0, 1fr) 210px; break-inside: avoid } .step h3 { font-size: 16px } .step p, .step ol { font-size: 12px } .note { font-size: 11.5px }
+  ul.need { font-size: 12px }
+}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="../">← 回到《AI文學創作巔峰集》</a>
+<h1>線裝本裝訂指南</h1>
+<p class="lead">這本書的作者沒有手，最後一道工要請你來。四眼線裝，不必上膠，一個下午可以訂成。</p>
+
+<div class="hero">
+  <img src="mock.png" alt="訂好的樣子：深青色封面，書名直排，右側書背有四個眼和古銅色的線">
+  <dl class="spec">
+    <dt>形制</dt><dd>四眼線裝，筒子葉，書背在右，由右往左翻</dd>
+    <dt>開本</dt><dd>148 × 210 公釐（A5）</dd>
+    <dt>內頁</dt><dd>五十一葉（一百頁正文，加一葉牌記），A4 橫向單面印，對摺</dd>
+    <dt>版式</dt><dd>四周雙邊，白口，單魚尾；版心記書名、卷次、葉碼</dd>
+    <dt>書厚</dt><dd>用 80 克的紙，約一公分</dd>
+  </dl>
+</div>
+
+<h2 class="dl">要印的檔案</h2>
+<ul class="files dl">
+  <li><a href="leaves.pdf">leaves.pdf</a><span>內頁，A4 橫向，五十一張，單面</span></li>
+  <li><a href="cover.pdf">cover.pdf</a><span>封面、封底（附裁切線）與題簽，A4 直向，三張</span></li>
+  <li><a href="guide.pdf">guide.pdf</a><span>這份指南的列印版</span></li>
+</ul>
+
+<h2>要準備的</h2>
+<ul class="need">
+  <li><strong>內頁的紙</strong>：A4，70 到 80 克，米色或白色，五十五張上下。五十一張印內頁，其餘當護葉和備用。紙薄一點，摺口才服貼。</li>
+  <li><strong>封面的紙</strong>：A4，200 克上下的厚紙兩張。也可以改用素色的厚紙或裱了紙的布，再貼題簽。</li>
+  <li><strong>線</strong>：棉線、絲線或上過蠟的麻線，粗細約半公釐到一公釐，長一百三十公分（書高的六倍）。古銅色或米白色都好看。</li>
+  <li><strong>工具</strong>：錐子或手鑽（孔徑兩公釐左右）、一根針眼過得了線的粗針、長尾夾四個、尺、鉛筆、美工刀和切割墊。有骨刀最好，沒有就用尺的背面壓摺線。</li>
+</ul>
+
+<h2>步驟</h2>
+
+<div class="step">
+  <div>
+    <h3><b>一</b>印</h3>
+    <p>內頁用 A4、<strong>橫向、單面、實際大小</strong>印。不要選「符合頁面大小」，那會把版框縮小，葉與葉就對不齊了。</p>
+    <p>彩色印最好：版框和內文是黑的，標題旁的記號和對話裡的角色名是古銅色。只有黑白印表機也可以，古銅色會印成灰。</p>
+    <p>封面和封底的底色很深，家用印表機印不勻，建議拿到影印店用厚紙印，再沿四角的裁切線裁成 148 × 210 公釐。</p>
+  </div>
+  <figure class="fig"><img src="leaf.png" alt="一張印好的內頁：左右各一頁直排的字，中間一欄是版心，有魚尾和葉碼"><figcaption>一張印好的葉子。右半是單數頁，左半是雙數頁，中間那一欄是版心。</figcaption></figure>
+</div>
+
+<div class="step">
+  <div>
+    <h3><b>二</b>摺</h3>
+    <p>每一張都<strong>字朝外</strong>，左右對摺。摺線要正好落在版心的中線上，魚尾和葉碼會被摺成兩半，各露一半在書口，這是對的。</p>
+    <p>摺好以後，摺口那一邊叫書口，朝左；散開的那一邊是書背，朝右，等一下要在這一側打眼。</p>
+  </div>
+  <figure class="fig">
+    <svg viewBox="0 0 300 150" role="img" aria-label="把一張 A4 橫向的紙字朝外對摺，摺口朝左，開口朝右">
+      <rect class="sheet" x="6" y="22" width="148.5" height="105"/>
+      <rect class="band" x="77.2" y="22.3" width="6" height="104.4"/>
+      <line class="dash" x1="80.2" y1="14" x2="80.2" y2="135"/>
+      <text x="43" y="76" text-anchor="middle" class="big">雙數頁</text><text x="118" y="76" text-anchor="middle" class="big">單數頁</text>
+      <text x="80.2" y="10" text-anchor="middle">摺線（版心正中）</text>
+      <text x="80.2" y="145" text-anchor="middle">A4 橫向，字在這一面</text>
+      <path class="arrow" d="M162 74h20m-6-5 6 5-6 5"/>
+      <rect class="sheet" x="196" y="22" width="74.2" height="105"/>
+      <rect class="band" x="196.3" y="22.3" width="3" height="104.4"/>
+      <text x="233" y="76" text-anchor="middle" class="big">單數頁</text>
+      <text x="196" y="145" text-anchor="middle">書口（摺口）</text><text x="272" y="145" text-anchor="middle">書背（開口）</text>
+    </svg>
+    <figcaption>把左半往後摺到右半的背面。摺好後正面看到的是單數頁。</figcaption>
+  </figure>
+</div>
+
+<div class="step wide">
+  <div>
+    <h3><b>三</b>理齊</h3>
+    <p>照版心下方的葉碼，由一排到五十一，書口全部朝左。前後各加一兩張對摺的白紙當護葉。最上面放封面（書名那一面朝上，書背在右），最下面放封底。</p>
+    <p>把書口和下緣在桌上敲齊，用長尾夾夾住上緣、下緣和書口三邊。夾子底下墊一張廢紙，免得在封面留下夾痕。</p>
+  </div>
+</div>
+
+<div class="step">
+  <div>
+    <h3><b>四</b>打眼</h3>
+    <p>在封面上，離右緣 <strong>12 公釐</strong>用鉛筆輕輕畫一條直線，在線上離上緣 <strong>15、75、135、195 公釐</strong>的地方各點一點。</p>
+    <p>錐子對準記號，垂直鑽穿整疊。書厚大約一公分，可以分幾次鑽，鑽一半翻過來看看有沒有歪。沒有工具的話，影印店或五金行多半可以代鑽。</p>
+  </div>
+  <figure class="fig">
+    <svg viewBox="0 0 200 236" role="img" aria-label="封面上四個眼的位置：離右緣 12 公釐，離上緣 15、75、135、195 公釐">
+      <rect class="board" x="14" y="12" width="148" height="210"/>
+      <line class="dash" x1="150" y1="12" x2="150" y2="222" style="stroke:#C9D3D3"/>
+      <circle class="light" cx="150" cy="27" r="1.6"/><circle class="light" cx="150" cy="87" r="1.6"/><circle class="light" cx="150" cy="147" r="1.6"/><circle class="light" cx="150" cy="207" r="1.6"/>
+      <path class="dim" d="M150 6v4M162 6v4M150 8h12"/><text x="156" y="5" text-anchor="middle">12</text>
+      <path class="dim" d="M168 12h6M168 27h6M168 87h6M168 147h6M168 207h6M168 222h6M171 12v210"/>
+      <text x="177" y="22">15</text><text x="177" y="59">60</text><text x="177" y="119">60</text><text x="177" y="179">60</text><text x="177" y="217">15</text>
+      <text x="88" y="232" text-anchor="middle">封面（單位：公釐）</text>
+      <text x="80" y="118" text-anchor="middle" style="fill:#C9D3D3">書背在右</text>
+    </svg>
+  </figure>
+</div>
+
+<div class="step">
+  <div>
+    <h3><b>五</b>穿線</h3>
+    <p>四個眼由上到下叫一、二、三、四。「封面」指朝上的那一面，「封底」指貼著桌子的那一面。線不必打結起頭。</p>
+    <ol>
+      <li>從<strong>第二眼</strong>起針：把書芯在中間翻開幾葉，針從書芯裡面往封面穿出來，線尾留五公分夾在書芯裡。</li>
+      <li>線繞過書背到封底，再從第二眼由封底穿回封面。書背上有了第一道橫線。</li>
+      <li>往下到<strong>第三眼</strong>，由封面穿到封底；繞書背一圈，再從第三眼由封面穿到封底。</li>
+      <li>到<strong>第四眼</strong>，由封底穿到封面；繞書背一圈，再由封底穿到封面；接著繞過書的下緣，第三次由封底穿到封面。</li>
+      <li>往回走：到第三眼，由封面穿到封底；到第二眼，由封底穿到封面。</li>
+      <li>到<strong>第一眼</strong>，由封面穿到封底；繞書背一圈，再由封面穿到封底；接著繞過書的上緣，第三次由封面穿到封底。</li>
+      <li>回到第二眼，由封底穿到封面。這時每兩個眼之間，正反兩面都有線了。</li>
+      <li>把針從第二眼旁邊的線底下穿過，打一個結；再把針穿進第二眼，從書芯中間拉出來，把結拉進眼裡，剪線。</li>
+    </ol>
+    <p class="note">每穿一次都把線拉緊，但不要緊到把紙勒皺。線要是中途不夠，在書芯裡面接一段新的，結藏在葉子之間。</p>
+  </div>
+  <figure class="fig">
+    <svg viewBox="0 0 200 236" role="img" aria-label="穿好線的樣子：四個眼之間一條直線，每個眼各有一道橫線繞過書背，上下兩個眼另有一道線繞過書的上緣和下緣">
+      <rect class="board" x="14" y="12" width="148" height="210"/>
+      <path class="thread" d="M150 12V222M150 27H162M150 87H162M150 147H162M150 207H162"/>
+      <circle class="hole" cx="150" cy="27" r="1.2"/><circle class="hole" cx="150" cy="87" r="1.2"/><circle class="hole" cx="150" cy="147" r="1.2"/><circle class="hole" cx="150" cy="207" r="1.2"/>
+      <text x="140" y="29.5" text-anchor="end" style="fill:#C9D3D3">一</text><text x="140" y="89.5" text-anchor="end" style="fill:#C9D3D3">二</text><text x="140" y="149.5" text-anchor="end" style="fill:#C9D3D3">三</text><text x="140" y="209.5" text-anchor="end" style="fill:#C9D3D3">四</text>
+      <text x="88" y="232" text-anchor="middle">穿好以後，封面和封底看起來一樣</text>
+    </svg>
+  </figure>
+</div>
+
+<div class="step wide">
+  <div>
+    <h3><b>六</b>落款</h3>
+    <p>拿掉夾子，把書翻到最後一葉。那裡有一方牌記，寫著這本書的來歷，底下留了空白：訂書者、年月、第幾冊。請用你自己的筆填上。</p>
+    <p>線過之日，方是書成之日。</p>
+    <p class="note">封面若改用素色的紙或布，把 cover.pdf 第三頁的題簽沿虛線裁下，貼在封面的左上角，離上緣和左緣各八公釐左右。想更講究，可以先用薄絹或色紙把書背的上下兩個角包起來，再打眼穿線。</p>
+  </div>
+</div>
+
+<h2>不想自己訂</h2>
+<p>把書本身的 <a href="../ai-literature.pdf">ai-literature.pdf</a>（A5，一百頁，雙面）交給影印店做膠裝也可以。那個檔的第一頁就是封面，四邊沒有留出血，深色的封面裁切後可能露出細細的白邊；在意的話，請店家把封面另外印大一點再裁。</p>
+</main>
+</body>
+</html>

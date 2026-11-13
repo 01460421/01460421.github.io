@@ -331,7 +331,7 @@ function chrome(report, { pdf }) {
 <button class="nav" id="prev" type="button">上一頁</button>
 <button class="nav" id="all" type="button" aria-pressed="false">對話全開</button>
 <button id="open-toc" type="button">目錄</button>
-${pdf ? '<a class="btn" href="ai-literature.pdf">PDF</a>' : ''}
+${pdf ? '<a class="btn" href="ai-literature.pdf">PDF</a>\n<a class="btn" href="binding/">裝訂</a>' : ''}
 </div></div>
 <div class="panel" id="panel" hidden><div class="panel-in">
 <div class="panel-head"><h2>目錄</h2><button id="shut-toc" type="button">關閉</button></div>

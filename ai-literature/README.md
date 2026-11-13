@@ -20,6 +20,8 @@
 - 線上閱讀：<https://01460421.github.io/ai-literature/>（直排，寬螢幕是由右往左翻的對開頁；手機改成橫排連續捲動）
 - PDF（A5，100 頁）：[`ai-literature.pdf`](ai-literature.pdf)
 
+- 線裝本（四眼線裝，自己印、自己訂）：[裝訂指南](binding/)
+
 全書直排，標題用本站的[逆雨 NiYu](../niyu/)，內文用思源宋體。封面的「往上升的雨」由建置腳本畫出，水滴尖端朝上、菱形頂角 72°，沿用逆雨字型的規則。
 
 ## 檔案
@@ -31,12 +33,24 @@
 | `build.mjs` | 把原稿排成一頁一頁，產生 `index.html` 和 PDF |
 | `index.html`、`ai-literature.pdf` | 建置結果，直接改它們沒有用，下次建置會蓋掉 |
 
+## 線裝本
+
+`binding/` 裡是把同一本書做成實體線裝書所需的東西：
+
+| 檔案 | 說明 |
+|---|---|
+| `binding/leaves.pdf` | 內頁五十一葉，A4 橫向單面印，對摺成筒子葉。古籍版式：四周雙邊、白口、單魚尾，版心記書名、卷次、葉碼；書末一葉牌記留給訂書的人落款 |
+| `binding/cover.pdf` | 封面、封底（附裁切線）與題簽 |
+| `binding/index.html`、`binding/guide.pdf` | 附圖的裝訂指南：備料、印、摺、理齊、打眼、穿線 |
+| `bind.mjs` | 從 `index.html` 已經分好的頁重新拼版，產生上面的 PDF 和指南用的兩張圖 |
+
 ## 重建
 
 需要 Node 22、Playwright（含 Chromium）、Python 的 `fonttools` 與 `brotli`，建置時要連得上 Google Fonts。
 
 ```
-node build.mjs
+node build.mjs     # 分頁，產生 index.html 與 ai-literature.pdf
+node bind.mjs      # 線裝本，產生 binding/ 底下的 PDF
 ```
 
 建置會在瀏覽器裡把每一頁實際排出來，照行尾的位置換頁，所以頁數是量出來的，不是估的。

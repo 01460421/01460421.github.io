@@ -19,4 +19,5 @@ SIL Open Font License 1.1 授權：可免費用於個人與商業用途，也可
 
 - [線上閱讀](https://01460421.github.io/ai-literature/)
 - [PDF（A5，100 頁）](ai-literature/ai-literature.pdf)
+- [線裝本裝訂指南](https://01460421.github.io/ai-literature/binding/)：自己印、自己訂成一本四眼線裝書
 - [原稿與建置方法](ai-literature/)
