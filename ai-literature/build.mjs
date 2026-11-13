@@ -51,28 +51,45 @@ function rain(seed = 20261113) {
 
 // ---------- 解析 ----------
 // @part 卷次|卷名|文類|題句        整頁的卷首
-// @piece 種類|篇名|副題            新的一篇，另起一頁（種類：prose poem verse play）
+// @piece 種類|篇名|副題            新的一篇，另起一頁（種類：prose poem verse play chat koan）
 // @raw 類別 … @end                 整頁的原樣 HTML（書名頁、版權頁）
 // @toc                             目錄的位置
 // 篇內：@sec（分隔）@sec 一（小節）@sub（小標）@note @sig @center @break
 function parse(text) {
   const items = [];
-  let piece = null, para = [], display = '';
+  let piece = null, para = [], display = '', turn = 0, pid = 0;
   const flush = () => {
     if (!piece || !para.length) { para = []; return; }
     const lines = para; para = [];
     const k = piece.kind;
+    // 對話與語錄：「人」的話是一問（q），其後直到下一問的段落都等這一問送出才出現
+    const wait = piece.turn ? ` data-w="${piece.turn}"` : '';
     if (k === 'poem' || k === 'verse') {
       piece.blocks.push({ html: `<div class="st">${lines.map(l => `<span class="l">${inline(l)}</span>`).join('')}</div>` });
       return;
     }
     const t = lines.join('');
-    if (k === 'play') {
-      if (/^（.*）$/.test(t)) { piece.blocks.push({ html: `<p class="stage">${inline(t)}</p>`, split: true }); return; }
-      const m = t.match(/^([^：（]{1,5})：(.*)$/);
-      if (m) { piece.blocks.push({ html: `<p class="dl"><b>${esc(m[1])}</b>${inline(m[2])}</p>`, split: true }); return; }
+    if (k === 'koan') {
+      const m = t.match(/^〔(.+?)〕(.*?)｜(.*)$/);
+      if (m) {
+        piece.turn = ++turn;
+        piece.blocks.push({ keep: true, split: true, html: `<p class="kq q" data-t="${turn}" data-p="${piece.id}" data-free><span class="kt">〔${esc(m[1])}〕</span>${inline(m[2])}</p>` });
+        piece.blocks.push({ split: true, html: `<p class="ka a" data-w="${turn}">${inline(m[3])}</p>` });
+        display += m[1] + '〔〕';
+        return;
+      }
     }
-    piece.blocks.push({ html: `<p>${inline(t)}</p>`, split: true });
+    if (k === 'play' || k === 'chat') {
+      if (/^（.*）$/.test(t)) { piece.blocks.push({ html: `<p class="stage"${wait}>${inline(t)}</p>`, split: true }); return; }
+      const m = t.match(/^([^：（]{1,5})：(.*)$/);
+      if (m && k === 'chat' && (m[1] === '人' || m[1] === '你')) {
+        piece.turn = ++turn;
+        piece.blocks.push({ html: `<p class="dl q" data-t="${turn}" data-p="${piece.id}"><b>${esc(m[1])}</b>${inline(m[2])}</p>`, split: true });
+        return;
+      }
+      if (m) { piece.blocks.push({ html: `<p class="dl a"${wait}><b>${esc(m[1])}</b>${inline(m[2])}</p>`, split: true }); return; }
+    }
+    piece.blocks.push({ html: `<p${wait}>${inline(t)}</p>`, split: true });
   };
   const src = text.split('\n');
   for (let i = 0; i < src.length; i++) {
@@ -97,7 +114,7 @@ function parse(text) {
       display += no + name; piece = null;
     } else if (cmd === 'piece') {
       const [kind, title, sub = ''] = f;
-      piece = { type: 'piece', kind, title, blocks: [{ keep: true,
+      piece = { type: 'piece', kind, title, id: ++pid, turn: 0, blocks: [{ keep: true,
         html: `<div class="tb"><h2>${inline(title)}</h2>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>` }] };
       items.push(piece); display += title;
     } else if (!piece) {
@@ -312,6 +329,7 @@ function chrome(report, { pdf }) {
 <span class="where" id="where" aria-live="off"></span>
 <button class="nav" id="next" type="button">下一頁</button>
 <button class="nav" id="prev" type="button">上一頁</button>
+<button class="nav" id="all" type="button" aria-pressed="false">對話全開</button>
 <button id="open-toc" type="button">目錄</button>
 ${pdf ? '<a class="btn" href="ai-literature.pdf">PDF</a>' : ''}
 </div></div>
@@ -330,7 +348,7 @@ if (font.missing) console.log('⚠ 逆雨字型缺字（會退回思源宋體）
 const fontFace = `@font-face{font-family:"NiYuBook";src:url(data:font/woff2;base64,${font.b64}) format("woff2");font-display:block}`;
 const head = `<title>${TITLE}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="一本由 AI 寫成的一百頁文學作品集：詩、小說、散文、極短篇、擬古、寓言與獨幕劇。">
+<meta name="description" content="一本由 AI 寫成的一百頁文學作品集：把世人笑 AI 的梗，寫成散文、語錄、對話、詩詞與戲。">
 ${FONT_LINK}
 <style>
 ${fontFace}

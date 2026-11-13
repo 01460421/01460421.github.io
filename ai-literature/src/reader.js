@@ -1,4 +1,5 @@
 (function () {
+  document.documentElement.classList.add('js');
   var book = document.getElementById('book'), where = document.getElementById('where');
   var panel = document.getElementById('panel'), pristine = book.innerHTML;
   var narrow = window.matchMedia('screen and (max-width: 639px)');
@@ -16,8 +17,62 @@
         cont.remove(); head.classList.remove('split-head');
       });
     }
+    arm();
     watch();
   }
+  // ---- 對話：讀者點「人」的話把它送出，回答才逐字出現 ----
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function arm() {
+    var first = {};
+    book.querySelectorAll('.q').forEach(function (q) {
+      q.setAttribute('role', 'button'); q.tabIndex = 0;
+      var p = q.dataset.p;
+      if (!first[p]) first[p] = q.dataset.t;
+      if (q.hasAttribute('data-free') || first[p] === q.dataset.t) q.classList.add('ready');
+    });
+  }
+  function type(el, done) {
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [], n;
+    while ((n = walker.nextNode())) if (n.data) nodes.push(n);
+    var rest = nodes.map(function (t) {
+      var s = document.createElement('span');
+      s.style.visibility = 'hidden'; s.textContent = t.data; t.data = '';
+      t.parentNode.insertBefore(s, t.nextSibling);
+      return { t: t, s: s };
+    });
+    el.classList.add('on');
+    var k = 0, timer = setInterval(function () {
+      for (var i = 0; i < 2; i++) {
+        while (k < rest.length && !rest[k].s.textContent) { rest[k].s.remove(); k++; }
+        if (k >= rest.length) { clearInterval(timer); done(); return; }
+        var d = rest[k].s.textContent;
+        rest[k].t.data += d.charAt(0); rest[k].s.textContent = d.slice(1);
+      }
+    }, 22);
+  }
+  function send(q) {
+    var t = q.dataset.t, p = q.dataset.p;
+    book.querySelectorAll('.q[data-t="' + t + '"]').forEach(function (e) { e.classList.remove('ready'); e.classList.add('sent'); e.removeAttribute('tabindex'); });
+    var answers = Array.prototype.slice.call(book.querySelectorAll('[data-w="' + t + '"]')), i = 0;
+    (function next() {
+      if (i < answers.length) {
+        var el = answers[i++];
+        if (calm.matches) { el.classList.add('on'); next(); } else type(el, next);
+        return;
+      }
+      book.querySelectorAll('.q[data-p="' + p + '"][data-t="' + (+t + 1) + '"]').forEach(function (e) { e.classList.add('ready'); });
+    })();
+  }
+  book.addEventListener('click', function (e) { var q = e.target.closest('.q.ready'); if (q) send(q); });
+  book.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var q = e.target.closest('.q.ready'); if (q) { e.preventDefault(); send(q); }
+  });
+  var allBtn = document.getElementById('all');
+  allBtn.addEventListener('click', function () {
+    var on = book.classList.toggle('all');
+    allBtn.setAttribute('aria-pressed', on); allBtn.textContent = on ? '對話收起' : '對話全開';
+  });
   function watch() {
     if (io) io.disconnect();
     if (!('IntersectionObserver' in window)) return;
