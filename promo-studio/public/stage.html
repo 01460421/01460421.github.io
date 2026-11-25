@@ -64,13 +64,32 @@
   .tile { position: absolute; width: 576px; height: 360px; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.5); background: #222; }
   .tile img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 
-  .icon { position: absolute; width: 210px; height: 210px; border-radius: 48px; overflow: hidden; background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 120px var(--accent); }
-  .icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
-  .mono { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 120px; font-weight: 800; color: #fff;
-    background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  /* 收尾 icon：多種樣式 */
+  .halo { position: absolute; width: 760px; height: 760px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 38%, transparent) 0%, transparent 65%); pointer-events: none; }
+  .ic { position: absolute; left: 50%; display: flex; align-items: center; justify-content: center; transform-origin: 50% 60%; }
+  .ic-glass { width: 220px; height: 220px; margin-left: -110px; border-radius: 56px; overflow: hidden;
+    background: linear-gradient(160deg, rgba(255,255,255,.2), rgba(255,255,255,.05) 55%, rgba(255,255,255,.1));
+    border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 40px 90px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(255,255,255,.08); }
+  .ic-glass img { width: 176px; height: 176px; object-fit: cover; border-radius: 40px; box-shadow: 0 14px 34px rgba(0,0,0,.35); }
+  .ic-glass .mono-t { font-size: 132px; font-weight: 800; letter-spacing: -.04em; background: linear-gradient(160deg, #fff 10%, var(--accent) 60%, var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 1; }
+  .ic-glass .sheen { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.35) 47%, transparent 58%); background-size: 300% 100%; mix-blend-mode: screen; }
+  .ic-bare { width: 210px; height: 210px; margin-left: -105px; flex-direction: column; }
+  .ic-bare img { width: 210px; height: 210px; object-fit: cover; border-radius: 48px; box-shadow: 0 34px 80px rgba(0,0,0,.6); }
+  .ic-bare .refl { margin-top: 14px; transform: scaleY(-1); opacity: .22; -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 45%); mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 45%); box-shadow: none; }
+  .ic-logo { height: 150px; padding: 0 56px; margin-left: 0; transform: translateX(-50%); border-radius: 40px; background: rgba(255,255,255,.94); box-shadow: 0 40px 90px rgba(0,0,0,.5), inset 0 1px 0 #fff; }
+  .ic-logo img { height: 96px; max-width: 760px; object-fit: contain; }
   .cta { position: absolute; left: 50%; display: inline-flex; align-items: center; gap: 18px; height: 84px; padding: 0 44px; border-radius: 999px;
-    background: var(--accent); color: #fff; font-size: 32px; font-weight: 700; white-space: nowrap; box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 80px var(--accent); }
-  .cta .dom { font-weight: 500; opacity: .85; }
+    background: #f5f5f7; color: #000; font-size: 32px; font-weight: 700; white-space: nowrap; box-shadow: 0 20px 50px rgba(0,0,0,.45), 0 0 60px color-mix(in srgb, var(--accent) 35%, transparent); }
+  .cta .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  /* 功能總覽牆 */
+  .gcard { position: absolute; border-radius: 22px; overflow: hidden; background: rgba(28,28,30,.72); border: 1px solid rgba(255,255,255,.12); box-shadow: 0 24px 60px rgba(0,0,0,.45); will-change: transform, opacity; }
+  .gcard .th { position: absolute; left: 0; right: 0; top: 0; background-repeat: no-repeat; background-color: #fff; }
+  .gcard .tx { position: absolute; left: 0; right: 0; bottom: 0; padding: 0 22px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(180deg, rgba(22,22,24,.92), rgba(14,14,16,.98)); }
+  .gcard .k { color: var(--accent); font-weight: 700; letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gcard .t { color: #f5f5f7; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .gcard .ring { position: absolute; inset: 0; border-radius: 22px; box-shadow: inset 0 0 0 2px var(--accent), 0 0 40px color-mix(in srgb, var(--accent) 55%, transparent); opacity: 0; }
+  .cta .dom { font-weight: 500; color: #3a3a3c; }
   .streak { position: absolute; left: 50%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), #fff, var(--accent2), transparent); box-shadow: 0 0 30px var(--accent); }
 </style>
 </head>
@@ -412,20 +431,101 @@
       };
     },
 
-    outro(sc, d) {
-      const icon = h('div', 'icon', sc); icon.style.left = (W / 2 - 105) + 'px'; icon.style.top = '210px';
-      if (d.icon && !/\.ico$/.test(d.icon)) { const im = h('img', '', icon); im.src = src(d.icon); imgs.push(im); }
-      else h('div', 'mono', icon).textContent = (d.brand || '?').trim().charAt(0).toUpperCase();
-      const brand = h('div', 'center h-xl grad', sc); brand.style.top = '470px'; const bSp = reveal(brand, d.brand);
-      const line = h('div', 'center body', sc); line.style.top = '640px'; line.style.padding = '0 200px'; const lSp = reveal(line, d.line);
-      const cta = h('div', 'cta', sc, `${esc(d.cta)} <span class="dom">${esc(d.domain)}</span> <svg width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>`);
-      cta.style.top = '760px';
+    grid(sc, d) {
+      const n = d.items.length;
+      const cols = n <= 3 ? n : n === 4 ? 2 : n <= 6 ? 3 : n <= 9 ? 3 : 4;
+      const rows = Math.ceil(n / cols);
+      const gap = 22, areaW = 1680, areaTop = 270, areaH = 1080 - areaTop - 70;
+      const cw = Math.min(520, (areaW - gap * (cols - 1)) / cols);
+      const ch = Math.min(380, (areaH - gap * (rows - 1)) / rows);
+      const totalW = cw * cols + gap * (cols - 1), totalH = ch * rows + gap * (rows - 1);
+      const x0 = (W - totalW) / 2, y0 = areaTop + (areaH - totalH) / 2;
+      const head = h('div', 'center h-xl grad', sc); head.style.top = '70px'; head.style.padding = '0 200px';
+      const hSp = reveal(head, d.line);
+      const persp = h('div', '', sc); persp.style.cssText = 'position:absolute;inset:0;perspective:2400px;perspective-origin:50% 30%';
+      const plane = h('div', '', persp); plane.style.cssText = 'position:absolute;inset:0;transform-origin:50% 40%';
+      const txH = Math.max(64, Math.min(120, ch * 0.36));
+      const cards = d.items.map((it, i) => {
+        const c = h('div', 'gcard', plane);
+        const col = i % cols, row = Math.floor(i / cols);
+        // 最後一列置中
+        const inRow = row === rows - 1 ? n - row * cols : cols;
+        const rowOff = (cols - inRow) * (cw + gap) / 2;
+        Object.assign(c.style, { left: x0 + rowOff + col * (cw + gap) + 'px', top: y0 + row * (ch + gap) + 'px', width: cw + 'px', height: ch + 'px' });
+        const th = h('div', 'th', c); th.style.height = (ch - txH) + 'px';
+        const pre = new Image(); pre.src = src(it.img); imgs.push(pre);
+        const R = it.rect || { x: 520, y: 300, w: 400, h: 80 };
+        const k = Math.max(cw / 760, (ch - txH) / 470);
+        const fx = (R.x + R.w / 2) * k, fy = (R.y + R.h / 2) * k;
+        const bx = clamp(cw / 2 - fx, cw - 1440 * k, 0), by = clamp((ch - txH) / 2 - fy, (ch - txH) - 900 * k, 0);
+        Object.assign(th.style, { backgroundImage: `url("${src(it.img)}")`, backgroundSize: `${1440 * k}px ${900 * k}px`, backgroundPosition: `${bx}px ${by}px` });
+        const tx = h('div', 'tx', c); tx.style.height = txH + 'px';
+        const kk = h('div', 'k', tx); kk.textContent = it.kicker || String(i + 1).padStart(2, '0'); kk.style.fontSize = Math.round(txH * 0.17) + 'px';
+        const tt = h('div', 't', tx); tt.textContent = it.title; tt.style.fontSize = Math.round(Math.min(34, txH * 0.3)) + 'px'; tt.style.marginTop = '4px';
+        const ring = h('div', 'ring', c);
+        return { c, ring, i, d: Math.hypot(col - (cols - 1) / 2, row - (rows - 1) / 2) };
+      });
       return {
-        layout() { fit(brand, 1600, 170, 128, 56); fit(line, 1500, 110, 40, 24); },
+        layout() { fit(head, 1600, 160, 84, 44); },
         render(t, dur) {
-          const ip = P(t, 0.15, 1.1, E.outBack);
-          icon.style.transform = `scale(${clamp(ip, 0, 2)}) rotate(${(1 - ip) * -12}deg)`; icon.style.opacity = P(t, 0.1, 0.5, E.lin);
-          playReveal(bSp, t, 0.5, 0.9, 0.45, 18);
+          playReveal(hSp, t, 0.05, 0.8, 0.5, 14);
+          const m = P(t, 0, dur, E.inOutSine);
+          plane.style.transform = `rotateX(${lerp(16, 4, P(t, 0, 1.6, E.outCubic))}deg) scale(${lerp(0.92, 1.03, m)}) translateY(${lerp(40, -10, m)}px)`;
+          const step = Math.min(0.09, 1.2 / n);
+          for (const cd of cards) {
+            const st = 0.25 + cd.i * step;
+            const p = P(t, st, st + 0.7, E.outExpo);
+            cd.c.style.opacity = p;
+            cd.c.style.transform = `translateY(${(1 - p) * 80}px) scale(${lerp(0.9, 1, p)})`;
+            // 依序點亮
+            const lt = t - (1.2 + cd.i * ((dur - 1.8) / n));
+            cd.ring.style.opacity = lt > 0 ? Math.max(0, 1 - lt / 0.9) : 0;
+          }
+        },
+      };
+    },
+
+    outro(sc, d) {
+      // 樣式：auto | glass | bare | logo | mono | none
+      let style = d.iconStyle || 'auto';
+      const hasIcon = d.icon && !/\.ico$/.test(d.icon);
+      if (style === 'auto') style = hasIcon ? 'glass' : 'mono';
+      if ((style === 'glass' || style === 'bare') && !hasIcon) style = 'mono';
+      if (style === 'logo' && !d.logo) style = hasIcon ? 'glass' : 'mono';
+      const tops = { glass: [200, 470, 640, 760], mono: [200, 470, 640, 760], bare: [180, 480, 650, 770], logo: [250, 470, 640, 760], none: [0, 360, 540, 680] }[style];
+      const halo = h('div', 'halo', sc); halo.style.left = (W / 2 - 380) + 'px'; halo.style.top = (tops[0] + 110 - 380) + 'px';
+      let icon = null, sheen = null;
+      if (style === 'glass' || style === 'mono') {
+        icon = h('div', 'ic ic-glass', sc);
+        if (style === 'glass') { const im = h('img', '', icon); im.src = src(d.icon); imgs.push(im); }
+        else h('div', 'mono-t', icon).textContent = (d.brand || '?').trim().charAt(0).toUpperCase();
+        sheen = h('div', 'sheen', icon);
+      } else if (style === 'bare') {
+        icon = h('div', 'ic ic-bare', sc);
+        const im = h('img', '', icon); im.src = src(d.icon); imgs.push(im);
+        const rf = h('img', 'refl', icon); rf.src = src(d.icon); imgs.push(rf);
+      } else if (style === 'logo') {
+        icon = h('div', 'ic ic-logo', sc);
+        const im = h('img', '', icon); im.src = src(d.logo); imgs.push(im);
+      } else halo.style.top = '120px';
+      if (icon) icon.style.top = tops[0] + 'px';
+      const brand = h('div', 'center h-xl grad', sc); brand.style.top = tops[1] + 'px'; const bSp = reveal(brand, d.brand);
+      const line = h('div', 'center body', sc); line.style.top = tops[2] + 'px'; line.style.padding = '0 200px'; const lSp = reveal(line, d.line);
+      const cta = h('div', 'cta', sc, `<span class="dot"></span>${esc(d.cta)} <span class="dom">${esc(d.domain)}</span> <svg width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>`);
+      cta.style.top = tops[3] + 'px';
+      const baseX = style === 'logo' ? 'translateX(-50%) ' : '';
+      return {
+        layout() { fit(brand, 1600, 170, style === 'none' ? 150 : 128, 56); fit(line, 1500, 110, 40, 24); },
+        render(t, dur) {
+          const ip = P(t, 0.1, 1.2, E.outExpo);
+          if (icon) {
+            icon.style.opacity = P(t, 0.05, 0.6, E.lin);
+            icon.style.transform = `${baseX}translateY(${(1 - ip) * 60}px) scale(${lerp(0.82, 1, ip) + 0.02 * Math.sin(t * 1.4)})`;
+            icon.style.filter = ip < 0.999 ? `blur(${(1 - ip) * 16}px)` : 'none';
+          }
+          if (sheen) sheen.style.backgroundPosition = `${lerp(130, -40, P(t, 0.9, 2.2, E.inOutSine))}% 0`;
+          halo.style.opacity = P(t, 0, 1.4, E.outCubic) * (0.85 + 0.15 * Math.sin(t * 2));
+          playReveal(bSp, t, style === 'none' ? 0.2 : 0.5, 0.9, 0.45, 18);
           playReveal(lSp, t, 1.1, 0.8, 0.5, 10);
           const cp = P(t, 1.7, 2.5, E.outExpo);
           cta.style.opacity = cp; cta.style.transform = `translateX(-50%) translateY(${(1 - cp) * 40}px) scale(${lerp(0.92, 1, cp)})`;
@@ -446,7 +546,7 @@
   }
   const orbs = ['o1', 'o2', 'o3'].map((id) => document.getElementById(id));
   function renderBg(t, type) {
-    const strong = { intro: 0.55, hook: 0.45, outro: 0.6, wall: 0.25, scroll: 0.35, mobile: 0.4 }[type] ?? 0.22;
+    const strong = { intro: 0.55, hook: 0.45, outro: 0.5, wall: 0.25, scroll: 0.35, mobile: 0.4, grid: 0.35 }[type] ?? 0.22;
     const cfg = [[0.3, 0.35, 0.21, 0.13], [0.7, 0.6, 0.17, 0.23], [0.5, 0.2, 0.11, 0.19]];
     orbs.forEach((o, i) => {
       const [bx, by, fx, fy] = cfg[i];

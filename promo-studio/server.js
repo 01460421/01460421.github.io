@@ -3,7 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { runPipeline, normalizeUrl } = require('./src/pipeline');
+const { prepare, produce, timelineFor, normalizeUrl } = require('./src/pipeline');
 
 const PORT = +process.env.PORT || 3000;
 const JOBS_DIR = path.resolve(process.env.JOBS_DIR || path.join(__dirname, 'jobs'));
@@ -48,12 +48,31 @@ function safeJoin(base, rel) {
 }
 
 function publicJob(j) {
+  const copy = j.prep ? j.prep.copy : null;
   return {
-    id: j.id, url: j.url, status: j.status, stage: j.stage, progress: j.progress, eta: j.eta, error: j.error,
+    id: j.id, url: j.url, status: j.status, stage: j.stage, progress: j.progress, eta: j.eta, error: j.error, phase: j.phase,
     logs: j.logs.slice(-40), queuePos: j.status === 'queued' ? queue.indexOf(j) + 1 : 0,
-    copy: j.copy, timeline: j.timeline, video: j.status === 'done' ? `/jobs/${j.id}/promo.mp4` : null,
+    review: copy ? {
+      source: copy.source, brand: copy.brand, tagline: copy.tagline, cta: copy.cta, outroLine: copy.outroLine, gridLine: copy.gridLine, hook: copy.hook,
+      features: copy.features.map((f) => ({ sectionId: f.sectionId, on: f.on !== false, kicker: f.kicker, title: f.title, body: f.body, page: f.page, img: f.img, rect: f.rect })),
+      icon: j.prep.site.iconFile, logo: j.prep.site.logoFile, palette: j.prep.palette,
+    } : null,
+    choices: j.choices || null,
+    timeline: j.timeline || null, video: j.hasVideo ? `/jobs/${j.id}/promo.mp4?v=${j.videoVer}` : null,
     createdAt: j.createdAt,
   };
+}
+
+function sanitizeChoices(c = {}) {
+  const out = {};
+  if (['short', 'standard', 'full'].includes(c.length)) out.length = c.length;
+  if (['auto', 'glass', 'bare', 'logo', 'mono', 'none'].includes(c.iconStyle)) out.iconStyle = c.iconStyle;
+  for (const k of ['brand', 'tagline', 'cta', 'outroLine', 'gridLine']) if (typeof c[k] === 'string') out[k] = c[k].slice(0, 120);
+  if (Array.isArray(c.hook)) out.hook = c.hook.slice(0, 3).map((x) => String(x).slice(0, 80));
+  if (Array.isArray(c.features)) out.features = c.features.slice(0, 16).map((f) => ({
+    sectionId: String(f.sectionId || ''), kicker: String(f.kicker ?? '').slice(0, 40), title: String(f.title ?? '').slice(0, 80), body: String(f.body ?? '').slice(0, 200),
+  }));
+  return out;
 }
 
 async function pump() {
@@ -61,19 +80,21 @@ async function pump() {
   running = true;
   const job = queue.shift();
   job.status = 'running';
+  const log = (m) => { job.logs.push({ t: Date.now(), m }); };
+  const onStatus = (st) => { job.stage = st.stage; job.progress = st.progress; job.eta = st.eta; if (st.timeline) job.timeline = st.timeline; };
   try {
-    await runPipeline({
-      url: job.url, jobDir: job.dir, lang: job.lang, maxPages: job.pages, useAI: job.useAI, allowPrivate: ALLOW_PRIVATE,
-      log: (m) => { job.logs.push({ t: Date.now(), m }); },
-      onStatus: (s) => {
-        job.stage = s.stage; job.progress = s.progress; job.eta = s.eta;
-        if (s.copy) { job.copy = s.copy; job.timeline = s.timeline; }
-      },
-    });
-    job.status = 'done';
+    if (job.phase === 'prepare') {
+      job.prep = await prepare({ url: job.url, jobDir: job.dir, lang: job.lang, maxPages: job.pages, useAI: job.useAI, allowPrivate: ALLOW_PRIVATE, log, onStatus });
+      job.timeline = job.prep.timeline;
+      job.status = 'review'; job.stage = 'review'; job.progress = 0.4;
+    } else {
+      await produce(job.prep, job.choices || {}, { jobDir: job.dir, log, onStatus });
+      job.hasVideo = true; job.videoVer = Date.now();
+      job.status = 'done';
+    }
   } catch (e) {
     job.status = 'error'; job.error = e.message;
-    job.logs.push({ t: Date.now(), m: '錯誤：' + e.message });
+    log('錯誤：' + e.message);
   } finally {
     running = false;
     pump();
@@ -104,7 +125,7 @@ const server = http.createServer(async (req, res) => {
       const id = crypto.randomBytes(6).toString('hex');
       const job = {
         id, url, dir: path.join(JOBS_DIR, id), lang: body.lang === 'en' ? 'en' : 'zh-Hant',
-        pages: Math.max(1, Math.min(8, +body.pages || 5)), useAI: body.ai !== false,
+        pages: Math.max(1, Math.min(16, +body.pages || 8)), useAI: body.ai !== false, phase: 'prepare',
         status: 'queued', stage: 'queued', progress: 0, logs: [], createdAt: Date.now(),
       };
       jobs.set(id, job); queue.push(job); pump();
@@ -112,6 +133,18 @@ const server = http.createServer(async (req, res) => {
     }
 
     let m;
+    if (req.method === 'POST' && (m = p.match(/^\/api\/jobs\/([a-f0-9]{12})\/(preview|render)$/))) {
+      const j = jobs.get(m[1]);
+      if (!j) return send(res, 404, { error: '找不到這個任務' });
+      if (!j.prep) return send(res, 409, { error: '網站還在分析中' });
+      if (j.status === 'queued' || j.status === 'running') return send(res, 409, { error: '正在處理中' });
+      const choices = sanitizeChoices(await readBody(req));
+      if (m[2] === 'preview') return send(res, 200, timelineFor(j.prep, choices));
+      if (queue.length >= MAX_QUEUE) return send(res, 429, { error: '排隊的人太多了，請稍後再試' });
+      j.choices = choices; j.phase = 'produce'; j.status = 'queued'; j.stage = 'queued'; j.error = null; j.progress = 0.4;
+      queue.push(j); pump();
+      return send(res, 202, publicJob(j));
+    }
     if (req.method === 'GET' && (m = p.match(/^\/api\/jobs\/([a-f0-9]{12})$/))) {
       const j = jobs.get(m[1]);
       return j ? send(res, 200, publicJob(j)) : send(res, 404, { error: '找不到這個任務' });

@@ -6,12 +6,20 @@
 
 | 階段 | 做什麼 |
 |---|---|
-| 1. 深度瀏覽 `src/crawl.js` | Playwright 打開首頁與導覽列裡的主要頁面（預設 5 頁），自動關彈窗、觸發延遲載入；擷取每頁 hero、每個功能段落特寫（記錄標題位置供鏡頭聚焦）、整頁長圖、手機版、icon、品牌色。 |
-| 2. 腳本 `src/story.js` | 有 `ANTHROPIC_API_KEY` 時，Claude 會看截圖與內容，挑出 4–5 個最值得展示的功能，寫 Apple 式短句；沒有金鑰則用規則產生。接著排成對齊 120 BPM 小節的分鏡時間軸。 |
-| 3. 配樂 `src/music.js` | 程序化合成：墊底和弦、低頻、鼓組、上升音、轉場重擊，全部對齊剪輯點。 |
-| 4. 渲染 `src/render.js` + `public/stage.html` | 動態引擎完全由時間 t 決定每一格畫面，Playwright 逐格截圖 → ffmpeg 編成 1080p30 H.264 + AAC。 |
+| 1. 深度瀏覽 `src/crawl.js` | Playwright 打開首頁，展開導覽群組，逐一點開導覽列／側欄的每個項目（包含單頁應用的按鈕式路由），預設 8 頁；自動關彈窗、觸發延遲載入；擷取每頁／每個視圖的畫面、功能段落特寫（記錄標題位置供鏡頭聚焦）、整頁長圖、手機版、icon、Logo 字標（自動裁白邊）、品牌色。 |
+| 2. 腳本 `src/story.js` | 有 `ANTHROPIC_API_KEY` 時，Claude 會看截圖與內容，列出所有重點功能（6–12 個，依重要性排序）並寫 Apple 式短句；沒有金鑰則用規則產生。 |
+| 3. 你來挑選（網頁版） | 勾選要放的功能、改文案、調順序，選收尾圖示樣式與影片長度，先看即時分鏡預覽再渲染；渲染完還能修改後重新渲染。 |
+| 4. 配樂 `src/music.js` | 程序化合成：墊底和弦、低頻、鼓組、上升音、轉場重擊，全部對齊剪輯點。 |
+| 5. 渲染 `src/render.js` + `public/stage.html` | 動態引擎完全由時間 t 決定每一格畫面，Playwright 逐格截圖 → ffmpeg 編成 1080p30 H.264 + AAC。 |
 
-分鏡：開場品牌字 → 鋪陳金句 → 3D 主視覺 → 功能特寫 ×N（左右分割／全幅推鏡交替）→ 快剪 → 整頁滑動 → 頁面牆 → 手機展示 → 收尾 CTA。
+分鏡：開場品牌字 → 鋪陳金句 → 3D 主視覺 → 功能特寫 ×N（左右分割／全幅推鏡交替）→ **重點功能總覽牆**（所有勾選的功能都在這裡）→ 快剪 → 整頁滑動 → 頁面牆 → 手機展示 → 收尾 CTA。
+
+### 選項
+
+| 選項 | 值 |
+|---|---|
+| 影片長度 | `short` 精簡（3 個特寫）、`standard` 標準（5 個）、`full` 完整（全部特寫） |
+| 收尾圖示 | `glass` 玻璃磚、`bare` 裸圖＋倒影、`logo` 網站字標、`mono` 首字母、`none` 純文字（`auto`：有圖示用玻璃，沒有用首字母） |
 
 ## 使用
 
@@ -27,9 +35,10 @@ export ANTHROPIC_API_KEY=sk-ant-...  # 選用：AI 文案
 npm start            # → http://localhost:3000
 
 # 命令列
-node cli.js https://example.com --lang zh-Hant --pages 5 --out promo.mp4
+node cli.js https://example.com --pages 8 --length standard --icon glass --out promo.mp4
 #   --lang en      英文文案
 #   --no-ai        不呼叫 Claude
+#   命令列會直接用推薦的功能渲染；要挑選請用網頁版
 ```
 
 ### Docker（建議部署方式）

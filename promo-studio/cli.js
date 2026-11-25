@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 用法：node cli.js <網址> [--lang zh-Hant|en] [--pages 5] [--out promo.mp4] [--no-ai]
+// 用法：node cli.js <網址> [--lang zh-Hant|en] [--pages 8] [--length short|standard|full] [--icon auto|glass|bare|logo|mono|none] [--out promo.mp4] [--no-ai]
 const path = require('path');
 const fs = require('fs');
 const { runPipeline } = require('./src/pipeline');
@@ -7,13 +7,14 @@ const { runPipeline } = require('./src/pipeline');
 const args = process.argv.slice(2);
 const url = args.find((a) => !a.startsWith('--'));
 const opt = (k, d) => { const i = args.indexOf('--' + k); return i >= 0 ? args[i + 1] : d; };
-if (!url) { console.log('用法：node cli.js <網址> [--lang zh-Hant|en] [--pages 5] [--out promo.mp4] [--no-ai]'); process.exit(1); }
+if (!url) { console.log('用法：node cli.js <網址> [--lang zh-Hant|en] [--pages 8] [--length short|standard|full] [--icon auto|glass|bare|logo|mono|none] [--out promo.mp4] [--no-ai]'); process.exit(1); }
 
 const jobDir = path.resolve(opt('dir', path.join('jobs', 'cli-' + Date.now())));
 const out = path.resolve(opt('out', 'promo.mp4'));
 let last = '';
 runPipeline({
-  url, jobDir, lang: opt('lang', 'zh-Hant'), maxPages: +opt('pages', 5), useAI: !args.includes('--no-ai'),
+  url, jobDir, lang: opt('lang', 'zh-Hant'), maxPages: +opt('pages', 8), useAI: !args.includes('--no-ai'),
+  choices: { length: opt('length', 'standard'), iconStyle: opt('icon', 'auto') },
   log: (m) => console.log('  ' + m),
   onStatus: (s) => {
     const line = `[${s.stage}] ${(s.progress * 100).toFixed(0)}%${s.eta != null ? `  剩約 ${s.eta}s` : ''}`;

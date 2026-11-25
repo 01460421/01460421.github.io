@@ -4,7 +4,7 @@ const path = require('path');
 const dns = require('dns').promises;
 const net = require('net');
 const { crawl } = require('./crawl');
-const { makeStory } = require('./story');
+const { makeStory, buildTimeline, applyChoices } = require('./story');
 const { makeMusic } = require('./music');
 const { render } = require('./render');
 
@@ -30,27 +30,40 @@ async function normalizeUrl(input, { allowPrivate = false } = {}) {
   return u.href;
 }
 
-async function runPipeline({ url, jobDir, lang = 'zh-Hant', maxPages = 5, useAI = true, allowPrivate = true, onStatus = () => {}, log = () => {} }) {
+// 第一階段：爬取＋寫腳本（之後讓使用者挑選）
+async function prepare({ url, jobDir, lang = 'zh-Hant', maxPages = 8, useAI = true, allowPrivate = true, onStatus = () => {}, log = () => {} }) {
   const assets = path.join(jobDir, 'assets');
   fs.mkdirSync(assets, { recursive: true });
   const status = (stage, p, extra = {}) => onStatus({ stage, progress: p, ...extra });
-
   const target = await normalizeUrl(url, { allowPrivate });
   status('crawl', 0.01);
   const site = await crawl(target, { outDir: assets, maxPages, log, progress: (p) => status('crawl', 0.02 + p * 0.33) });
   if (!site.pages.length) throw new Error('抓不到任何頁面');
   fs.writeFileSync(path.join(jobDir, 'site.json'), JSON.stringify(site));
-
   status('script', 0.36);
-  const { copy, timeline } = await makeStory(site, assets, { lang, useAI, log });
-  fs.writeFileSync(path.join(jobDir, 'story.json'), JSON.stringify({ copy, timeline }, null, 1));
-  log(`腳本完成（${copy.source === 'claude' ? 'Claude AI 文案' : '規則式文案'}），共 ${timeline.scenes.length} 個鏡頭、${timeline.duration} 秒`);
-  status('music', 0.4, { copy, timeline });
+  const { copy, palette, timeline } = await makeStory(site, assets, { lang, useAI, log });
+  fs.writeFileSync(path.join(jobDir, 'story.json'), JSON.stringify({ copy, palette }, null, 1));
+  const n = copy.features.filter((f) => f.on !== false).length;
+  log(`腳本完成（${copy.source === 'claude' ? 'Claude AI 文案' : '規則式文案'}）：找到 ${copy.features.length} 個功能候選，預選 ${n} 個`);
+  return { site, copy, palette, timeline, lang };
+}
 
+// 依使用者選擇產生時間軸（不渲染，可用來預覽）
+function timelineFor(prep, choices = {}) {
+  const copy = applyChoices(prep.copy, choices);
+  return { copy, timeline: buildTimeline(prep.site, copy, prep.palette, { lang: prep.lang, length: choices.length, iconStyle: choices.iconStyle }) };
+}
+
+// 第二階段：配樂＋渲染
+async function produce(prep, choices, { jobDir, onStatus = () => {}, log = () => {} }) {
+  const assets = path.join(jobDir, 'assets');
+  const { copy, timeline } = timelineFor(prep, choices);
+  fs.writeFileSync(path.join(jobDir, 'final.json'), JSON.stringify({ choices, copy, timeline }, null, 1));
+  const status = (stage, p, extra = {}) => onStatus({ stage, progress: p, ...extra });
+  status('music', 0.4, { copy, timeline });
   const wav = path.join(jobDir, 'music.wav');
   makeMusic(timeline, wav);
-  log('配樂完成');
-
+  log(`配樂完成；${timeline.scenes.length} 個鏡頭、${timeline.duration} 秒`);
   status('render', 0.42);
   const out = path.join(jobDir, 'promo.mp4');
   await render({
@@ -62,4 +75,10 @@ async function runPipeline({ url, jobDir, lang = 'zh-Hant', maxPages = 5, useAI 
   return { out, copy, timeline };
 }
 
-module.exports = { runPipeline, normalizeUrl };
+// 一次跑完（CLI 用）
+async function runPipeline(opts) {
+  const prep = await prepare(opts);
+  return produce(prep, opts.choices || {}, opts);
+}
+
+module.exports = { runPipeline, prepare, produce, timelineFor, normalizeUrl };
