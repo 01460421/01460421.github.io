@@ -38,6 +38,8 @@ npm start            # → http://localhost:3000
 node cli.js https://example.com --pages 8 --length standard --icon glass --out promo.mp4
 #   --lang en      英文文案
 #   --no-ai        不呼叫 Claude
+#   --main-only    只抓主站的視圖（不含另開的獨立頁面）
+#   --extra /ep-calc,/foo   一定要包含的同網域頁面，頁內分頁（role=tab）會逐一拍攝
 #   命令列會直接用推薦的功能渲染；要挑選請用網頁版
 ```
 

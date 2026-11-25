@@ -293,7 +293,7 @@ async function captureSections(page, info, dir, prefix, maxSections, log) {
 }
 
 async function crawl(startUrl, opts = {}) {
-  const { outDir, maxPages = 5, log = () => {}, progress = () => {} } = opts;
+  const { outDir, maxPages = 5, log = () => {}, progress = () => {}, viewsOnly = false, extraUrls = [] } = opts;
   fs.mkdirSync(outDir, { recursive: true });
   const browser = await chromium.launch({ args: ['--hide-scrollbars'] });
   const result = { pages: [], mobile: null, iconFile: null, logoFile: null };
@@ -323,6 +323,47 @@ async function crawl(startUrl, opts = {}) {
       } catch (e) { log(`  長圖失敗：${e.message.split('\n')[0]}`); }
       const sections = await captureSections(page, info, outDir, prefix, maxSections, log);
       return { ...info, hero, full, fullH, sections, links: idx === 0 ? info.links : undefined };
+    };
+
+    // 頁內分頁（role=tab）：逐一點開，每個分頁都是一個功能
+    const captureTabs = async (parent, baseIdx) => {
+      const tabs = await page.evaluate(() => [...document.querySelectorAll('[role=tab]')].filter((t) => { const r = t.getBoundingClientRect(); return r.width > 0 && r.height > 0; })
+        .map((t, i) => { t.setAttribute('data-pc-tab', String(i)); return { i, text: (t.innerText || t.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim() }; })
+        .filter((t) => t.text && t.text.length <= 16 && !/^(說明|說明書|help|about|faq|關於|設定|settings)$/i.test(t.text))).catch(() => []);
+      const out = [];
+      for (const tb of tabs.slice(0, 6)) {
+        try {
+          await page.click(`[data-pc-tab="${tb.i}"]`, { timeout: 5000 });
+          await sleep(700); await settle(page, 5000);
+          // 捲到該分頁的內容區
+          const focus = await page.evaluate((i) => {
+            const t = document.querySelector(`[data-pc-tab="${i}"]`);
+            let panel = t && t.getAttribute('aria-controls') && document.getElementById(t.getAttribute('aria-controls'));
+            if (!panel || !panel.getBoundingClientRect().height) panel = [...document.querySelectorAll('[role=tabpanel]')].find((x) => x.getBoundingClientRect().height > 40);
+            const target = panel || t;
+            const y = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo(0, Math.max(0, y - 90));
+            const r = target.getBoundingClientRect();
+            const head = (panel && panel.querySelector('h1,h2,h3,h4,label,legend,th')) || t;
+            const hr = head.getBoundingClientRect();
+            return { x: hr.left, y: hr.top, w: Math.min(hr.width, 900), h: hr.height, panelTop: r.top };
+          }, tb.i);
+          await sleep(500);
+          const file = `p${baseIdx + out.length}_hero.jpg`;
+          await page.screenshot({ path: path.join(outDir, file), type: 'jpeg', quality: 88 });
+          const lead = await page.evaluate((i) => {
+            const t = document.querySelector(`[data-pc-tab="${i}"]`);
+            const panel = (t && t.getAttribute('aria-controls') && document.getElementById(t.getAttribute('aria-controls'))) || document.querySelector('[role=tabpanel]:not([hidden])');
+            const p = panel && [...panel.querySelectorAll('p,small,[class*=hint],[class*=desc]')].map((e) => e.innerText.replace(/\s+/g, ' ').trim()).find((x) => x.length >= 10 && x.length <= 160);
+            return p || '';
+          }, tb.i).catch(() => '');
+          out.push({ url: page.url(), title: parent.title, description: parent.description, heads: [], colors: {}, icons: [], lead,
+            focus: focus ? { x: focus.x, y: focus.y, w: focus.w, h: focus.h, text: tb.text } : null,
+            hero: file, full: null, fullH: 0, sections: [], navText: `${parent.navText || parent.heads?.[0]?.text || ''}・${tb.text}`.replace(/^・/, ''), view: true, tab: tb.text, bodyText: '' });
+          log(`  分頁「${tb.text}」`);
+        } catch (e) { log(`  分頁略過：${e.message.split('\n')[0]}`); }
+      }
+      return out;
     };
 
     const home = await visit(startUrl, 0, 10);
@@ -378,7 +419,7 @@ async function crawl(startUrl, opts = {}) {
       if (key === homeKey) return u.hash && u.hash.length > 1 ? 'click' : null; // 同頁 hash 路由用點的
       return 'url';
     };
-    nav = nav.map((n) => ({ ...n, kind: kindOf(n) })).filter((n) => n.kind);
+    nav = nav.map((n) => ({ ...n, kind: kindOf(n) })).filter((n) => n.kind && (!viewsOnly || n.kind === 'click'));
     log(`找到 ${nav.length} 個導覽項目`);
     // 平均取樣，讓每個導覽群組都有代表
     const pickEven = (arr, k) => {
@@ -386,7 +427,7 @@ async function crawl(startUrl, opts = {}) {
       const out = []; for (let i = 0; i < k; i++) out.push(arr[Math.floor((i + 0.5) * arr.length / k)]); return out;
     };
     let plan = pickEven(nav, budget);
-    if (plan.length < budget) {
+    if (plan.length < budget && !viewsOnly) {
       const have = new Set(plan.filter((x) => x.href).map((x) => x.href.split('#')[0]));
       for (const sp of pickSubpages(home, origin, budget * 2)) {
         if (plan.length >= budget) break;
@@ -428,6 +469,17 @@ async function crawl(startUrl, opts = {}) {
       log(`切換到「${it.text}」`);
       try { const v = await captureView(it, idx); if (v) { result.pages.push(v); idx++; } } catch (e) { log(`  略過「${it.text}」：${e.message.split('\n')[0]}`); }
       progress(0.3 + 0.55 * (++done / Math.max(1, plan.length)));
+    }
+    // 使用者指定的額外頁面：一定抓，並展開頁內分頁
+    for (const u of extraUrls) {
+      try {
+        const abs = new URL(u, home.url).href;
+        const p = await visit(abs, idx, 2);
+        p.navText = p.heads?.[0]?.text || p.title.split(/[|｜]/)[0].trim();
+        result.pages.push(p); idx++;
+        const tabs = await captureTabs(p, idx);
+        for (const t of tabs) { result.pages.push(t); idx++; }
+      } catch (e) { log(`  略過 ${u}：${e.message.split('\n')[0]}`); }
     }
     for (const it of plan.filter((x) => x.kind === 'url')) {
       try {

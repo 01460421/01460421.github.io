@@ -31,17 +31,21 @@ async function normalizeUrl(input, { allowPrivate = false } = {}) {
 }
 
 // 第一階段：爬取＋寫腳本（之後讓使用者挑選）
-async function prepare({ url, jobDir, lang = 'zh-Hant', maxPages = 8, useAI = true, allowPrivate = true, onStatus = () => {}, log = () => {} }) {
+async function prepare({ url, jobDir, lang = 'zh-Hant', maxPages = 8, useAI = true, allowPrivate = true, viewsOnly = false, extraUrls = [], brief = '', onStatus = () => {}, log = () => {} }) {
   const assets = path.join(jobDir, 'assets');
   fs.mkdirSync(assets, { recursive: true });
   const status = (stage, p, extra = {}) => onStatus({ stage, progress: p, ...extra });
   const target = await normalizeUrl(url, { allowPrivate });
   status('crawl', 0.01);
-  const site = await crawl(target, { outDir: assets, maxPages, log, progress: (p) => status('crawl', 0.02 + p * 0.33) });
+  // 額外頁面只允許同網域（避免被拿來抓別的站／內網）
+  const origin = new URL(target).origin;
+  const extras = (extraUrls || []).map((u) => { try { return new URL(String(u).trim(), target); } catch { return null; } })
+    .filter((u) => u && u.origin === origin).map((u) => u.href).slice(0, 6);
+  const site = await crawl(target, { outDir: assets, maxPages, viewsOnly, extraUrls: extras, log, progress: (p) => status('crawl', 0.02 + p * 0.33) });
   if (!site.pages.length) throw new Error('抓不到任何頁面');
   fs.writeFileSync(path.join(jobDir, 'site.json'), JSON.stringify(site));
   status('script', 0.36);
-  const { copy, palette, timeline } = await makeStory(site, assets, { lang, useAI, log });
+  const { copy, palette, timeline } = await makeStory(site, assets, { lang, useAI, log, brief });
   fs.writeFileSync(path.join(jobDir, 'story.json'), JSON.stringify({ copy, palette }, null, 1));
   const n = copy.features.filter((f) => f.on !== false).length;
   log(`腳本完成（${copy.source === 'claude' ? 'Claude AI 文案' : '規則式文案'}）：找到 ${copy.features.length} 個功能候選，預選 ${n} 個`);
@@ -51,7 +55,7 @@ async function prepare({ url, jobDir, lang = 'zh-Hant', maxPages = 8, useAI = tr
 // 依使用者選擇產生時間軸（不渲染，可用來預覽）
 function timelineFor(prep, choices = {}) {
   const copy = applyChoices(prep.copy, choices);
-  return { copy, timeline: buildTimeline(prep.site, copy, prep.palette, { lang: prep.lang, length: choices.length, iconStyle: choices.iconStyle }) };
+  return { copy, timeline: buildTimeline(prep.site, copy, prep.palette, { lang: prep.lang, length: choices.length, iconStyle: choices.iconStyle, spot: choices.spot }) };
 }
 
 // 第二階段：配樂＋渲染

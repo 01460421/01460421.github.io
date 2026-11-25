@@ -67,6 +67,7 @@ function sanitizeChoices(c = {}) {
   const out = {};
   if (['short', 'standard', 'full'].includes(c.length)) out.length = c.length;
   if (['auto', 'glass', 'bare', 'logo', 'mono', 'none'].includes(c.iconStyle)) out.iconStyle = c.iconStyle;
+  if (Number.isInteger(c.spot) && c.spot > 0 && c.spot <= 16) out.spot = c.spot;
   for (const k of ['brand', 'tagline', 'cta', 'outroLine', 'gridLine']) if (typeof c[k] === 'string') out[k] = c[k].slice(0, 120);
   if (Array.isArray(c.hook)) out.hook = c.hook.slice(0, 3).map((x) => String(x).slice(0, 80));
   if (Array.isArray(c.features)) out.features = c.features.slice(0, 16).map((f) => ({
@@ -84,7 +85,7 @@ async function pump() {
   const onStatus = (st) => { job.stage = st.stage; job.progress = st.progress; job.eta = st.eta; if (st.timeline) job.timeline = st.timeline; };
   try {
     if (job.phase === 'prepare') {
-      job.prep = await prepare({ url: job.url, jobDir: job.dir, lang: job.lang, maxPages: job.pages, useAI: job.useAI, allowPrivate: ALLOW_PRIVATE, log, onStatus });
+      job.prep = await prepare({ url: job.url, jobDir: job.dir, lang: job.lang, maxPages: job.pages, useAI: job.useAI, allowPrivate: ALLOW_PRIVATE, viewsOnly: job.viewsOnly, extraUrls: job.extraUrls, brief: job.brief, log, onStatus });
       job.timeline = job.prep.timeline;
       job.status = 'review'; job.stage = 'review'; job.progress = 0.4;
     } else {
@@ -126,6 +127,7 @@ const server = http.createServer(async (req, res) => {
       const job = {
         id, url, dir: path.join(JOBS_DIR, id), lang: body.lang === 'en' ? 'en' : 'zh-Hant',
         pages: Math.max(1, Math.min(16, +body.pages || 8)), useAI: body.ai !== false, phase: 'prepare',
+        viewsOnly: body.viewsOnly === true, brief: typeof body.brief === 'string' ? body.brief.slice(0, 2000) : '', extraUrls: Array.isArray(body.extraUrls) ? body.extraUrls.slice(0, 6).map(String) : [],
         status: 'queued', stage: 'queued', progress: 0, logs: [], createdAt: Date.now(),
       };
       jobs.set(id, job); queue.push(job); pump();

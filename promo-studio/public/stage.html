@@ -123,11 +123,16 @@
 
   // 逐字（中日韓）／逐詞（拉丁）拆分，做「模糊上浮」出場
   function tokens(text) { const out = []; const re = /\n|[⺀-鿿豈-﫿＀-￯　-〿]|[^\s⺀-鿿豈-﫿＀-￯　-〿]+\s*|\s+/g; let m; while ((m = re.exec(text))) out.push(m[0]); return out; }
+  // 中文只在標點後斷行：把字元依片語包成不換行的群組
   function reveal(el, text) {
     el.innerHTML = ''; const spans = [];
+    let grp = null;
+    const brk = /^[，、。・；：！？,.;:!?）」』\s]+$|[，、。・；：！？]$|\s$/;
     for (const tk of tokens(String(text || ''))) {
-      if (tk === '\n') { el.appendChild(document.createElement('br')); continue; }
-      const s = h('span', 'tk', el); s.textContent = tk; spans.push(s);
+      if (tk === '\n') { el.appendChild(document.createElement('br')); grp = null; continue; }
+      if (!grp) { grp = h('span', '', el); grp.style.cssText = 'display:inline-block;white-space:nowrap'; }
+      const s = h('span', 'tk', grp); s.textContent = tk; spans.push(s);
+      if (brk.test(tk)) grp = null;
     }
     spans.stagger = Math.min(0.075, 0.75 / Math.max(1, spans.length));
     return spans;

@@ -140,8 +140,13 @@
   <div class="opts">
     <span>語言 <span class="seg" id="lang"><button type="button" data-v="zh-Hant" class="on">繁中</button><button type="button" data-v="en">English</button></span></span>
     <span>深度 <span class="seg" id="pages"><button type="button" data-v="5">5 頁</button><button type="button" data-v="8" class="on">8 頁</button><button type="button" data-v="12">12 頁</button></span></span>
+    <label class="note" style="display:inline-flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="mainonly"> 只抓主站（不含另開的獨立頁面）</label>
     <span class="note" id="ainote"></span>
   </div>
+  <div class="opts" style="margin-top:10px">
+    <span style="flex:1 1 320px;display:flex;gap:8px;align-items:center">一定要包含 <input class="in" id="extra" placeholder="額外頁面，如 /ep-calc，多個用逗號分隔（頁內分頁會逐一拍攝）" style="flex:1;min-width:0"></span>
+  </div>
+  <div class="opts" style="margin-top:10px"><textarea class="in" id="brief" rows="2" placeholder="補充說明給 AI（選填）：例如某個功能的用途、一定要強調的重點" style="flex:1 1 100%;resize:vertical"></textarea></div>
   <div class="examples" id="ex"></div>
 
   <section id="job">
@@ -242,7 +247,7 @@
     e.preventDefault();
     $('#go').disabled = true;
     try {
-      const r = await fetch('/api/jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: $('#url').value, lang: state.lang, pages: state.pages }) });
+      const r = await fetch('/api/jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: $('#url').value, lang: state.lang, pages: state.pages, viewsOnly: $('#mainonly').checked, extraUrls: $('#extra').value.split(/[,，\s]+/).filter(Boolean), brief: $('#brief').value }) });
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || '失敗');
       startWatching(j.id);

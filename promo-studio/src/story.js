@@ -142,9 +142,9 @@ function heuristicCopy(site, lang) {
 }
 
 // ---------- Claude 文案 ----------
-async function claudeCopy(site, lang, jobDir, log) {
+async function claudeCopy(site, lang, jobDir, log, brief = '') {
   const Anthropic = require('@anthropic-ai/sdk');
-  const { z } = require('zod');
+  const { z } = require('zod/v4');
   const { zodOutputFormat } = require('@anthropic-ai/sdk/helpers/zod');
   const client = new Anthropic();
   const secs = allSections(site);
@@ -182,6 +182,7 @@ async function claudeCopy(site, lang, jobDir, log) {
 - gridLine：配合「所有功能一次排開」鏡頭的一句話。scrollLine：配合整頁滑動鏡頭。pagesLine：配合「多個頁面拼牆」鏡頭（共 ${site.pages.length} 頁）。mobileLine：配合手機畫面。
 - outroLine：結尾標語。cta：行動呼籲（≤ 6 字）。
 
+${brief ? `\n網站擁有者的補充說明（請優先遵守，並用來寫得更準確）：\n${brief}\n` : ''}
 網站資料（JSON）：
 ${JSON.stringify(digest)}`;
 
@@ -258,7 +259,8 @@ function buildTimeline(site, copy, palette, opts = {}) {
   push('intro', 2, { small: copy.intro, brand: copy.brand });
   push('hook', Math.max(1, Math.min(3, copy.hook.length)), { lines: copy.hook.slice(0, 3) });
   push('hero', 3, { img: home.hero, domain, title: copy.brand, tagline: copy.tagline });
-  selected.slice(0, L.spot).forEach((f, i) => {
+  const spotN = opts.spot > 0 ? Math.min(16, opts.spot) : L.spot;
+  selected.slice(0, spotN).forEach((f, i) => {
     const s = secs[f.sectionId];
     push('feature', 2, {
       variant: i % 2 === 0 ? (i % 4 === 0 ? 'left' : 'right') : 'bleed',
@@ -300,10 +302,10 @@ function buildTimeline(site, copy, palette, opts = {}) {
 }
 
 async function makeStory(site, jobDir, opts = {}) {
-  const { lang = 'zh-Hant', useAI = true, log = () => {} } = opts;
+  const { lang = 'zh-Hant', useAI = true, log = () => {}, brief = '' } = opts;
   let copy = null;
   if (useAI && (process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN)) {
-    try { copy = await claudeCopy(site, lang, jobDir, log); }
+    try { copy = await claudeCopy(site, lang, jobDir, log, String(brief || '').slice(0, 2000)); }
     catch (e) { log(`AI 文案失敗，改用規則產生：${e.message}`); }
   }
   if (!copy) copy = heuristicCopy(site, lang);
