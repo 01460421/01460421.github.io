@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Promo Stage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=block" rel="stylesheet">
+<style>
+  :root { --accent: #2997ff; --accent2: #a259ff; --accent3: #30d158; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; overflow: hidden; }
+  body { width: 1920px; height: 1080px; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #050507; color: #f5f5f7;
+    font-family: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "WenQuanYi Zen Hei", sans-serif;
+    -webkit-font-smoothing: antialiased; transform-origin: 0 0; }
+  #bg, #scenes, #flash, #vignette, #grain, #letterbox { position: absolute; inset: 0; }
+  .orb { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; left: 0; top: 0; will-change: transform, opacity; }
+  #vignette { background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%); pointer-events: none; }
+  #grain { opacity: .07; mix-blend-mode: overlay; pointer-events: none; }
+  #flash { background: #fff; opacity: 0; pointer-events: none; }
+  .scene { position: absolute; inset: 0; display: none; will-change: transform, opacity; }
+  .center { position: absolute; left: 0; right: 0; text-align: center; }
+  .tk { display: inline-block; white-space: pre; will-change: transform, opacity, filter; }
+  .h-xl { font-weight: 800; letter-spacing: -0.035em; line-height: 1.04; }
+  .grad .tk, .grad.solid { background: linear-gradient(180deg, #fff 35%, #9a9aa0 125%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .agrad .tk { background: linear-gradient(180deg, var(--accent) 10%, var(--accent2) 110%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .tk { padding-bottom: .08em; }
+  .acc { color: var(--accent); }
+  .kicker { font-size: 26px; font-weight: 600; letter-spacing: .16em; color: var(--accent); text-transform: uppercase; }
+  .body { font-size: 34px; font-weight: 500; color: #a1a1a6; line-height: 1.45; letter-spacing: -0.01em; }
+
+  /* 瀏覽器視窗 */
+  .win { position: absolute; border-radius: 22px; overflow: hidden; background: #1c1c1e;
+    box-shadow: 0 60px 140px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.12) inset, 0 0 0 1px rgba(0,0,0,.6); transform-style: preserve-3d; }
+  .win .bar { height: 54px; background: linear-gradient(#2c2c2e, #232325); display: flex; align-items: center; padding: 0 22px; gap: 10px; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .win .dot { width: 14px; height: 14px; border-radius: 50%; }
+  .win .url { margin: 0 auto; height: 32px; min-width: 38%; max-width: 60%; border-radius: 10px; background: rgba(255,255,255,.08); color: #d1d1d6;
+    font-size: 17px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 0 18px; white-space: nowrap; overflow: hidden; }
+  .win .vp { position: relative; overflow: hidden; background: #fff; }
+  .win .vp .inner { position: absolute; left: 0; top: 0; width: 100%; transform-origin: 0 0; will-change: transform; }
+  .win .vp img { display: block; width: 100%; }
+  .glare { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.18) 48%, transparent 60%); background-size: 300% 100%; mix-blend-mode: screen; }
+  .hl { position: absolute; border: 3px solid var(--accent); border-radius: 16px; box-shadow: 0 0 0 6000px rgba(0,0,0,.5), 0 0 60px var(--accent); }
+
+  /* 全幅 */
+  .bleed { position: absolute; inset: 0; overflow: hidden; }
+  .bleed .inner { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+  .bleed img { display: block; }
+  .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.3) 0%, rgba(0,0,0,0) 28%, rgba(0,0,0,.7) 58%, rgba(0,0,0,.96) 100%), linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 60%); }
+  .pill { position: absolute; display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 26px; border-radius: 999px;
+    background: rgba(30,30,32,.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.18); font-size: 22px; font-weight: 500; color: #f5f5f7; }
+
+  /* 手機 */
+  .phone { position: absolute; width: 430px; height: 900px; border-radius: 74px; background: linear-gradient(145deg, #3a3a3c, #0d0d0f 40%, #2a2a2c);
+    padding: 15px; box-shadow: 0 70px 140px rgba(0,0,0,.7), 0 0 0 2px #48484a inset; }
+  .phone .screen { position: relative; width: 100%; height: 100%; border-radius: 60px; overflow: hidden; background: #fff; }
+  .phone .screen .inner { position: absolute; left: 0; top: 0; width: 100%; will-change: transform; }
+  .phone .screen img { display: block; width: 100%; }
+  .phone .island { position: absolute; top: 14px; left: 50%; width: 130px; height: 38px; margin-left: -65px; border-radius: 20px; background: #000; z-index: 2; }
+
+  /* 牆 */
+  .wall { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+  .tile { position: absolute; width: 576px; height: 360px; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.5); background: #222; }
+  .tile img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+  .icon { position: absolute; width: 210px; height: 210px; border-radius: 48px; overflow: hidden; background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 120px var(--accent); }
+  .icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .mono { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 120px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .cta { position: absolute; left: 50%; display: inline-flex; align-items: center; gap: 18px; height: 84px; padding: 0 44px; border-radius: 999px;
+    background: var(--accent); color: #fff; font-size: 32px; font-weight: 700; white-space: nowrap; box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 80px var(--accent); }
+  .cta .dom { font-weight: 500; opacity: .85; }
+  .streak { position: absolute; left: 50%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), #fff, var(--accent2), transparent); box-shadow: 0 0 30px var(--accent); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"><div class="orb" id="o1"></div><div class="orb" id="o2"></div><div class="orb" id="o3"></div></div>
+  <div id="scenes"></div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+  <div id="flash"></div>
+</div>
+<script>
+(() => {
+  // ---------- 工具 ----------
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+  const lerp = (a, b, p) => a + (b - a) * p;
+  const E = {
+    lin: (x) => x,
+    outExpo: (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x)),
+    outCubic: (x) => 1 - Math.pow(1 - x, 3),
+    inCubic: (x) => x * x * x,
+    inOutCubic: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+    inOutSine: (x) => -(Math.cos(Math.PI * x) - 1) / 2,
+    outBack: (x) => { const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+    inExpo: (x) => (x <= 0 ? 0 : Math.pow(2, 10 * x - 10)),
+  };
+  const P = (t, a, b, e = E.outExpo) => e(clamp((t - a) / (b - a)));
+  const h = (tag, cls, parent, html) => { const el = document.createElement(tag); if (cls) el.className = cls; if (html != null) el.innerHTML = html; if (parent) parent.appendChild(el); return el; };
+  const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const W = 1920, H = 1080;
+
+  // 逐字（中日韓）／逐詞（拉丁）拆分，做「模糊上浮」出場
+  function tokens(text) { const out = []; const re = /\n|[⺀-鿿豈-﫿＀-￯　-〿]|[^\s⺀-鿿豈-﫿＀-￯　-〿]+\s*|\s+/g; let m; while ((m = re.exec(text))) out.push(m[0]); return out; }
+  function reveal(el, text) {
+    el.innerHTML = ''; const spans = [];
+    for (const tk of tokens(String(text || ''))) {
+      if (tk === '\n') { el.appendChild(document.createElement('br')); continue; }
+      const s = h('span', 'tk', el); s.textContent = tk; spans.push(s);
+    }
+    spans.stagger = Math.min(0.075, 0.75 / Math.max(1, spans.length));
+    return spans;
+  }
+  function playReveal(spans, t, start, dur = 0.8, rise = 0.5, blur = 14) {
+    const st = spans.stagger || 0.05;
+    for (let i = 0; i < spans.length; i++) {
+      const p = P(t, start + i * st, start + i * st + dur, E.outExpo);
+      const s = spans[i].style;
+      s.opacity = p; s.transform = `translateY(${((1 - p) * rise).toFixed(3)}em)`;
+      s.filter = p < 0.999 ? `blur(${((1 - p) * blur).toFixed(2)}px)` : 'none';
+    }
+  }
+  function fade(el, p, dy = 30) { el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * dy}px)`; }
+  // 自動縮字：以實際文字範圍量測（不受 padding / 版面寬度影響）
+  function fit(el, maxW, maxH, size, min) {
+    el.style.fontSize = size + 'px';
+    const measure = () => { const r = document.createRange(); r.selectNodeContents(el); const b = r.getBoundingClientRect(); return { w: b.width, h: b.height }; };
+    let guard = 0, m = measure();
+    while ((m.w > maxW + 2 || m.h > maxH + 2) && size > min && guard++ < 60) { size *= 0.95; el.style.fontSize = size + 'px'; m = measure(); }
+    return size;
+  }
+
+  let S = null, base = '', scenes = [], imgs = [];
+  const src = (f) => base + f;
+
+  // ---------- 元件 ----------
+  function makeWin(parent, file, domain, w, vpH) {
+    const win = h('div', 'win', parent);
+    win.style.width = w + 'px';
+    const bar = h('div', 'bar', win);
+    ['#ff5f57', '#febc2e', '#28c840'].forEach((c) => { h('div', 'dot', bar).style.background = c; });
+    h('div', 'url', bar, `<svg width="14" height="16" viewBox="0 0 14 16"><path fill="#8e8e93" d="M3 7V5a4 4 0 118 0v2h1a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V8a1 1 0 011-1h1zm2 0h4V5a2 2 0 10-4 0v2z"/></svg>${esc(domain)}`);
+    h('div', '', bar).style.width = '62px';
+    const vp = h('div', 'vp', win);
+    vp.style.height = (vpH || Math.round(w * 900 / 1440)) + 'px';
+    const inner = h('div', 'inner', vp);
+    const img = h('img', '', inner); img.src = src(file); imgs.push(img);
+    const glare = h('div', 'glare', win);
+    return { win, vp, inner, img, glare };
+  }
+
+  // ---------- 場景 ----------
+  const SCENES = {
+    intro(sc, d) {
+      const small = h('div', 'center kicker', sc); small.style.top = '370px'; small.style.color = '#a1a1a6'; small.style.letterSpacing = '.3em';
+      const sSp = reveal(small, d.small);
+      const brand = h('div', 'center h-xl', sc); brand.style.top = '420px';
+      brand.style.background = 'linear-gradient(100deg,#fff 0%,#fff 42%,var(--accent) 50%,var(--accent2) 54%,#fff 62%,#fff 100%)';
+      brand.style.backgroundSize = '320% 100%'; brand.style.webkitBackgroundClip = 'text'; brand.style.backgroundClip = 'text'; brand.style.color = 'transparent';
+      brand.textContent = d.brand;
+      const streak = h('div', 'streak', sc);
+      return {
+        layout() { fit(brand, 1600, 260, 200, 70); streak.style.top = (420 + brand.offsetHeight + 40) + 'px'; },
+        render(t, dur) {
+          playReveal(sSp, t, 0.25, 0.9, 0.6, 10);
+          const p = P(t, 0.9, 2.3, E.outExpo);
+          brand.style.opacity = p; brand.style.letterSpacing = `${lerp(0.35, -0.035, p)}em`;
+          brand.style.filter = p < 0.999 ? `blur(${(1 - p) * 26}px)` : 'none';
+          brand.style.backgroundPosition = `${lerp(100, 0, P(t, 1.4, 3.4, E.inOutCubic))}% 0`;
+          const sp = P(t, 1.5, 2.6, E.outExpo);
+          streak.style.width = (sp * 900) + 'px'; streak.style.marginLeft = (-sp * 450) + 'px'; streak.style.opacity = sp * (1 - P(t, 2.8, 3.6, E.lin));
+          sc.style.transform = `scale(${lerp(1, 1.06, t / dur)})`;
+        },
+      };
+    },
+
+    hook(sc, d) {
+      const lines = d.lines.map((txt, i) => {
+        const el = h('div', 'center h-xl' + (i === d.lines.length - 1 && d.lines.length > 1 ? ' agrad' : ' grad'), sc);
+        el.style.top = '0'; el.style.padding = '0 160px';
+        const sp = reveal(el, txt);
+        return { el, sp };
+      });
+      return {
+        layout() { for (const l of lines) { fit(l.el, 1600, 330, 132, 60); l.el.style.top = ((H - l.el.offsetHeight) / 2) + 'px'; } },
+        render(t) {
+          lines.forEach((l, i) => {
+            const lt = t - i * 2;
+            const on = lt >= 0 && lt < 2;
+            l.el.style.display = on ? 'block' : 'none';
+            if (!on) return;
+            playReveal(l.sp, lt, 0.05, 0.75, 0.55, 16);
+            const o = P(lt, 1.72, 2.0, E.inCubic);
+            l.el.style.opacity = 1 - o; l.el.style.transform = `scale(${lerp(1, 1.04, lt / 2) + o * 0.06})`;
+            l.el.style.filter = o > 0 ? `blur(${o * 10}px)` : 'none';
+          });
+        },
+      };
+    },
+
+    hero(sc, d) {
+      const kick = h('div', 'center kicker', sc); kick.style.top = '92px'; kick.textContent = d.title;
+      const tag = h('div', 'center h-xl grad', sc); tag.style.top = '140px'; tag.style.padding = '0 200px';
+      const tSp = reveal(tag, d.tagline);
+      const persp = h('div', '', sc); persp.style.cssText = 'position:absolute;inset:0;perspective:2400px;perspective-origin:50% 0%';
+      const w = 1500; const { win, glare } = makeWin(persp, d.img, d.domain, w);
+      win.style.left = ((W - w) / 2) + 'px'; win.style.top = '330px'; win.style.transformOrigin = '50% 0%';
+      return {
+        layout() { fit(tag, 1520, 170, 86, 44); },
+        render(t, dur) {
+          kick.style.opacity = P(t, 0.15, 0.8);
+          playReveal(tSp, t, 0.3, 0.8, 0.5, 14);
+          const p = P(t, 0.05, 1.9, E.outExpo);
+          const push = P(t, 1.6, dur, E.inOutSine);
+          const capOut = P(t, 3.3, 4.4, E.inOutCubic);
+          kick.style.transform = tag.style.transform = `translateY(${-capOut * 260}px)`;
+          tag.style.opacity = 1 - capOut; if (t > 0.8) kick.style.opacity = 1 - capOut;
+          win.style.transform = `translateY(${lerp(560, 0, p) - push * 270}px) rotateX(${lerp(42, 6, p) * (1 - push) }deg) scale(${lerp(0.86, 1, p) + push * 0.16})`;
+          glare.style.backgroundPosition = `${lerp(120, -40, P(t, 0.8, 2.6, E.inOutSine))}% 0`;
+        },
+      };
+    },
+
+    feature(sc, d) {
+      const R = d.rect || { x: 200, y: 200, w: 600, h: 80 };
+      const cx = clamp(R.x + R.w / 2, 200, 1240), cy = clamp(R.y + R.h / 2, 150, 750);
+      const hlPad = 18;
+      const hlBox = { x: Math.max(4, R.x - hlPad), y: Math.max(4, R.y - hlPad), w: Math.min(1430, R.w + hlPad * 2), h: Math.min(880, R.h + hlPad * 2) };
+      if (d.variant === 'bleed') {
+        const bl = h('div', 'bleed', sc);
+        const inner = h('div', 'inner', bl);
+        const k = W / 1440; // 1440x900 → 1920x1200
+        inner.style.width = W + 'px';
+        const img = h('img', '', inner); img.src = src(d.img); img.style.width = W + 'px'; imgs.push(img);
+        const hl = h('div', 'hl', inner);
+        Object.assign(hl.style, { left: hlBox.x * k + 'px', top: hlBox.y * k + 'px', width: hlBox.w * k + 'px', height: hlBox.h * k + 'px' });
+        const shade = h('div', 'shade', sc);
+        const pill = h('div', 'pill', sc, `<span style="width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent)"></span>${esc(d.domain + (d.path && d.path !== '/' ? d.path : ''))}`);
+        pill.style.left = '120px'; pill.style.top = '90px';
+        const kick = h('div', 'kicker', sc); kick.style.cssText += ';position:absolute;left:140px;bottom:330px';
+        const kSp = reveal(kick, d.kicker);
+        const title = h('div', 'h-xl', sc); title.style.cssText += ';position:absolute;left:136px;bottom:190px;width:1500px';
+        const tSp = reveal(title, d.title);
+        const body = h('div', 'body', sc); body.style.cssText += ';position:absolute;left:140px;bottom:110px;width:1400px;color:#d1d1d6';
+        body.textContent = d.body;
+        return {
+          layout() { fit(title, 1600, 130, 112, 50); fit(body, 1500, 52, 34, 22); },
+          render(t, dur) {
+            const z = lerp(1.04, 1.42, P(t, 0, dur, E.inOutSine));
+            const fx = cx * k, fy = cy * k;
+            // 讓焦點從畫面中心慢慢移向段落位置
+            const f = P(t, 0, dur, E.inOutCubic);
+            const tx = lerp(W / 2, W * 0.62, f), ty = lerp(H / 2, H * 0.4, f);
+            inner.style.transform = `translate(${tx - fx * z}px, ${ty - fy * z}px) scale(${z})`;
+            const hp = P(t, 0.7, 1.4, E.outCubic);
+            hl.style.opacity = hp; hl.style.boxShadow = `0 0 0 6000px rgba(0,0,0,${0.35 * hp}), 0 0 60px var(--accent)`;
+            pill.style.opacity = P(t, 0.2, 0.9); pill.style.transform = `translateY(${(1 - P(t, 0.2, 0.9)) * -20}px)`;
+            playReveal(kSp, t, 0.25, 0.7, 0.5, 8);
+            playReveal(tSp, t, 0.4, 0.85, 0.45, 16);
+            fade(body, P(t, 1.0, 1.8, E.outCubic), 24);
+            sc.style.transform = `scale(${1 + 0.0})`;
+          },
+        };
+      }
+      // 左右分割：文字欄 + 浮動瀏覽器視窗
+      const left = d.variant === 'left';
+      const ww = 1060; const vpH = 662;
+      const persp = h('div', '', sc); persp.style.cssText = 'position:absolute;inset:0;perspective:2600px';
+      const { win, vp, inner, glare } = makeWin(persp, d.img, d.domain, ww, vpH);
+      const winX = left ? W - ww - 110 : 110;
+      win.style.left = winX + 'px'; win.style.top = ((H - vpH - 54) / 2) + 'px';
+      const hl = h('div', 'hl', inner);
+      const ks = ww / 1440;
+      Object.assign(hl.style, { left: hlBox.x * ks + 'px', top: hlBox.y * ks + 'px', width: hlBox.w * ks + 'px', height: hlBox.h * ks + 'px', borderWidth: '2.5px', borderRadius: '12px' });
+      const col = h('div', '', sc);
+      col.style.cssText = `position:absolute;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;width:600px;${left ? 'left:130px' : 'right:120px'}`;
+      const kick = h('div', 'kicker', col); const kSp = reveal(kick, d.kicker);
+      const title = h('div', 'h-xl grad', col); title.style.margin = '22px 0 30px';
+      const tSp = reveal(title, d.title);
+      const body = h('div', 'body', col); body.textContent = d.body;
+      return {
+        layout() { fit(title, 600, 330, 92, 44); fit(body, 600, 220, 34, 22); },
+        render(t, dur) {
+          const p = P(t, 0, 1.2, E.outExpo);
+          const drift = t / dur;
+          const sgn = left ? 1 : -1;
+          win.style.transform = `translateX(${sgn * lerp(260, 0, p)}px) rotateY(${sgn * (lerp(-30, -10, p) + drift * 6)}deg) rotateX(${lerp(8, 3, p)}deg) scale(${lerp(0.9, 1, p)})`;
+          win.style.opacity = P(t, 0, 0.5, E.outCubic);
+          const z = lerp(1, 1.75, P(t, 0.9, dur, E.inOutCubic));
+          const f = P(t, 0.9, dur, E.inOutCubic);
+          const tx = lerp(ww / 2, ww * 0.5, f), ty = lerp(vpH / 2, vpH * 0.45, f);
+          const fx = cx * ks, fy = cy * ks;
+          let ox = tx - fx * z, oy = ty - fy * z;
+          ox = clamp(ox, ww - ww * z, 0); oy = clamp(oy, vpH - (900 * ks) * z, 0);
+          inner.style.transform = `translate(${ox}px, ${oy}px) scale(${z})`;
+          const hp = P(t, 1.1, 1.7, E.outCubic);
+          hl.style.opacity = hp; hl.style.boxShadow = `0 0 0 6000px rgba(0,0,0,${0.42 * hp}), 0 0 40px var(--accent)`;
+          glare.style.backgroundPosition = `${lerp(130, -30, P(t, 0.2, 1.8, E.inOutSine))}% 0`;
+          playReveal(kSp, t, 0.2, 0.7, 0.5, 8);
+          playReveal(tSp, t, 0.35, 0.85, 0.45, 16);
+          fade(body, P(t, 0.9, 1.7, E.outCubic), 24);
+        },
+      };
+    },
+
+    cuts(sc, d) {
+      const per = d.dur / d.cuts.length;
+      const items = d.cuts.map((c) => {
+        const bl = h('div', 'bleed', sc);
+        const inner = h('div', 'inner', bl);
+        const img = h('img', '', inner); img.src = src(c.img); img.style.width = W + 'px'; imgs.push(img);
+        return { bl, inner, c };
+      });
+      const dim = h('div', '', sc); dim.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(0,0,0,.7), rgba(0,0,0,.35))';
+      const word = h('div', 'center h-xl', sc); word.style.textShadow = '0 10px 60px rgba(0,0,0,.6)';
+      return {
+        render(t) {
+          const i = Math.min(items.length - 1, Math.floor(t / per));
+          const lt = t - i * per;
+          items.forEach((it, j) => { it.bl.style.display = j === i ? 'block' : 'none'; });
+          const it = items[i];
+          const k = W / 1440;
+          const R = it.c.rect || { x: 520, y: 300, w: 400, h: 100 };
+          const fx = clamp(R.x + R.w / 2, 300, 1140) * k, fy = clamp(R.y + R.h / 2, 200, 700) * k;
+          const z = lerp(1.5, 1.22, P(lt, 0, per, E.outCubic));
+          const dir = i % 2 ? 1 : -1;
+          it.inner.style.transform = `translate(${W / 2 - fx * z + dir * lt * 60}px, ${H / 2 - fy * z}px) scale(${z})`;
+          it.inner.style.filter = `blur(${lerp(14, 5, P(lt, 0, per * 0.6, E.outCubic)).toFixed(1)}px)`;
+          const wd = (it.c.word || '').slice(0, 16);
+          if (word.dataset.w !== wd) { word.textContent = wd; word.dataset.w = wd; fit(word, 1500, 200, 150, 60); word.style.top = ((H - word.offsetHeight) / 2) + 'px'; }
+          word.style.opacity = P(lt, 0, 0.08, E.lin);
+          word.style.transform = `scale(${lerp(1.12, 1, P(lt, 0, per, E.outExpo))})`;
+          S._flash = Math.max(S._flash || 0, 0.22 * (1 - clamp(lt / 0.12)));
+        },
+      };
+    },
+
+    scroll(sc, d) {
+      const col = h('div', '', sc); col.style.cssText = 'position:absolute;left:130px;top:0;bottom:0;width:640px;display:flex;flex-direction:column;justify-content:center';
+      const line = h('div', 'h-xl grad', col); const lSp = reveal(line, d.line);
+      const persp = h('div', '', sc); persp.style.cssText = 'position:absolute;inset:0;perspective:2200px;perspective-origin:70% 50%';
+      const ww = 1000, vpH = 1500;
+      const { win, inner, img } = makeWin(persp, d.img, d.domain, ww, vpH);
+      win.style.left = '820px'; win.style.top = '-150px'; win.style.transformOrigin = '0% 50%';
+      const imgH = d.h * (ww / 1440);
+      return {
+        layout() { fit(line, 640, 420, 104, 48); },
+        render(t, dur) {
+          playReveal(lSp, t, 0.35, 0.9, 0.5, 16);
+          const p = P(t, 0, 1.3, E.outExpo);
+          win.style.transform = `translateX(${lerp(500, 0, p)}px) rotateY(${lerp(-38, -24, p) + t * 1.2}deg) rotateX(${lerp(14, 10, p)}deg) rotateZ(${lerp(4, 2, p)}deg)`;
+          win.style.opacity = P(t, 0, 0.4, E.lin);
+          const s = P(t, 0.5, dur - 0.2, E.inOutCubic);
+          inner.style.transform = `translateY(${-s * Math.max(0, imgH - vpH * 0.8)}px)`;
+        },
+      };
+    },
+
+    wall(sc, d) {
+      const persp = h('div', '', sc); persp.style.cssText = 'position:absolute;inset:0;perspective:1800px';
+      const wall = h('div', 'wall', persp);
+      const tiles = [];
+      const cols = 7, rows = 6, gx = 616, gy = 400;
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        const tile = h('div', 'tile', wall);
+        const im = h('img', '', tile); im.src = src(d.imgs[(r * 3 + c) % d.imgs.length]); imgs.push(im);
+        const x = (c - cols / 2 + 0.5) * gx + (r % 2) * 120, y = (r - rows / 2 + 0.5) * gy;
+        tile.style.left = (x - 288) + 'px'; tile.style.top = (y - 180) + 'px';
+        tiles.push({ tile, dist: Math.hypot(x, y) });
+      }
+      const glow = h('div', '', sc); glow.style.cssText = 'position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,.85), rgba(0,0,0,.15) 70%, rgba(0,0,0,0))';
+      const line = h('div', 'center h-xl grad', sc); line.style.padding = '0 200px';
+      const lSp = reveal(line, d.line);
+      return {
+        layout() { fit(line, 1500, 330, 124, 56); line.style.top = ((H - line.offsetHeight) / 2) + 'px'; },
+        render(t, dur) {
+          const m = t / dur;
+          wall.style.transform = `rotateX(${lerp(48, 38, m)}deg) rotateZ(${lerp(-28, -22, m)}deg) translate3d(${lerp(-260, 260, E.inOutSine(m))}px, ${lerp(220, -160, m)}px, ${lerp(-300, 0, P(t, 0, 1.5))}px)`;
+          for (const tl of tiles) { const p = P(t, tl.dist / 3000, tl.dist / 3000 + 0.8, E.outCubic); tl.tile.style.opacity = p; tl.tile.style.transform = `translateZ(${(1 - p) * -400}px)`; }
+          playReveal(lSp, t, 0.6, 0.8, 0.5, 16);
+          glow.style.opacity = P(t, 0.4, 1.2, E.lin);
+        },
+      };
+    },
+
+    mobile(sc, d) {
+      const col = h('div', '', sc); col.style.cssText = 'position:absolute;left:150px;top:0;bottom:0;width:720px;display:flex;flex-direction:column;justify-content:center';
+      const line = h('div', 'h-xl grad', col); const lSp = reveal(line, d.line);
+      const persp = h('div', '', sc); persp.style.cssText = 'position:absolute;inset:0;perspective:2000px';
+      const mk = (x) => {
+        const ph = h('div', 'phone', persp); ph.style.left = x + 'px'; ph.style.top = '90px';
+        const scr = h('div', 'screen', ph); h('div', 'island', scr);
+        const inner = h('div', 'inner', scr); const im = h('img', '', inner); im.src = src(d.img); imgs.push(im);
+        return { ph, inner };
+      };
+      const back = mk(1020), front = mk(1300);
+      const screenW = 400, screenH = 870; const imgH = d.h * (screenW / d.w);
+      return {
+        layout() { fit(line, 700, 420, 104, 48); },
+        render(t, dur) {
+          playReveal(lSp, t, 0.3, 0.85, 0.5, 16);
+          const p = P(t, 0, 1.2, E.outExpo), p2 = P(t, 0.15, 1.4, E.outExpo);
+          front.ph.style.transform = `translateY(${lerp(900, 0, p) - t * 10}px) rotateY(${lerp(-25, -12, p)}deg) rotateZ(${lerp(6, 2, p)}deg)`;
+          back.ph.style.transform = `translateY(${lerp(1000, 40, p2) - t * 6}px) rotateY(${lerp(-25, -14, p2)}deg) rotateZ(${lerp(-2, -4, p2)}deg) scale(.9)`;
+          back.ph.style.opacity = 0.75;
+          const s = P(t, 0.6, dur, E.inOutCubic);
+          front.inner.style.transform = `translateY(${-s * Math.max(0, imgH - screenH) * 0.7}px)`;
+          back.inner.style.transform = `translateY(${-Math.max(0, imgH - screenH) * 0.45}px)`;
+        },
+      };
+    },
+
+    outro(sc, d) {
+      const icon = h('div', 'icon', sc); icon.style.left = (W / 2 - 105) + 'px'; icon.style.top = '210px';
+      if (d.icon && !/\.ico$/.test(d.icon)) { const im = h('img', '', icon); im.src = src(d.icon); imgs.push(im); }
+      else h('div', 'mono', icon).textContent = (d.brand || '?').trim().charAt(0).toUpperCase();
+      const brand = h('div', 'center h-xl grad', sc); brand.style.top = '470px'; const bSp = reveal(brand, d.brand);
+      const line = h('div', 'center body', sc); line.style.top = '640px'; line.style.padding = '0 200px'; const lSp = reveal(line, d.line);
+      const cta = h('div', 'cta', sc, `${esc(d.cta)} <span class="dom">${esc(d.domain)}</span> <svg width="30" height="30" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>`);
+      cta.style.top = '760px';
+      return {
+        layout() { fit(brand, 1600, 170, 128, 56); fit(line, 1500, 110, 40, 24); },
+        render(t, dur) {
+          const ip = P(t, 0.15, 1.1, E.outBack);
+          icon.style.transform = `scale(${clamp(ip, 0, 2)}) rotate(${(1 - ip) * -12}deg)`; icon.style.opacity = P(t, 0.1, 0.5, E.lin);
+          playReveal(bSp, t, 0.5, 0.9, 0.45, 18);
+          playReveal(lSp, t, 1.1, 0.8, 0.5, 10);
+          const cp = P(t, 1.7, 2.5, E.outExpo);
+          cta.style.opacity = cp; cta.style.transform = `translateX(-50%) translateY(${(1 - cp) * 40}px) scale(${lerp(0.92, 1, cp)})`;
+          sc.style.opacity = 1 - P(t, dur - 1.1, dur - 0.1, E.inOutSine);
+          sc.style.transform = `scale(${lerp(1.0, 0.97, t / dur)})`;
+        },
+      };
+    },
+  };
+
+  // ---------- 背景與顆粒 ----------
+  function makeGrain() {
+    const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+    const id = x.createImageData(256, 256); let s = 99;
+    for (let i = 0; i < id.data.length; i += 4) { s = (s * 16807) % 2147483647; const v = s & 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255; }
+    x.putImageData(id, 0, 0);
+    const g = document.getElementById('grain'); g.style.backgroundImage = `url(${c.toDataURL()})`;
+  }
+  const orbs = ['o1', 'o2', 'o3'].map((id) => document.getElementById(id));
+  function renderBg(t, type) {
+    const strong = { intro: 0.55, hook: 0.45, outro: 0.6, wall: 0.25, scroll: 0.35, mobile: 0.4 }[type] ?? 0.22;
+    const cfg = [[0.3, 0.35, 0.21, 0.13], [0.7, 0.6, 0.17, 0.23], [0.5, 0.2, 0.11, 0.19]];
+    orbs.forEach((o, i) => {
+      const [bx, by, fx, fy] = cfg[i];
+      const x = W * (bx + 0.18 * Math.sin(t * fx + i)) - 700, y = H * (by + 0.18 * Math.cos(t * fy + i * 2)) - 700;
+      o.style.transform = `translate(${x}px, ${y}px) scale(${1 + 0.15 * Math.sin(t * 0.3 + i)})`;
+      o.style.opacity = strong * (i === 2 ? 0.6 : 1);
+    });
+  }
+
+  // ---------- API ----------
+  window.__init = async (story, assetBase) => {
+    S = story; base = assetBase || '';
+    const pal = story.palette || {};
+    const root = document.documentElement.style;
+    if (pal.accent) root.setProperty('--accent', pal.accent);
+    if (pal.accent2) root.setProperty('--accent2', pal.accent2);
+    if (pal.accent3) root.setProperty('--accent3', pal.accent3);
+    orbs[0].style.background = 'radial-gradient(circle, var(--accent) 0%, transparent 62%)';
+    orbs[1].style.background = 'radial-gradient(circle, var(--accent2) 0%, transparent 62%)';
+    orbs[2].style.background = 'radial-gradient(circle, var(--accent3) 0%, transparent 62%)';
+    makeGrain();
+    const host = document.getElementById('scenes');
+    host.innerHTML = ''; scenes = []; imgs = [];
+    const allText = [];
+    for (const d of story.scenes) {
+      const el = h('div', 'scene', host);
+      const impl = SCENES[d.type](el, d);
+      scenes.push({ d, el, impl });
+      allText.push(JSON.stringify(d));
+    }
+    // 字型：先載入實際用到的字，避免中文分片延遲
+    try {
+      const txt = allText.join('');
+      await Promise.all(['400', '500', '600', '700', '800', '900'].flatMap((w) => [document.fonts.load(`${w} 40px "Noto Sans TC"`, txt), document.fonts.load(`${w} 40px Inter`, txt)]));
+      await document.fonts.ready;
+    } catch (e) {}
+    await Promise.all(imgs.map((im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((r) => { im.onload = im.onerror = r; })).then(() => im.decode && im.decode().catch(() => {}))));
+    for (const s of scenes) { s.el.style.display = 'block'; if (s.impl.layout) s.impl.layout(); s.el.style.display = 'none'; }
+    return { duration: story.duration, images: imgs.length };
+  };
+
+  let lastActive = null;
+  window.__seek = (t) => {
+    S._flash = 0;
+    let active = null;
+    for (const s of scenes) if (t >= s.d.start && t < s.d.start + s.d.dur) active = s;
+    if (!active) active = scenes[scenes.length - 1];
+    if (lastActive && lastActive !== active) lastActive.el.style.display = 'none';
+    active.el.style.display = 'block';
+    lastActive = active;
+    const lt = t - active.d.start;
+    active.el.style.opacity = 1; active.el.style.transform = '';
+    active.impl.render(lt, active.d.dur);
+    // 通用轉場：最後 0.22 秒快速放大淡出（outro 自己處理）
+    if (active.d.type !== 'outro' && active.d.type !== 'hook') {
+      const o = P(lt, active.d.dur - 0.22, active.d.dur, E.inCubic);
+      if (o > 0) { active.el.style.opacity = 1 - o; active.el.style.transform = (active.el.style.transform || '') + ` scale(${1 + o * 0.08})`; }
+    }
+    // 重要剪輯點的白閃
+    const big = active.d.type === 'hero' || active.d.type === 'outro' || active.d.type === 'feature';
+    if (big) S._flash = Math.max(S._flash, (active.d.type === 'feature' ? 0.08 : 0.3) * (1 - clamp(lt / 0.18)));
+    document.getElementById('flash').style.opacity = S._flash;
+    renderBg(t, active.d.type);
+    const g = document.getElementById('grain');
+    const fr = Math.floor(t * 24);
+    g.style.backgroundPosition = `${(fr * 73) % 256}px ${(fr * 151) % 256}px`;
+  };
+
+  // 即時預覽（網頁裡使用）
+  window.__play = (onTick) => {
+    const t0 = performance.now();
+    let stop = false;
+    const loop = () => {
+      if (stop) return;
+      const t = (performance.now() - t0) / 1000;
+      if (t > S.duration) { onTick && onTick(S.duration, true); return; }
+      window.__seek(t); onTick && onTick(t, false);
+      requestAnimationFrame(loop);
+    };
+    loop();
+    return () => { stop = true; };
+  };
+})();
+</script>
+</body>
+</html>

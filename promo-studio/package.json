@@ -1,0 +1,17 @@
+{
+  "name": "promo-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "輸入網址，自動產生整站功能介紹宣傳片（爬取＋AI 文案＋電影級動態排版＋配樂）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "make": "node cli.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.14.0",
+    "playwright": "1.63.0",
+    "zod": "^3.25.0"
+  }
+}
