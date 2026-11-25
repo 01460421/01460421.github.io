@@ -4486,11 +4486,12 @@ function resetGacha() {
       const savedKarma = localStorage.getItem('gacha-karma');
       if (savedKarma) {
         karma = parseInt(savedKarma, 10);
-        karmaDisplay.textContent = `已累積功德: ${karma}`;
+        if (karmaDisplay) karmaDisplay.textContent = `已累積功德: ${karma}`;
       }
     });
     
-    karmaBtn.addEventListener('click', () => {
+    // 功德按鈕已從頁面拿掉時不能報錯（以前這裡丟例外，後面的腳本整段不跑）
+    if (karmaBtn && karmaDisplay) karmaBtn.addEventListener('click', () => {
       karma++;
       localStorage.setItem('gacha-karma', karma);
       
@@ -5467,26 +5468,8 @@ document.getElementById('selectAll').addEventListener('change', e => {
   updateTable();
   updateCardView();
   updateTotals();
-});// 在 updateTotals() 最後，加上這段：
-const matSummary = document.getElementById('materialSummary');
-const matList    = document.getElementById('materialList');
-matList.innerHTML = '';
-
-// 把 finalItems 裡除了「獨一律」以外、有數量的素材都列出來
-Object.entries(finalItems).forEach(([name, qty]) => {
-  if (name !== '獨一律' && qty > 0) {
-    const li = document.createElement('li');
-    li.textContent = `${name} × ${qty}`;
-    matList.appendChild(li);
-  }
 });
-
-// 若真的有任何素材，就顯示那個區塊，否則隱藏
-if (matList.children.length) {
-  matSummary.style.display = 'block';
-} else {
-  matSummary.style.display = 'none';
-}
+// （原本這裡有一段誤貼在外層的素材清單程式：同樣的邏輯已經在 updateTotals() 裡，放在外層會因 finalItems 未定義而中斷後面的腳本）
 // 禮包計算器主要初始化功能
 function initPackageCalc() {
   // 創建卡片視圖容器（如果不存在）
