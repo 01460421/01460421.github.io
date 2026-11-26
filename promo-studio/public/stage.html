@@ -581,11 +581,12 @@
   function renderBg(t, type) {
     const strong = { chapter: 0.42, intro: 0.55, hook: 0.45, outro: 0.5, wall: 0.25, scroll: 0.35, mobile: 0.4, grid: 0.35 }[type] ?? 0.22;
     const cfg = [[0.3, 0.35, 0.21, 0.13], [0.7, 0.6, 0.17, 0.23], [0.5, 0.2, 0.11, 0.19]];
+    const calm = S && S.calm ? 0.4 : 1;
     orbs.forEach((o, i) => {
       const [bx, by, fx, fy] = cfg[i];
       const x = W * (bx + 0.18 * Math.sin(t * fx + i)) - 700, y = H * (by + 0.18 * Math.cos(t * fy + i * 2)) - 700;
       o.style.transform = `translate(${x}px, ${y}px) scale(${1 + 0.15 * Math.sin(t * 0.3 + i)})`;
-      o.style.opacity = strong * (i === 2 ? 0.6 : 1);
+      o.style.opacity = strong * calm * (i === 2 ? 0.6 : 1);
     });
   }
 
@@ -601,6 +602,7 @@
     orbs[1].style.background = 'radial-gradient(circle, var(--accent2) 0%, transparent 62%)';
     orbs[2].style.background = 'radial-gradient(circle, var(--accent3) 0%, transparent 62%)';
     makeGrain();
+    document.getElementById('grain').style.opacity = story.calm ? 0.025 : '';
     const host = document.getElementById('scenes');
     host.innerHTML = ''; scenes = []; imgs = [];
     const allText = [];

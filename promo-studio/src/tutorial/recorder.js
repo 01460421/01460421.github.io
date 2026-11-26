@@ -15,12 +15,12 @@ const OVERLAY = () => {
     root.id = '__pc_root';
     root.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147483647;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif';
     root.innerHTML = `
-      <div id="__pc_hl" style="position:fixed;border:3px solid #39c5bb;border-radius:14px;box-shadow:0 0 0 9999px rgba(0,0,0,.28),0 0 30px rgba(57,197,187,.8);opacity:0;transition:all .45s cubic-bezier(.2,.8,.2,1)"></div>
-      <div id="__pc_rip" style="position:fixed;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:3px solid #39c5bb;opacity:0"></div>
+      <div id="__pc_hl" style="display:none;position:fixed;border:3px solid #39c5bb;border-radius:14px;box-shadow:0 0 0 9999px rgba(0,0,0,.28),0 0 30px rgba(57,197,187,.8);opacity:0;transition:all .45s cubic-bezier(.2,.8,.2,1)"></div>
+      <div id="__pc_rip" style="position:fixed;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:rgba(255,255,255,.35);border:1.5px solid rgba(255,255,255,.95);box-shadow:0 0 0 1px rgba(0,0,0,.12);opacity:0"></div>
       <svg id="__pc_cur" width="30" height="34" viewBox="0 0 30 34" style="position:fixed;left:0;top:0;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45));transform:translate(-100px,-100px)">
         <path d="M3 2 L3 26 L9.5 20 L14 31 L18.5 29 L14 18.5 L23 18.5 Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>
-      <div id="__pc_badge" style="position:fixed;left:22px;top:18px;padding:8px 16px;border-radius:999px;background:rgba(20,20,24,.78);color:#fff;font-size:15px;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(12px);opacity:0;transition:opacity .4s;box-shadow:0 6px 20px rgba(0,0,0,.25)"></div>
-      <div id="__pc_cap" style="position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(12px);max-width:1180px;padding:16px 30px;border-radius:18px;background:rgba(16,16,20,.82);color:#fff;font-size:26px;font-weight:600;line-height:1.45;text-align:center;letter-spacing:.01em;backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(0,0,0,.35);opacity:0;transition:opacity .35s,transform .35s"></div>`;
+      <div id="__pc_badge" style="display:none;position:fixed;left:22px;top:18px;padding:8px 16px;border-radius:999px;background:rgba(20,20,24,.78);color:#fff;font-size:15px;font-weight:700;letter-spacing:.04em;backdrop-filter:blur(12px);opacity:0;transition:opacity .4s;box-shadow:0 6px 20px rgba(0,0,0,.25)"></div>
+      <div id="__pc_cap" style="display:none;position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(12px);max-width:1180px;padding:16px 30px;border-radius:18px;background:rgba(16,16,20,.82);color:#fff;font-size:26px;font-weight:600;line-height:1.45;text-align:center;letter-spacing:.01em;backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(0,0,0,.35);opacity:0;transition:opacity .35s,transform .35s"></div>`;
     document.documentElement.appendChild(root);
     const cur = root.querySelector('#__pc_cur'), cap = root.querySelector('#__pc_cap'), hl = root.querySelector('#__pc_hl'), rip = root.querySelector('#__pc_rip'), badge = root.querySelector('#__pc_badge');
     const st = { x: innerWidth * 0.62, y: innerHeight * 0.55 };
@@ -43,7 +43,7 @@ const OVERLAY = () => {
         });
       },
       click() {
-        rip.animate([{ opacity: 0.95, transform: 'scale(.4)' }, { opacity: 0, transform: 'scale(3.2)' }], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' });
+        rip.animate([{ opacity: 0.9, transform: 'scale(.5)' }, { opacity: 0, transform: 'scale(2.4)' }], { duration: 460, easing: 'cubic-bezier(.2,.8,.2,1)' });
         rip.style.left = st.x + 'px'; rip.style.top = st.y + 'px';
         cur.animate([{ transform: cur.style.transform + ' scale(1)' }, { transform: cur.style.transform + ' scale(.82)' }, { transform: cur.style.transform + ' scale(1)' }], { duration: 220 });
       },
@@ -67,6 +67,7 @@ class Recorder {
   constructor({ outDir, viewport = { width: 1600, height: 900 }, scale = 1.2, log = console.log, storage = {} }) {
     this.outDir = outDir; this.viewport = viewport; this.scale = scale; this.log = log; this.storage = storage;
     this.frames = []; this.segments = []; this.cur = null; this.badgeText = '';
+    this.events = [];   // 合成用：{ ts, type: 'cap'|'focus', text?, rect? }（rect 為 CSS px）
     fs.mkdirSync(path.join(outDir, 'frames'), { recursive: true });
   }
 
@@ -95,6 +96,7 @@ class Recorder {
   }
 
   async goto(url) {
+    this.focus(null);
     await this.page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
     try { await this.page.waitForLoadState('networkidle', { timeout: 15000 }); } catch {}
     await sleep(500);
@@ -103,7 +105,8 @@ class Recorder {
 
   // ---- 分段（每章一段） ----
   begin(id, badge) {
-    this.cur = { id, start: Date.now() / 1000 };
+    this.focus(null);
+    this.cur = { id, start: Date.now() / 1000, badge: badge || '' };
     this.badgeText = badge || '';
     return this.page.evaluate((t) => window.__pc && window.__pc.badge(t), this.badgeText).catch(() => {});
   }
@@ -136,22 +139,29 @@ class Recorder {
     const b = await loc.boundingBox();
     return b && { x: b.x, y: b.y, w: b.width, h: b.height };
   }
+  _ev(e) { this.events.push({ ts: Date.now() / 1000, ...e }); }
+  focus(rect) {
+    const V = this.viewport;
+    if (rect && (rect.w > V.width * 0.72 || rect.h > V.height * 0.72)) rect = null;   // 太大就不推近
+    this._ev({ type: 'focus', rect: rect || null });
+  }
   async say(text, ms = 0) {
-    await this.page.evaluate((t) => window.__pc && window.__pc.say(t), text || '').catch(() => {});
+    this._ev({ type: 'cap', text: text || '' });
     if (ms) await sleep(ms);
   }
   async hl(target, ms = 0) {
-    if (!target) { await this.page.evaluate(() => window.__pc && window.__pc.hl(null)).catch(() => {}); return; }
+    if (!target) { this.focus(null); return; }
     try {
       const r = await this._rect(await this._el(target));
-      await this.page.evaluate((rr) => window.__pc && window.__pc.hl(rr), r);
-      if (ms) { await sleep(ms); await this.hl(null); }
+      this.focus(r);
+      if (ms) { await sleep(ms); this.focus(null); }
     } catch (e) { this.log(`  （聚焦略過：${target}）`); if (ms) await sleep(ms); }
   }
   async move(target, ms = 700) {
     const loc = await this._el(target);
     const r = await this._rect(loc);
     if (!r) return null;
+    this.focus(r);
     const x = r.x + Math.min(r.w / 2, 60), y = r.y + r.h / 2;
     await this.page.evaluate(([x, y, ms]) => window.__pc && window.__pc.move(x, y, ms), [x, y, ms]);
     await sleep(80);
@@ -165,8 +175,10 @@ class Recorder {
       await this.page.evaluate(() => window.__pc && window.__pc.click());
       await sleep(140);
       await loc.click({ timeout: 5000 });
-      await sleep(wait);
-      if (hl) await this.hl(null);
+      // 點完先停一下讓人看到結果，再把鏡頭拉回全景
+      await sleep(Math.min(700, wait * 0.45));
+      this.focus(null);
+      await sleep(Math.max(0, wait - Math.min(700, wait * 0.45)));
       return true;
     } catch (e) { this.log(`  （點擊略過：${target} — ${e.message.split('\n')[0]}）`); await sleep(wait); return false; }
   }
@@ -179,7 +191,9 @@ class Recorder {
       if (clear) await loc.fill('');
       await loc.pressSequentially(text, { delay: 110 });
       if (enter) await loc.press('Enter');
-      await sleep(wait);
+      await sleep(Math.min(900, wait * 0.5));
+      this.focus(null);
+      await sleep(Math.max(0, wait - Math.min(900, wait * 0.5)));
       return true;
     } catch (e) { this.log(`  （輸入略過：${target} — ${e.message.split('\n')[0]}）`); await sleep(wait); return false; }
   }
@@ -189,15 +203,17 @@ class Recorder {
       const loc = await this.move(target);
       await this.page.evaluate(() => window.__pc && window.__pc.click());
       await loc.selectOption(value);
-      await sleep(wait);
+      await sleep(600); this.focus(null);
+      await sleep(Math.max(0, wait - 600));
       return true;
     } catch (e) { this.log(`  （選單略過：${target} — ${e.message.split('\n')[0]}）`); await sleep(wait); return false; }
   }
   async scroll(by, ms = 1200) {
+    this.focus(null);
     await this.page.evaluate((by) => window.scrollBy({ top: by, behavior: 'smooth' }), by);
     await sleep(ms);
   }
-  async top(ms = 700) { await this.page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' })); await sleep(ms); }
+  async top(ms = 700) { this.focus(null); await this.page.evaluate(() => window.scrollTo({ top: 0, behavior: 'smooth' })); await sleep(ms); }
   async keys(text, caption, wait = 900) {
     if (caption) await this.say(caption);
     await this.page.keyboard.type(text, { delay: 120 });
@@ -212,7 +228,20 @@ class Recorder {
     await this.browser.close();
   }
 
-  // ---- 輸出：每段依時間戳組成固定 30fps 影片 ----
+  // ---- 輸出給合成器：段落內的畫面（含時間）與事件 ----
+  segmentData(seg) {
+    const fr = this.frames;
+    let i0 = fr.findIndex((f) => f.ts >= seg.start); if (i0 < 0) i0 = fr.length - 1;
+    const frames = [];
+    for (let i = Math.max(0, i0 - 1); i < fr.length && fr[i].ts < seg.end; i++) frames.push({ file: fr[i].file, t: Math.max(0, fr[i].ts - seg.start) });
+    const before = this.events.filter((e) => e.ts < seg.start);
+    const lastFocus = [...before].reverse().find((e) => e.type === 'focus');
+    const events = (lastFocus ? [{ ...lastFocus, ts: seg.start }] : []).concat(this.events.filter((e) => e.ts >= seg.start && e.ts <= seg.end))
+      .map((e) => ({ ...e, t: Math.max(0, e.ts - seg.start) }));
+    return { id: seg.id, badge: seg.badge, duration: seg.end - seg.start, frames, events, viewport: this.viewport, scale: this.scale };
+  }
+
+  // ---- 輸出：每段依時間戳組成固定 30fps 影片（無合成） ----
   encodeSegment(seg, outFile, fps = 30) {
     const fr = this.frames;
     const W = Math.round(this.viewport.width * this.scale), H = Math.round(this.viewport.height * this.scale);

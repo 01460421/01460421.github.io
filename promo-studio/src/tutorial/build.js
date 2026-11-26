@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { Recorder } = require('./recorder');
+const { composeSegments } = require('./compose');
 const { render } = require('../render');
 const { pickPalette } = require('../story');
 
@@ -37,14 +38,27 @@ async function main() {
       try { await rec.page.keyboard.press('Escape'); await rec.page.evaluate(() => window.scrollTo(0, 0)); } catch {}
     }
     await rec.stop();
-    for (const s of rec.segments) rec.encodeSegment(s, path.join(OUT, 'seg', s.id + '.mp4'));
+    const list = rec.segments.map((s) => {
+      const data = rec.segmentData(s);
+      fs.writeFileSync(path.join(OUT, 'rec', s.id + '.json'), JSON.stringify(data));
+      return { data, outFile: path.join(OUT, 'seg', s.id + '.mp4') };
+    });
+    log('合成畫面（視窗、鏡頭推近、字幕）…');
+    await composeSegments(list, { log });
+  }
+
+  if (args.includes('--recompose')) {
+    const recDir = path.join(OUT, 'rec');
+    const list = fs.readdirSync(recDir).filter((f) => /^c\d+\.json$/.test(f)).filter((f) => !only || only.includes(parseInt(f.slice(1)))).sort()
+      .map((f) => ({ data: JSON.parse(fs.readFileSync(path.join(recDir, f))), outFile: path.join(OUT, 'seg', f.replace('.json', '.mp4')) }));
+    await composeSegments(list, { log });
   }
 
   // ---------- 2. 章節卡、開場、收尾 ----------
   const site = fs.existsSync(path.join(ASSETS, '..', 'site.json')) ? JSON.parse(fs.readFileSync(path.join(ASSETS, '..', 'site.json'))) : { pages: [] };
   const palette = site.pages.length ? pickPalette(site.pages) : { accent: 'hsl(176 70% 55%)', accent2: 'hsl(224 80% 62%)', accent3: 'hsl(136 70% 55%)' };
   const domain = new URL(script.site).hostname.replace(/^www\./, '');
-  const base = { width: 1920, height: 1080, fps: 30, bpm: 120, palette, lang: 'zh-Hant' };
+  const base = { width: 1920, height: 1080, fps: 30, bpm: 120, palette, lang: 'zh-Hant', calm: true };
   const mk = (scenes) => {
     let t = 0; for (const s of scenes) { s.start = t; t += s.dur; }
     return { ...base, scenes, duration: t, dropAt: 0, outroAt: t, cuts: scenes.map((s) => ({ t: s.start, type: s.type })) };

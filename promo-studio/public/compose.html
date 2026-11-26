@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Tutorial Compositor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=block" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b0b0c; }
+  #c { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+    background: radial-gradient(1400px 700px at 50% -10%, #26262b 0%, rgba(38,38,43,0) 70%), linear-gradient(180deg, #151517 0%, #0b0b0c 100%);
+    font-family: Inter, "Noto Sans TC", "PingFang TC", sans-serif; -webkit-font-smoothing: antialiased; }
+  #win { position: absolute; left: 192px; top: 58px; width: 1536px; height: 864px; border-radius: 14px; overflow: hidden; background: #fff;
+    box-shadow: 0 40px 90px rgba(0,0,0,.55), 0 12px 28px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.07); }
+  #cam { position: absolute; left: 0; top: 0; width: 1536px; height: 864px; transform-origin: 0 0; will-change: transform; }
+  #cam img { position: absolute; left: 0; top: 0; width: 1536px; height: 864px; }
+  #label { position: absolute; left: 192px; top: 20px; font-size: 17px; font-weight: 500; letter-spacing: .06em; color: #8a8a90; }
+  #label b { color: #d6d6da; font-weight: 600; margin-right: 10px; }
+  #cap { position: absolute; left: 192px; right: 192px; top: 950px; text-align: center; font-size: 31px; font-weight: 500; letter-spacing: .02em; line-height: 1.4; color: #f1f1f3; }
+  #cap span { display: inline-block; transition: none; }
+</style>
+</head>
+<body>
+<div id="c">
+  <div id="label"></div>
+  <div id="win"><div id="cam"><img id="a"><img id="b"></div></div>
+  <div id="cap"><span id="capA"></span></div>
+</div>
+<script>
+(() => {
+  const W = 1536, H = 864;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  let D = null, kf = [], caps = [], imgA, imgB, curFile = '', base = '';
+
+  // 聚焦事件 → 鏡頭關鍵格（z：放大倍率；cx, cy：畫面中心，單位為視窗像素）
+  function target(rect, vp) {
+    if (!rect) return { z: 1, cx: W / 2, cy: H / 2 };
+    const k = W / vp.width;
+    const rw = rect.w * k, rh = rect.h * k;
+    let z = Math.min((W * 0.6) / Math.max(rw, 1), (H * 0.6) / Math.max(rh, 1));
+    z = clamp(z, 1, 1.45);
+    if (z < 1.12) z = 1;   // 只差一點就不要推，避免晃動
+    let cx = (rect.x + rect.w / 2) * k, cy = (rect.y + rect.h / 2) * k;
+    cx = clamp(cx, W / (2 * z), W - W / (2 * z)); cy = clamp(cy, H / (2 * z), H - H / (2 * z));
+    return { z, cx, cy };
+  }
+  const TR = 1.0;   // 每次鏡頭移動的秒數
+  function camAt(t) {
+    let cur = { z: 1, cx: W / 2, cy: H / 2 };
+    for (let i = 0; i < kf.length; i++) {
+      const k = kf[i]; if (k.t > t) break;
+      const end = Math.min(t, k.t + TR);
+      const p = ease(clamp((end - k.t) / TR, 0, 1));
+      const from = k.from;
+      cur = { z: from.z + (k.to.z - from.z) * p, cx: from.cx + (k.to.cx - from.cx) * p, cy: from.cy + (k.to.cy - from.cy) * p };
+    }
+    return cur;
+  }
+
+  window.__init = async (data, fileBase) => {
+    D = data; base = fileBase || '';
+    imgA = document.getElementById('a'); imgB = document.getElementById('b');
+    document.getElementById('label').innerHTML = (data.badge || '').replace(/^(\d+)\s*·\s*/, '<b>$1</b>');
+    // 鏡頭關鍵格：同一個目標不重複觸發，並記錄起點
+    const evs = data.events.filter((e) => e.type === 'focus');
+    let last = { z: 1, cx: W / 2, cy: H / 2 };
+    kf = [];
+    for (const e of evs) {
+      const to = target(e.rect, data.viewport);
+      if (Math.abs(to.z - last.z) < 0.02 && Math.hypot(to.cx - last.cx, to.cy - last.cy) < 12) continue;
+      const k = { t: e.t, to };
+      kf.push(k); last = to;
+    }
+    // 計算每個關鍵格的起點（前一段在此刻的位置）
+    for (let i = 0; i < kf.length; i++) {
+      const prev = i ? kf[i - 1] : null;
+      if (!prev) { kf[i].from = { z: 1, cx: W / 2, cy: H / 2 }; continue; }
+      const p = ease(clamp((kf[i].t - prev.t) / TR, 0, 1));
+      kf[i].from = { z: prev.from.z + (prev.to.z - prev.from.z) * p, cx: prev.from.cx + (prev.to.cx - prev.from.cx) * p, cy: prev.from.cy + (prev.to.cy - prev.from.cy) * p };
+    }
+    caps = data.events.filter((e) => e.type === 'cap');
+    try { await document.fonts.load('500 31px "Noto Sans TC"', caps.map((c) => c.text).join('') + (data.badge || '')); await document.fonts.ready; } catch (e) {}
+    return { kf: kf.length, caps: caps.length };
+  };
+
+  function frameAt(t) {
+    const fr = D.frames; let lo = 0, hi = fr.length - 1, ans = 0;
+    while (lo <= hi) { const m = (lo + hi) >> 1; if (fr[m].t <= t) { ans = m; lo = m + 1; } else hi = m - 1; }
+    return fr[ans].file;
+  }
+
+  window.__seek = async (t) => {
+    const f = frameAt(t);
+    if (f !== curFile) {
+      // 雙緩衝：在背後那張載入完成再交換，避免閃爍
+      imgB.src = base + f.split('/').pop();
+      try { await imgB.decode(); } catch (e) {}
+      imgB.style.visibility = 'visible'; imgA.style.visibility = 'hidden';
+      [imgA, imgB] = [imgB, imgA]; curFile = f;
+    }
+    const c = camAt(t);
+    document.getElementById('cam').style.transform = `translate(${W / 2 - c.cx * c.z}px, ${H / 2 - c.cy * c.z}px) scale(${c.z})`;
+    // 字幕：淡入淡出
+    let cur = null; for (const e of caps) { if (e.t <= t) cur = e; else break; }
+    const el = document.getElementById('capA');
+    const text = cur ? cur.text : '';
+    if (el.textContent !== text) el.textContent = text;
+    const since = cur ? t - cur.t : 0;
+    el.style.opacity = text ? clamp(since / 0.3, 0, 1) : 0;
+    el.style.transform = `translateY(${(1 - clamp(since / 0.3, 0, 1)) * 8}px)`;
+  };
+})();
+</script>
+</body>
+</html>
