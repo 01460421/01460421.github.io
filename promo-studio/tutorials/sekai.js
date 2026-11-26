@@ -17,9 +17,11 @@ module.exports = {
       await r.hl('aside', 3200);
       await r.click('button:has-text("台服")', '右上角可以切換台服／日服與繁簡中文。', { wait: 1800 });
       await r.key('Escape', 500);
-      await r.click('button[title*="主題"], button:has-text("主題")', '一鍵切換深色／淺色主題。', { wait: 1800 });
-      await r.click('button[title*="主題"], button:has-text("主題")', '', { wait: 900 });
-      await r.move('button:has-text("複製連結")'); await r.say('「複製連結」把目前頁面連同篩選條件分享出去。', 2600);
+      await r.click('button[title*="主題"], button:has-text("主題")', '一鍵切換深色／淺色主題。', { wait: 2200 });
+      // 示範完恢復網站原本的主題
+      await r.page.evaluate(() => { try { localStorage.removeItem('sekai-theme'); localStorage.removeItem('sekai-app-theme'); } catch (e) {} });
+      await r.goto(HOME);
+      await r.click('[aria-label*="複製連結"], [title*="複製連結"], button:has-text("複製連結")', '「複製連結」把目前頁面連同篩選條件分享出去。', { wait: 2400 });
     } },
     { title: '搜尋與指令', sub: '⌘K 一鍵找到任何功能、歌曲、角色', async run(r) {
       await r.click('main button:has-text("搜尋功能")', '按 ⌘K 或點搜尋列，任何功能、歌曲、角色都找得到。', { wait: 1200 });
@@ -145,8 +147,8 @@ module.exports = {
     { title: '抽卡與儲值', sub: '依官方機率模擬抽卡、存石規劃', async run(r) {
       await nav(r, 'gachasim', '進入「抽卡與儲值」。');
       await r.say('依台服官方機率模型模擬抽卡，可選期數與卡池。', 2400);
-      await btn(r, '10 連 保底★3↑ 3000 石', '來抽個 10 連……', 2400);
-      await btn(r, '10 連 保底★3↑ 3000 石', '再一次！', 2400);
+      await r.click('main button:text-matches("10\\s*連[\\s\\S]*3000")', '來抽個 10 連……', { wait: 2600 });
+      await r.click('main button:text-matches("10\\s*連[\\s\\S]*3000")', '再一次！', { wait: 2600 });
       await tab(r, '存石規劃', '「存石規劃」：算到目標卡池前能存多少石頭。', 2600);
       await tab(r, '儲值分析', '「儲值分析」：比較各種儲值方案的划算程度。', 2600);
     } },
@@ -172,7 +174,7 @@ module.exports = {
       await nav(r, 'tut', '「教學與社群」');
       await r.say('123 則問答：養成、車隊、衝榜與音遊練習，教學圖片直接內嵌。', 3000);
       await r.scroll(600, 1500);
-      await r.click('main summary >> nth=0', '點開任何一題看詳細解答。', { wait: 2400 });
+      await r.click('main summary >> nth=0, main :text("▾") >> nth=0', '點開任何一題看詳細解答。', { wait: 2400 });
       await r.top();
     } },
     { title: '線上客服與 AI 助手', sub: '小幫手即時回答，AI 助手幫你規劃', async run(r) {
@@ -191,6 +193,7 @@ module.exports = {
       await btn(r, '舞台版', '例如「舞台版」……', 2400);
       await btn(r, '文青版', '或「文青版」。', 2400);
       await btn(r, '原版', '隨時換回原版。', 2000);
+      await r.page.evaluate(() => { try { localStorage.removeItem('sekai-skin'); localStorage.removeItem('sekai-visual'); } catch (e) {} });
     } },
     { title: '特別專案', sub: '星圖、聲紋、衝榜劇場、迴響之境', async run(r) {
       for (const [p, cap] of [['x_starmap', 'SEKAI 星圖：700 多首歌化成一片可互動的星空。'], ['x_soundprint', 'SEKAI 聲紋：每首歌的聲音指紋。'], ['x_theater', '衝榜劇場：把一期活動的衝榜過程變成劇場。'], ['x_echoes', '迴響之境：探索型的互動體驗。']]) {
