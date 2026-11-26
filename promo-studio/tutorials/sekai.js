@@ -147,8 +147,8 @@ module.exports = {
     { title: '抽卡與儲值', sub: '依官方機率模擬抽卡、存石規劃', async run(r) {
       await nav(r, 'gachasim', '進入「抽卡與儲值」。');
       await r.say('依台服官方機率模型模擬抽卡，可選期數與卡池。', 2400);
-      await r.click('main button:text-matches("10\\s*連[\\s\\S]*3000")', '來抽個 10 連……', { wait: 2600 });
-      await r.click('main button:text-matches("10\\s*連[\\s\\S]*3000")', '再一次！', { wait: 2600 });
+      await r.click('main button.gs-btn:has-text("3000 石") >> nth=0', '來抽個 10 連……', { wait: 2600 });
+      await r.click('main button.gs-btn:has-text("3000 石") >> nth=0', '再一次！', { wait: 2600 });
       await tab(r, '存石規劃', '「存石規劃」：算到目標卡池前能存多少石頭。', 2600);
       await tab(r, '儲值分析', '「儲值分析」：比較各種儲值方案的划算程度。', 2600);
     } },
@@ -174,7 +174,7 @@ module.exports = {
       await nav(r, 'tut', '「教學與社群」');
       await r.say('123 則問答：養成、車隊、衝榜與音遊練習，教學圖片直接內嵌。', 3000);
       await r.scroll(600, 1500);
-      await r.click('main summary >> nth=0, main :text("▾") >> nth=0', '點開任何一題看詳細解答。', { wait: 2400 });
+      await r.click('main button:has-text("卡是什麼")', '點開任何一題看詳細解答。', { wait: 2400 });
       await r.top();
     } },
     { title: '線上客服與 AI 助手', sub: '小幫手即時回答，AI 助手幫你規劃', async run(r) {
