@@ -436,6 +436,34 @@
       };
     },
 
+    // 教學片的章節卡：大號章節數字、標題、副標、章節進度條
+    chapter(sc, d) {
+      const num = h('div', '', sc);
+      num.style.cssText = 'position:absolute;left:150px;top:250px;font-size:330px;font-weight:900;letter-spacing:-.06em;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.18)';
+      num.textContent = String(d.n).padStart(2, '0');
+      const kick = h('div', 'kicker', sc); kick.style.cssText += ';position:absolute;left:160px;top:640px';
+      const kSp = reveal(kick, d.kicker || `第 ${d.n} 章`);
+      const title = h('div', 'h-xl grad', sc); title.style.cssText += ';position:absolute;left:156px;top:690px;width:1600px';
+      const tSp = reveal(title, d.title);
+      const sub = h('div', 'body', sc); sub.style.cssText += ';position:absolute;left:160px;top:830px;width:1500px';
+      sub.textContent = d.sub || '';
+      const bar = h('div', '', sc); bar.style.cssText = 'position:absolute;left:160px;right:160px;bottom:90px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden';
+      const fill = h('div', '', bar); fill.style.cssText = 'height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))';
+      const dots = h('div', '', sc); dots.style.cssText = 'position:absolute;right:160px;bottom:110px;font-size:22px;color:#8e8e93;font-weight:600;letter-spacing:.08em';
+      dots.textContent = `${d.n} / ${d.total}`;
+      return {
+        layout() { fit(title, 1600, 140, 120, 56); fit(sub, 1500, 100, 36, 22); },
+        render(t, dur) {
+          num.style.opacity = P(t, 0, 0.8, E.outCubic); num.style.transform = `translateX(${(1 - P(t, 0, 1.2, E.outExpo)) * -80 + t * 6}px)`;
+          playReveal(kSp, t, 0.15, 0.6, 0.5, 8);
+          playReveal(tSp, t, 0.3, 0.8, 0.45, 16);
+          fade(sub, P(t, 0.8, 1.5, E.outCubic), 20);
+          fill.style.width = (lerp((d.n - 1) / d.total, d.n / d.total, P(t, 0.4, 1.6, E.inOutCubic)) * 100) + '%';
+          sc.style.opacity = 1 - P(t, dur - 0.35, dur, E.inCubic);
+        },
+      };
+    },
+
     grid(sc, d) {
       const n = d.items.length;
       const cols = n <= 3 ? n : n === 4 ? 2 : n <= 6 ? 3 : n <= 9 ? 3 : 4;
@@ -551,7 +579,7 @@
   }
   const orbs = ['o1', 'o2', 'o3'].map((id) => document.getElementById(id));
   function renderBg(t, type) {
-    const strong = { intro: 0.55, hook: 0.45, outro: 0.5, wall: 0.25, scroll: 0.35, mobile: 0.4, grid: 0.35 }[type] ?? 0.22;
+    const strong = { chapter: 0.42, intro: 0.55, hook: 0.45, outro: 0.5, wall: 0.25, scroll: 0.35, mobile: 0.4, grid: 0.35 }[type] ?? 0.22;
     const cfg = [[0.3, 0.35, 0.21, 0.13], [0.7, 0.6, 0.17, 0.23], [0.5, 0.2, 0.11, 0.19]];
     orbs.forEach((o, i) => {
       const [bx, by, fx, fy] = cfg[i];
