@@ -57,6 +57,7 @@ const OVERLAY = () => {
         Object.assign(hl.style, { left: r.x - pad + 'px', top: r.y - pad + 'px', width: r.w + pad * 2 + 'px', height: r.h + pad * 2 + 'px', opacity: 1 });
       },
       badge(t) { badge.textContent = t || ''; badge.style.opacity = t ? 1 : 0; },
+      cursor(on) { cur.style.display = on ? '' : 'none'; },
     };
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
@@ -218,6 +219,24 @@ class Recorder {
     if (caption) await this.say(caption);
     await this.page.keyboard.type(text, { delay: 120 });
     await sleep(wait);
+  }
+  // 顯示／隱藏游標（電影式鏡頭通常不要游標）
+  async cursor(on) { this._cursorOn = on; await this.page.evaluate((v) => window.__pc && window.__pc.cursor(v), on).catch(() => {}); }
+  // 真的移動滑鼠沿路徑走（觸發 hover 互動），游標疊加層同步
+  async sweep(points, ms = 2000) {
+    const per = ms / Math.max(1, points.length - 1);
+    for (let i = 0; i < points.length; i++) {
+      const [x, y] = points[i];
+      const steps = Math.max(2, Math.round(per / 16));
+      if (i === 0) { await this.page.mouse.move(x, y); await this.page.evaluate(([x, y]) => window.__pc && window.__pc.setPos(x, y), [x, y]); continue; }
+      const [x0, y0] = points[i - 1];
+      for (let k = 1; k <= steps; k++) {
+        const e = k / steps, xx = x0 + (x - x0) * e, yy = y0 + (y - y0) * e;
+        await this.page.mouse.move(xx, yy);
+        await this.page.evaluate(([x, y]) => window.__pc && window.__pc.setPos(x, y), [xx, yy]);
+        await sleep(per / steps);
+      }
+    }
   }
   async key(k, wait = 600) { await this.page.keyboard.press(k); await sleep(wait); }
   wait(ms) { return sleep(ms); }

@@ -4,9 +4,10 @@ const { spawn } = require('child_process');
 const path = require('path');
 const { pathToFileURL } = require('url');
 
-const PAGE = path.join(__dirname, '..', '..', 'public', 'compose.html');
+const PUB = path.join(__dirname, '..', '..', 'public');
 
-async function composeSegments(list, { fps = 30, log = () => {} } = {}) {
+async function composeSegments(list, { fps = 30, log = () => {}, page: pageName = 'compose.html' } = {}) {
+  const PAGE = path.join(PUB, pageName);
   const browser = await chromium.launch({ args: ['--allow-file-access-from-files', '--force-color-profile=srgb'] });
   try {
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });

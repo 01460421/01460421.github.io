@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>Cinema Compositor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+TC:wght@400;600;700&display=block" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+  #c { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0a0a0a; }
+  #cam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; will-change: transform; }
+  #cam img { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  #vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 75% 70% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,.38) 100%); }
+  #shade { position: absolute; left: 0; right: 0; bottom: 0; height: 420px; pointer-events: none; background: linear-gradient(180deg, rgba(10,8,6,0) 0%, rgba(10,8,6,.55) 60%, rgba(10,8,6,.78) 100%); opacity: 0; }
+  #cap { position: absolute; left: 120px; bottom: 104px; max-width: 1200px; color: #f3ece0; text-shadow: 0 2px 18px rgba(0,0,0,.45); }
+  #cap .k { font-family: "Cormorant Garamond", serif; font-size: 22px; letter-spacing: .32em; text-transform: uppercase; color: #d8cbb2; }
+  #cap .k b { font-weight: 500; font-size: 30px; letter-spacing: .04em; margin-right: 22px; color: #efe4cf; }
+  #cap .t { font-family: "Noto Serif TC", serif; font-weight: 600; font-size: 68px; letter-spacing: .08em; line-height: 1.2; margin-top: 10px; }
+  #cap .l { font-family: "Noto Serif TC", serif; font-weight: 400; font-size: 25px; letter-spacing: .06em; line-height: 1.7; margin-top: 16px; color: #e6dccb; }
+  #cap .rule { width: 56px; height: 1px; background: #cdbd9f; margin: 18px 0 0; }
+  #mid { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #f3ece0; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
+  #mid .t { font-family: "Noto Serif TC", serif; font-weight: 600; font-size: 96px; letter-spacing: .22em; }
+  #mid .e { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 34px; letter-spacing: .06em; margin-top: 18px; color: #e3d6bd; }
+  #mid .u { font-family: "Cormorant Garamond", serif; font-size: 24px; letter-spacing: .28em; margin-top: 46px; color: #cdbd9f; }
+  #fade { position: absolute; inset: 0; background: #000; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="c">
+  <div id="cam"><img id="a"><img id="b"></div>
+  <div id="vig"></div>
+  <div id="shade"></div>
+  <div id="cap"></div>
+  <div id="mid"></div>
+  <div id="fade"></div>
+</div>
+<script>
+(() => {
+  const W = 1920, H = 1080;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+  let D = null, kf = [], caps = [], imgA, imgB, curFile = '', base = '', capKey = '';
+
+  function target(rect, vp) {
+    if (!rect) return { z: 1, cx: W / 2, cy: H / 2 };
+    const k = W / vp.width;
+    let z = Math.min((W * 0.7) / Math.max(rect.w * k, 1), (H * 0.7) / Math.max(rect.h * k, 1));
+    z = clamp(z, 1, 1.25); if (z < 1.06) z = 1;
+    let cx = (rect.x + rect.w / 2) * k, cy = (rect.y + rect.h / 2) * k;
+    cx = clamp(cx, W / (2 * z), W - W / (2 * z)); cy = clamp(cy, H / (2 * z), H - H / (2 * z));
+    return { z, cx, cy };
+  }
+  const TR = 1.6;
+  function camAt(t) {
+    let cur = { z: 1, cx: W / 2, cy: H / 2 };
+    for (const k of kf) {
+      if (k.t > t) break;
+      const p = ease(clamp((t - k.t) / TR, 0, 1));
+      cur = { z: k.from.z + (k.to.z - k.from.z) * p, cx: k.from.cx + (k.to.cx - k.from.cx) * p, cy: k.from.cy + (k.to.cy - k.from.cy) * p };
+    }
+    // 整段極慢的推鏡
+    const push = 1 + 0.045 * (t / Math.max(1, D.duration));
+    return { z: cur.z * push, cx: cur.cx, cy: cur.cy };
+  }
+
+  window.__init = async (data, fileBase) => {
+    D = data; base = fileBase || '';
+    imgA = document.getElementById('a'); imgB = document.getElementById('b');
+    let last = { z: 1, cx: W / 2, cy: H / 2 }; kf = [];
+    for (const e of data.events.filter((e) => e.type === 'focus')) {
+      const to = target(e.rect, data.viewport);
+      if (Math.abs(to.z - last.z) < 0.02 && Math.hypot(to.cx - last.cx, to.cy - last.cy) < 16) continue;
+      kf.push({ t: e.t, to }); last = to;
+    }
+    for (let i = 0; i < kf.length; i++) {
+      const prev = kf[i - 1];
+      if (!prev) { kf[i].from = { z: 1, cx: W / 2, cy: H / 2 }; continue; }
+      const p = ease(clamp((kf[i].t - prev.t) / TR, 0, 1));
+      kf[i].from = { z: prev.from.z + (prev.to.z - prev.from.z) * p, cx: prev.from.cx + (prev.to.cx - prev.from.cx) * p, cy: prev.from.cy + (prev.to.cy - prev.from.cy) * p };
+    }
+    caps = data.events.filter((e) => e.type === 'cap');
+    try { await document.fonts.load('600 68px "Noto Serif TC"', caps.map((c) => c.text).join('')); await document.fonts.load('400 25px "Noto Serif TC"', caps.map((c) => c.text).join('')); await document.fonts.load('500 22px "Cormorant Garamond"', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'); await document.fonts.ready; } catch (e) {}
+    return kf.length;
+  };
+
+  function frameAt(t) {
+    const fr = D.frames; let lo = 0, hi = fr.length - 1, ans = 0;
+    while (lo <= hi) { const m = (lo + hi) >> 1; if (fr[m].t <= t) { ans = m; lo = m + 1; } else hi = m - 1; }
+    return fr[ans].file;
+  }
+  const esc = (s) => String(s || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+  // 字幕格式：「編號|中文標題|英文小標|一句話」；或「@中文|英文|網址」做置中大標
+  function renderCap(text) {
+    const cap = document.getElementById('cap'), mid = document.getElementById('mid');
+    cap.innerHTML = ''; mid.innerHTML = '';
+    if (!text) return;
+    if (text[0] === '@') {
+      const [t, e, u] = text.slice(1).split('|');
+      if (!t && !e) { mid.style.justifyContent = 'flex-end'; mid.style.paddingBottom = '22px'; } else { mid.style.justifyContent = 'center'; mid.style.paddingBottom = '0'; }
+      mid.innerHTML = `${t ? `<div class="t">${esc(t)}</div>` : ''}${e ? `<div class="e">${esc(e)}</div>` : ''}${u ? `<div class="u">${esc(u)}</div>` : ''}`;
+      return;
+    }
+    const [n, t, k, l] = text.split('|');
+    cap.innerHTML = `<div class="k">${n ? `<b>${esc(n)}</b>` : ''}${esc(k || '')}</div><div class="t">${esc(t || '')}</div><div class="rule"></div>${l ? `<div class="l">${esc(l)}</div>` : ''}`;
+  }
+
+  window.__seek = async (t) => {
+    const f = frameAt(t);
+    if (f !== curFile) {
+      imgB.src = base + f.split('/').pop();
+      try { await imgB.decode(); } catch (e) {}
+      imgB.style.visibility = 'visible'; imgA.style.visibility = 'hidden';
+      [imgA, imgB] = [imgB, imgA]; curFile = f;
+    }
+    const c = camAt(t);
+    document.getElementById('cam').style.transform = `translate(${W / 2 - c.cx * c.z}px, ${H / 2 - c.cy * c.z}px) scale(${c.z})`;
+    let cur = null; for (const e of caps) { if (e.t <= t) cur = e; else break; }
+    const text = cur ? cur.text : '';
+    if (text !== capKey) { renderCap(text); capKey = text; }
+    const since = cur ? t - cur.t : 0;
+    const end = D.duration - t;
+    const vis = text ? clamp(since / 0.9, 0, 1) * clamp(end / 0.7, 0, 1) : 0;
+    const el = text && text[0] === '@' ? document.getElementById('mid') : document.getElementById('cap');
+    el.style.opacity = vis; el.style.transform = `translateY(${(1 - easeOut(clamp(since / 0.9, 0, 1))) * 14}px)`;
+    el.style.filter = vis < 1 ? `blur(${(1 - clamp(since / 0.9, 0, 1)) * 6}px)` : 'none';
+    document.getElementById('shade').style.opacity = text && text[0] !== '@' ? vis : 0;
+    // 每個鏡頭頭尾各 0.25 秒淡入淡出（串接時再交叉溶接）
+    document.getElementById('fade').style.opacity = Math.max(1 - clamp(t / 0.25, 0, 1), 1 - clamp(end / 0.25, 0, 1)) * 0.0;
+  };
+})();
+</script>
+</body>
+</html>
