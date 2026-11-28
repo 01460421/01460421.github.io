@@ -5,7 +5,7 @@
 <title>Promo Stage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=block" rel="stylesheet">
 <style>
   :root { --accent: #2997ff; --accent2: #a259ff; --accent3: #30d158; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -91,11 +91,44 @@
   .gcard .ring { position: absolute; inset: 0; border-radius: 22px; box-shadow: inset 0 0 0 2px var(--accent), 0 0 40px color-mix(in srgb, var(--accent) 55%, transparent); opacity: 0; }
   .cta .dom { font-weight: 500; color: #3a3a3c; }
   .streak { position: absolute; left: 50%; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), #fff, var(--accent2), transparent); box-shadow: 0 0 30px var(--accent); }
+
+  /* ===== 主題：逆雨（襯線、墨色、琥珀、上升的雨） ===== */
+  .t-rain #stage { background: radial-gradient(1300px 760px at 50% 28%, #18212c 0%, #0b0e13 72%); font-family: "Noto Serif TC", "Cormorant Garamond", serif; color: #efe6d6; }
+  .t-rain .orb { display: none; }
+  .t-rain #rain { position: absolute; inset: 0; }
+  .t-rain #numeral { position: absolute; left: 0; right: 0; top: 120px; text-align: center; font-family: "Cormorant Garamond", serif; font-size: 560px; line-height: 1; color: rgba(214, 226, 240, .045); letter-spacing: .02em; }
+  .t-rain .h-xl { font-weight: 600; letter-spacing: .06em; }
+  .t-rain .grad .tk, .t-rain .grad.solid { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: #efe6d6; }
+  .t-rain .agrad .tk { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: #d9b77a; }
+  .t-rain .kicker { font-family: "Cormorant Garamond", "Noto Serif TC", serif; font-weight: 500; letter-spacing: .3em; color: #d9b77a; font-size: 24px; }
+  .t-rain .body { color: #c9bfae; font-weight: 400; letter-spacing: .04em; }
+  .t-rain .win { border-radius: 4px; box-shadow: 0 60px 140px rgba(0,0,0,.72), 0 0 0 1px rgba(239,230,214,.16); }
+  .t-rain .win .bar { background: #13161b; border-bottom: 1px solid rgba(239,230,214,.07); height: 46px; }
+  .t-rain .win .dot { width: 11px; height: 11px; background: rgba(239,230,214,.22) !important; }
+  .t-rain .win .url { background: transparent; border: 1px solid rgba(239,230,214,.12); border-radius: 2px; font-family: "Cormorant Garamond", serif; font-size: 19px; letter-spacing: .12em; color: #cfc4b2; }
+  .t-rain .glare { display: none; }
+  .t-rain .hl { border: 1.5px solid #d9b77a; border-radius: 2px; box-shadow: 0 0 0 6000px rgba(5,7,10,.38) !important; }
+  .t-rain .shade { background: linear-gradient(180deg, rgba(8,10,14,.35) 0%, rgba(8,10,14,0) 30%, rgba(8,10,14,.72) 60%, rgba(8,10,14,.95) 100%), linear-gradient(90deg, rgba(8,10,14,.6), rgba(8,10,14,0) 60%); }
+  .t-rain .pill { border-radius: 2px; background: rgba(10,12,16,.62); border-color: rgba(239,230,214,.22); font-family: "Cormorant Garamond", serif; letter-spacing: .1em; font-size: 22px; }
+  .t-rain .pill span { background: #d9b77a !important; box-shadow: none !important; }
+  .t-rain .cta { background: transparent; color: #efe6d6; border: 1px solid rgba(239,230,214,.85); border-radius: 0; box-shadow: none; font-weight: 600; letter-spacing: .3em; height: 76px; padding: 0 46px; }
+  .t-rain .cta .dot { display: none; }
+  .t-rain .cta .dom { color: #c9bfae; font-family: "Cormorant Garamond", serif; letter-spacing: .14em; font-weight: 500; }
+  .t-rain .cta svg path { stroke: #efe6d6; }
+  .t-rain .gcard { border-radius: 2px; background: rgba(16,19,24,.92); border-color: rgba(239,230,214,.12); }
+  .t-rain .gcard .tx { background: linear-gradient(180deg, rgba(14,16,20,.94), rgba(10,12,15,.99)); }
+  .t-rain .gcard .k { color: #d9b77a; font-family: "Cormorant Garamond", serif; letter-spacing: .2em; }
+  .t-rain .gcard .t { font-weight: 600; letter-spacing: .04em; }
+  .t-rain .gcard .ring { border-radius: 2px; box-shadow: inset 0 0 0 1.5px #d9b77a; }
+  .t-rain .tile { border-radius: 2px; }
+  .t-rain .streak { background: linear-gradient(90deg, transparent, rgba(217,183,122,.9), transparent); box-shadow: none; height: 1px; }
+  .t-rain #flash { display: none; }
+  .t-rain #grain { opacity: .05; }
 </style>
 </head>
 <body>
 <div id="stage">
-  <div id="bg"><div class="orb" id="o1"></div><div class="orb" id="o2"></div><div class="orb" id="o3"></div></div>
+  <div id="bg"><div class="orb" id="o1"></div><div class="orb" id="o2"></div><div class="orb" id="o3"></div><div id="numeral"></div><canvas id="rain" width="1920" height="1080"></canvas></div>
   <div id="scenes"></div>
   <div id="vignette"></div>
   <div id="grain"></div>
@@ -184,13 +217,14 @@
       brand.style.background = 'linear-gradient(100deg,#fff 0%,#fff 42%,var(--accent) 50%,var(--accent2) 54%,#fff 62%,#fff 100%)';
       brand.style.backgroundSize = '320% 100%'; brand.style.webkitBackgroundClip = 'text'; brand.style.backgroundClip = 'text'; brand.style.color = 'transparent';
       brand.textContent = d.brand;
+      if (S && S.theme === 'rain') { brand.style.background = 'none'; brand.style.webkitBackgroundClip = 'border-box'; brand.style.backgroundClip = 'border-box'; brand.style.color = '#efe6d6'; brand.style.letterSpacing = '.16em'; }
       const streak = h('div', 'streak', sc);
       return {
         layout() { fit(brand, 1600, 260, 200, 70); streak.style.top = (420 + brand.offsetHeight + 40) + 'px'; },
         render(t, dur) {
           playReveal(sSp, t, 0.25, 0.9, 0.6, 10);
           const p = P(t, 0.9, 2.3, E.outExpo);
-          brand.style.opacity = p; brand.style.letterSpacing = `${lerp(0.35, -0.035, p)}em`;
+          brand.style.opacity = p; brand.style.letterSpacing = S.theme === 'rain' ? `${lerp(0.5, 0.16, p)}em` : `${lerp(0.35, -0.035, p)}em`;
           brand.style.filter = p < 0.999 ? `blur(${(1 - p) * 26}px)` : 'none';
           brand.style.backgroundPosition = `${lerp(100, 0, P(t, 1.4, 3.4, E.inOutCubic))}% 0`;
           const sp = P(t, 1.5, 2.6, E.outExpo);
@@ -578,7 +612,24 @@
     const g = document.getElementById('grain'); g.style.backgroundImage = `url(${c.toDataURL()})`;
   }
   const orbs = ['o1', 'o2', 'o3'].map((id) => document.getElementById(id));
+  // 上升的雨：每一格由時間 t 決定（逐格渲染結果穩定）
+  let drops = null;
+  function drawRain(t) {
+    const cv = document.getElementById('rain'); if (!cv) return;
+    const x = cv.getContext('2d');
+    if (!drops) { let s = 7; const r = () => ((s = (s * 16807) % 2147483647) / 2147483647); drops = Array.from({ length: 260 }, () => ({ x: r() * W, y: r() * H, v: 260 + r() * 520, l: 18 + r() * 46, a: 0.08 + r() * 0.22, w: r() < 0.15 ? 1.4 : 0.9 })); }
+    x.clearRect(0, 0, W, H);
+    x.strokeStyle = '#c4d2e2'; x.lineCap = 'round';
+    for (const d of drops) {
+      const span = H + d.l;
+      const y = H - (((H - d.y) + d.v * t) % span);   // 由下往上
+      x.globalAlpha = d.a; x.lineWidth = d.w;
+      x.beginPath(); x.moveTo(d.x, y); x.lineTo(d.x - 1.5, y + d.l); x.stroke();
+    }
+    x.globalAlpha = 1;
+  }
   function renderBg(t, type) {
+    if (S && S.theme === 'rain') { drawRain(t); return; }
     const strong = { chapter: 0.42, intro: 0.55, hook: 0.45, outro: 0.5, wall: 0.25, scroll: 0.35, mobile: 0.4, grid: 0.35 }[type] ?? 0.22;
     const cfg = [[0.3, 0.35, 0.21, 0.13], [0.7, 0.6, 0.17, 0.23], [0.5, 0.2, 0.11, 0.19]];
     const calm = S && S.calm ? 0.4 : 1;
@@ -603,6 +654,8 @@
     orbs[2].style.background = 'radial-gradient(circle, var(--accent3) 0%, transparent 62%)';
     makeGrain();
     document.getElementById('grain').style.opacity = story.calm ? 0.025 : '';
+    document.body.classList.toggle('t-rain', story.theme === 'rain');
+    if (story.theme === 'rain') { document.getElementById('numeral').textContent = story.numeral || ''; }
     const host = document.getElementById('scenes');
     host.innerHTML = ''; scenes = []; imgs = [];
     const allText = [];
@@ -615,7 +668,7 @@
     // 字型：先載入實際用到的字，避免中文分片延遲
     try {
       const txt = allText.join('');
-      await Promise.all(['400', '500', '600', '700', '800', '900'].flatMap((w) => [document.fonts.load(`${w} 40px "Noto Sans TC"`, txt), document.fonts.load(`${w} 40px Inter`, txt)]));
+      await Promise.all(['400', '500', '600', '700', '800', '900'].flatMap((w) => [document.fonts.load(`${w} 40px "Noto Sans TC"`, txt), document.fonts.load(`${w} 40px Inter`, txt), document.fonts.load(`${w} 40px "Noto Serif TC"`, txt), document.fonts.load(`${w} 40px "Cormorant Garamond"`, txt)]));
       await document.fonts.ready;
     } catch (e) {}
     await Promise.all(imgs.map((im) => (im.complete && im.naturalWidth ? Promise.resolve() : new Promise((r) => { im.onload = im.onerror = r; })).then(() => im.decode && im.decode().catch(() => {}))));
